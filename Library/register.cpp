@@ -50,9 +50,13 @@ void Register::on_affirmReisterButton_clicked()
                 txtOutput << password1 << endl;
                 txtOutput << password2 << endl;
                 txtOutput << department << endl;
-                message_regSuccessfully *mes_regS = new message_regSuccessfully(this);
+                MainWindow *mw = new MainWindow();
+                QMessageBox::critical(this, "critical", "登陆成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
                 this->hide();
-                mes_regS->show();
+                mw->show();
+                /*message_regSuccessfully *mes_regS = new message_regSuccessfully(this);
+                this->hide();
+                mes_regS->show();*/
             }
 
             //判断失败情况
