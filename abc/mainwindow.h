@@ -39,6 +39,8 @@ private slots:
 
     void on_quitButton_clicked();
 
+    void on_searchButtonPermary_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

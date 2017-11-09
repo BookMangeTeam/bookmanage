@@ -348,3 +348,8 @@ void MainWindow::on_quitButton_clicked()
 {
     exit(0);
 }
+
+void MainWindow::on_searchButtonPermary_clicked()
+{
+    ui->stackedWidgetPermary->setCurrentIndex(1);
+}
