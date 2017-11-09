@@ -51,7 +51,7 @@ void Register::on_affirmReisterButton_clicked()
                 txtOutput << password2 << endl;
                 txtOutput << department << endl;
                 MainWindow *mw = new MainWindow();
-                QMessageBox::critical(this, "critical", "登陆成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                QMessageBox::information(this, "提示", "注册成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
                 this->hide();
                 mw->show();
                 /*message_regSuccessfully *mes_regS = new message_regSuccessfully(this);

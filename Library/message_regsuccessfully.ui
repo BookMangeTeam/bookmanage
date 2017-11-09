@@ -25,6 +25,9 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="styleSheet">
+   <string notr="true">border-radius:10px;</string>
+  </property>
   <widget class="QLabel" name="reg_successfully">
    <property name="geometry">
     <rect>

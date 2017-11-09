@@ -34,6 +34,7 @@ public:
         message_regSuccessfully->resize(316, 176);
         message_regSuccessfully->setMinimumSize(QSize(316, 176));
         message_regSuccessfully->setMaximumSize(QSize(316, 176));
+        message_regSuccessfully->setStyleSheet(QStringLiteral("border-radius:10px;"));
         reg_successfully = new QLabel(message_regSuccessfully);
         reg_successfully->setObjectName(QStringLiteral("reg_successfully"));
         reg_successfully->setGeometry(QRect(60, 50, 191, 41));

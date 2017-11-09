@@ -16,15 +16,18 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     register.cpp \
     main_interface.cpp \
-    message_regsuccessfully.cpp
+    message_regsuccessfully.cpp \
+    mainwins.cpp
 
 HEADERS  += mainwindow.h \
     register.h \
     main_interface.h \
-    message_regsuccessfully.h
+    message_regsuccessfully.h \
+    mainwins.h
 
 FORMS    += mainwindow.ui \
     register.ui \
     main_interface.ui \
-    message_regsuccessfully.ui
+    message_regsuccessfully.ui \
+    mainwins.ui
 QT += sql

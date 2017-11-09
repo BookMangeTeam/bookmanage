@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "register.h"
-#include "main_interface.h"
+#include "mainwins.h"
 #include <QSqlDatabase>
 #include <QDebug>
 #include <QTextStream>  //文本文件的读写类
@@ -67,12 +67,13 @@ void MainWindow::on_loginButton_clicked()
                 {
                     flag = 1;
                     password = txtInput.readLine();
-                    if(password_input == password && username != "")//验证密码
+                    if(password_input == password)//验证密码
                     {
                         sign = 1;
-                        main_interface *main_i = new main_interface(this);//说明main_i指针指向了副窗口，其中main_interface类在main_interface.h中定义
+                        MainWins *mwins = new MainWins();//说明main_i指针指向了副窗口，其中main_interface类在main_interface.h中定义
                         this->hide();//隐藏父窗口，this指针指向父窗口
-                        main_i->show();
+                        mwins->show();
+                        break;
                     }
                 }
             }
@@ -111,9 +112,10 @@ void MainWindow::on_loginButton_clicked()
                     if(password_input == password)
                     {
                         sign = 1;
-                        main_interface *main_i = new main_interface(this);//说明main_i指针指向了副窗口，其中main_interface类在main_interface.h中定义
+                        MainWins *mwins = new MainWins();//说明main_i指针指向了副窗口，其中main_interface类在main_interface.h中定义
                         this->hide();//隐藏父窗口，this指针指向父窗口
-                        main_i->show();
+                        mwins->show();
+                        break;
                     }
                 }
             }

@@ -15,6 +15,9 @@ public:
     explicit main_interface(QWidget *parent = 0);
     ~main_interface();
 
+private slots:
+    void on_main_search_btn_clicked();
+
 private:
     Ui::main_interface *ui;
 };

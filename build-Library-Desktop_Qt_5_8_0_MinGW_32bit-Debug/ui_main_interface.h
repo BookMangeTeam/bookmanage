@@ -49,10 +49,10 @@ public:
         label->setFont(font1);
         main_search_btn = new QPushButton(main_interface);
         main_search_btn->setObjectName(QStringLiteral("main_search_btn"));
-        main_search_btn->setGeometry(QRect(730, 290, 93, 31));
+        main_search_btn->setGeometry(QRect(710, 190, 93, 31));
         main_search_text = new QLineEdit(main_interface);
         main_search_text->setObjectName(QStringLiteral("main_search_text"));
-        main_search_text->setGeometry(QRect(300, 290, 411, 31));
+        main_search_text->setGeometry(QRect(280, 190, 411, 31));
         main_userinfo_label = new QLabel(main_interface);
         main_userinfo_label->setObjectName(QStringLiteral("main_userinfo_label"));
         main_userinfo_label->setGeometry(QRect(790, 20, 141, 21));

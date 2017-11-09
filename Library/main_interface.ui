@@ -42,8 +42,8 @@
   <widget class="QPushButton" name="main_search_btn">
    <property name="geometry">
     <rect>
-     <x>730</x>
-     <y>290</y>
+     <x>710</x>
+     <y>190</y>
      <width>93</width>
      <height>31</height>
     </rect>
@@ -55,8 +55,8 @@
   <widget class="QLineEdit" name="main_search_text">
    <property name="geometry">
     <rect>
-     <x>300</x>
-     <y>290</y>
+     <x>280</x>
+     <y>190</y>
      <width>411</width>
      <height>31</height>
     </rect>

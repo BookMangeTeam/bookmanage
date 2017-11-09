@@ -196,6 +196,7 @@ Makefile: ../Library/Library.pro F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/mkspe
 		F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/mkspecs/features/qt_config.prf \
 		F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/mkspecs/win32-g++/qmake.conf \
 		F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/mkspecs/features/exclusive_builds.prf \
 		F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/mkspecs/features/toolchain.prf \
 		F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/mkspecs/features/default_pre.prf \
@@ -363,6 +364,7 @@ F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/mkspecs/features/qt_functions.prf:
 F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/mkspecs/features/qt_config.prf:
 F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/mkspecs/win32-g++/qmake.conf:
 F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/mkspecs/features/spec_post.prf:
+.qmake.stash:
 F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/mkspecs/features/exclusive_builds.prf:
 F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/mkspecs/features/toolchain.prf:
 F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/mkspecs/features/default_pre.prf:
