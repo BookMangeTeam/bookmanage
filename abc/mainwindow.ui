@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1034</width>
-    <height>632</height>
+    <height>652</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -152,11 +152,11 @@
       <x>10</x>
       <y>10</y>
       <width>851</width>
-      <height>571</height>
+      <height>561</height>
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QLabel" name="name">
@@ -220,15 +220,6 @@
        <string>搜索</string>
       </property>
      </widget>
-     <zorder>name</zorder>
-     <zorder>searchLineEditPermary</zorder>
-     <zorder>searchButtonPermary</zorder>
-     <zorder>quitButton</zorder>
-     <zorder>borrowButton</zorder>
-     <zorder>renewButton</zorder>
-     <zorder>borrowRecordButton</zorder>
-     <zorder>moneyBotton</zorder>
-     <zorder>repayButton</zorder>
     </widget>
     <widget class="QWidget" name="page_2">
      <widget class="QLineEdit" name="searchLineEditBorrow">
@@ -245,6 +236,9 @@
         <pointsize>12</pointsize>
        </font>
       </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;</string>
+      </property>
       <property name="text">
        <string/>
       </property>
@@ -260,10 +254,14 @@
       </property>
       <property name="font">
        <font>
+        <family>等线</family>
         <pointsize>14</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
+        <weight>50</weight>
+        <bold>false</bold>
        </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
       </property>
       <property name="text">
        <string>搜索</string>
@@ -278,22 +276,29 @@
         <height>441</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
      </widget>
      <widget class="QPushButton" name="affirmBottonBorrow">
       <property name="geometry">
        <rect>
         <x>720</x>
-        <y>530</y>
+        <y>520</y>
         <width>91</width>
         <height>31</height>
        </rect>
       </property>
       <property name="font">
        <font>
+        <family>等线</family>
         <pointsize>14</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
+        <weight>50</weight>
+        <bold>false</bold>
        </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
       </property>
       <property name="text">
        <string>借书</string>
@@ -310,10 +315,14 @@
       </property>
       <property name="font">
        <font>
+        <family>等线</family>
         <pointsize>14</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
+        <weight>50</weight>
+        <bold>false</bold>
        </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
       </property>
       <property name="text">
        <string>返回</string>
@@ -330,6 +339,9 @@
         <height>461</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
      </widget>
      <widget class="QPushButton" name="returnButtonRepay">
       <property name="geometry">
@@ -342,10 +354,14 @@
       </property>
       <property name="font">
        <font>
+        <family>等线</family>
         <pointsize>14</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
+        <weight>50</weight>
+        <bold>false</bold>
        </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
       </property>
       <property name="text">
        <string>返回</string>
@@ -362,10 +378,14 @@
       </property>
       <property name="font">
        <font>
+        <family>等线</family>
         <pointsize>14</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
+        <weight>50</weight>
+        <bold>false</bold>
        </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
       </property>
       <property name="text">
        <string>还书</string>
@@ -382,6 +402,9 @@
         <height>461</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
      </widget>
      <widget class="QPushButton" name="returnButtonRenew">
       <property name="geometry">
@@ -394,10 +417,14 @@
       </property>
       <property name="font">
        <font>
+        <family>等线</family>
         <pointsize>14</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
+        <weight>50</weight>
+        <bold>false</bold>
        </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
       </property>
       <property name="text">
        <string>返回</string>
@@ -414,10 +441,14 @@
       </property>
       <property name="font">
        <font>
+        <family>等线</family>
         <pointsize>14</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
+        <weight>50</weight>
+        <bold>false</bold>
        </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
       </property>
       <property name="text">
        <string>续借</string>
@@ -434,6 +465,9 @@
         <height>461</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
      </widget>
      <widget class="QPushButton" name="returnBottonBorrowR">
       <property name="geometry">
@@ -446,10 +480,14 @@
       </property>
       <property name="font">
        <font>
+        <family>等线</family>
         <pointsize>14</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
+        <weight>50</weight>
+        <bold>false</bold>
        </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
       </property>
       <property name="text">
        <string>返回</string>
@@ -466,6 +504,9 @@
         <height>231</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
      </widget>
      <widget class="QTableView" name="paymentInformation">
       <property name="geometry">
@@ -476,58 +517,29 @@
         <height>201</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
      </widget>
-     <widget class="QLabel" name="paymentAmount">
+     <widget class="QLabel" name="passwordMoney">
       <property name="geometry">
        <rect>
-        <x>480</x>
-        <y>320</y>
+        <x>600</x>
+        <y>340</y>
         <width>121</width>
         <height>31</height>
        </rect>
       </property>
       <property name="font">
        <font>
+        <family>等线</family>
         <pointsize>14</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
+        <weight>50</weight>
+        <bold>false</bold>
        </font>
       </property>
       <property name="text">
-       <string>输入缴费金额</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="paymentAmountInput">
-      <property name="geometry">
-       <rect>
-        <x>640</x>
-        <y>320</y>
-        <width>113</width>
-        <height>31</height>
-       </rect>
-      </property>
-     </widget>
-     <widget class="QLabel" name="passwordMoney">
-      <property name="geometry">
-       <rect>
-        <x>490</x>
-        <y>400</y>
-        <width>71</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>14</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>密码</string>
+       <string>请输入密码</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -536,11 +548,14 @@
      <widget class="QLineEdit" name="passwordMoneyInput">
       <property name="geometry">
        <rect>
-        <x>590</x>
-        <y>400</y>
+        <x>550</x>
+        <y>380</y>
         <width>221</width>
         <height>31</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;</string>
       </property>
       <property name="text">
        <string/>
@@ -552,18 +567,22 @@
      <widget class="QPushButton" name="affirmButtonMoney">
       <property name="geometry">
        <rect>
-        <x>720</x>
-        <y>470</y>
+        <x>620</x>
+        <y>450</y>
         <width>91</width>
         <height>31</height>
        </rect>
       </property>
       <property name="font">
        <font>
+        <family>等线</family>
         <pointsize>14</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
+        <weight>50</weight>
+        <bold>false</bold>
        </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
       </property>
       <property name="text">
        <string>确认</string>
@@ -580,10 +599,14 @@
       </property>
       <property name="font">
        <font>
+        <family>等线</family>
         <pointsize>14</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
+        <weight>50</weight>
+        <bold>false</bold>
        </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
       </property>
       <property name="text">
        <string>返回</string>

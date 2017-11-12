@@ -4,6 +4,8 @@
 #include <QStackedWidget>
 #include <QStandardItemModel>
 #include <QHeaderView>
+#include <QMessageBox>
+#include "qstring.h"
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -16,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent) :
 //    this->ui->friendList->setAlternatingRowColors(true);//设置隔一行变一颜色，即：一灰一白
 
 
-
+    //首页界面
     ui->stackedWidgetPermary->setCurrentIndex(0);
 
     //借书信息表
@@ -351,5 +353,39 @@ void MainWindow::on_quitButton_clicked()
 
 void MainWindow::on_searchButtonPermary_clicked()
 {
-    ui->stackedWidgetPermary->setCurrentIndex(1);
+
+    //获取搜索框的信息
+    QString search_info = ui->searchLineEditPermary->text();
+    if(search_info == NULL)
+    {
+        //输入内容为空
+        QMessageBox::critical(this, "critical", "输入内容不能为空!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    }
+    else
+    {
+        //根据输入内容到数据库进行搜索并且返回内容显示到该页面上
+        ui->stackedWidgetPermary->setCurrentIndex(1);
+        ui->searchLineEditBorrow->setText(search_info);
+        //ui->searchLineEditBorrow->setCursorMoveStyle(Qt::CursorMoveStyle );
+
+    }
+
+}
+
+void MainWindow::on_searchButtonBorrow_clicked()
+{
+    //在借书页面的搜索按钮
+    QString search_info = ui->searchLineEditBorrow->text();
+
+    if(search_info == NULL)
+    {
+        //输入内容为空
+        QMessageBox::critical(this, "critical", "输入内容不能为空!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    }
+    else
+    {
+        //根据输入内容到数据库进行搜索并且返回内容显示到table中
+        QMessageBox::critical(this, "critical", "test", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+
+    }
 }

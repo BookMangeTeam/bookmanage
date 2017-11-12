@@ -20,7 +20,6 @@ private slots:
 
     void on_returnButtonBorrow_clicked();
 
-
     void on_returnButtonRepay_clicked();
 
     void on_repayButton_clicked();
@@ -40,6 +39,8 @@ private slots:
     void on_quitButton_clicked();
 
     void on_searchButtonPermary_clicked();
+
+    void on_searchButtonBorrow_clicked();
 
 private:
     Ui::MainWindow *ui;
