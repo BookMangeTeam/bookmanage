@@ -2,6 +2,8 @@
 #include "ui_login.h"
 #include "register.h"
 #include "mainwindow.h"
+#include "mainwindow_manage.h"
+#include "ui_mainwindow_manage.h"
 #include "ui_mainwindow.h"
 #include <QDebug>
 #include <QTextStream>  //文本文件的读写类
@@ -100,10 +102,20 @@ void Login::on_loginButton_clicked()
                     if(password_input == password)
                     {
                         sign = 1;
-                        MainWindow *mwins = new MainWindow();//说明main_i指针指向了副窗口，其中main_interface类在main_interface.h中定义
-                        this->hide();//隐藏父窗口，this指针指向父窗口
-                        mwins->show();
-                        break;
+                        if(username == 'admin' && password == 'system123')   //设定一个超级管理员的账号密码，若验证成功则进入管理员界面
+                        {
+                            MainWindow_Manage *mwins_mag = new MainWindow_Manage();  //指向超级管理员窗口
+                            this->hide();
+                            mwins_mag->show();
+                            break;
+                        }
+                        else
+                        {
+                            MainWindow_Manage *mwins_mag = new MainWindow_Manage();//说明main_i指针指向了副窗口，其中main_interface类在main_interface.h中定义
+                            this->hide();//隐藏父窗口，this指针指向父窗口
+                            mwins_mag->show();
+                            break;
+                        }
                     }
                 }
             }
