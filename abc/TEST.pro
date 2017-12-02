@@ -28,3 +28,6 @@ FORMS    += mainwindow.ui \
     login.ui \
     register.ui \
     mainwindow_manage.ui
+
+RESOURCES += \
+    picture.qrc
