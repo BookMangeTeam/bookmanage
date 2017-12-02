@@ -16,17 +16,15 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     login.cpp \
     register.cpp \
-    mainwindow_manage.cpp \
-    registermanager.cpp
+    mainwindow_manage.cpp
 
 HEADERS  += mainwindow.h \
     login.h \
     register.h \
     mainwindow_manage.h \
-    registermanager.h
+    global_variable.h
 
 FORMS    += mainwindow.ui \
     login.ui \
     register.ui \
-    mainwindow_manage.ui \
-    registermanager.ui
+    mainwindow_manage.ui
