@@ -47,6 +47,8 @@ public:
         if (Register->objectName().isEmpty())
             Register->setObjectName(QStringLiteral("Register"));
         Register->resize(446, 710);
+        Register->setMinimumSize(QSize(446, 710));
+        Register->setMaximumSize(QSize(446, 710));
         Register->setStyleSheet(QStringLiteral(""));
         registerBackgroundFrame = new QFrame(Register);
         registerBackgroundFrame->setObjectName(QStringLiteral("registerBackgroundFrame"));

@@ -84,6 +84,8 @@ public:
         sizePolicy.setVerticalStretch(0);
         sizePolicy.setHeightForWidth(MainWindow->sizePolicy().hasHeightForWidth());
         MainWindow->setSizePolicy(sizePolicy);
+        MainWindow->setMinimumSize(QSize(1093, 651));
+        MainWindow->setMaximumSize(QSize(1093, 951));
         MainWindow->setLayoutDirection(Qt::LeftToRight);
         MainWindow->setStyleSheet(QStringLiteral("background-color:#fff"));
         centralWidget = new QWidget(MainWindow);

@@ -42,6 +42,8 @@ public:
         if (Login->objectName().isEmpty())
             Login->setObjectName(QStringLiteral("Login"));
         Login->resize(429, 591);
+        Login->setMinimumSize(QSize(429, 591));
+        Login->setMaximumSize(QSize(429, 591));
         Login->setAutoFillBackground(false);
         Login->setStyleSheet(QStringLiteral(""));
         loginBackgroundFrame = new QFrame(Login);
