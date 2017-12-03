@@ -55,12 +55,12 @@ public:
         loginBackgroundFrame->setFrameShadow(QFrame::Raised);
         title = new QLabel(loginBackgroundFrame);
         title->setObjectName(QStringLiteral("title"));
-        title->setGeometry(QRect(80, 100, 271, 61));
+        title->setGeometry(QRect(87, 100, 271, 61));
         QFont font;
         font.setFamily(QString::fromUtf8("\347\255\211\347\272\277"));
         font.setPointSize(32);
-        font.setBold(false);
-        font.setWeight(50);
+        font.setBold(true);
+        font.setWeight(75);
         title->setFont(font);
         title->setAutoFillBackground(false);
         title->setStyleSheet(QStringLiteral(""));
@@ -101,7 +101,7 @@ public:
         user_option->setChecked(true);
         administrator_option = new QRadioButton(loginBackgroundFrame);
         administrator_option->setObjectName(QStringLiteral("administrator_option"));
-        administrator_option->setGeometry(QRect(240, 380, 91, 21));
+        administrator_option->setGeometry(QRect(250, 380, 91, 21));
         administrator_option->setFont(font1);
         loginButton = new QPushButton(loginBackgroundFrame);
         loginButton->setObjectName(QStringLiteral("loginButton"));

@@ -8,7 +8,7 @@
 #include <QMessageBox>
 #include <global_variable.h>
 #include <Qstring>
-
+#include <QCryptographichash.h> //md5加密封装类
 
 
 
@@ -43,6 +43,8 @@ Register::~Register()
 void Register::on_affirmReisterButton_clicked()
 {
 
+    QString md5_password1,md5_password2;
+    QByteArray bb;
     //注册信息到用户表
     if(register_location == 1)
     {
@@ -94,9 +96,14 @@ void Register::on_affirmReisterButton_clicked()
                 if(flag == 0)
                 {
                     //将登录信息写进磁盘文件
+                    //密码md5加密
                     txtOutput << username << endl;
-                    txtOutput << password1 << endl;
-                    txtOutput << password2 << endl;
+                    bb = QCryptographicHash::hash ( password1.toLatin1(), QCryptographicHash::Md5 );
+                    md5_password1.append(bb.toHex());
+                    txtOutput << md5_password1 << endl;
+                    bb = QCryptographicHash::hash ( password2.toLatin1(), QCryptographicHash::Md5 );
+                    md5_password2.append(bb.toHex());
+                    txtOutput << md5_password2 << endl;
                     txtOutput << department << endl;
                     Login *login = new Login();
                     QMessageBox::information(this, "提示", "注册成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
@@ -183,9 +190,14 @@ void Register::on_affirmReisterButton_clicked()
                 if(flag == 0)
                 {
                     //将登录信息写进磁盘文件
+                    //md5密码加密
                     txtOutput << username << endl;
-                    txtOutput << password1 << endl;
-                    txtOutput << password2 << endl;
+                    bb = QCryptographicHash::hash ( password1.toLatin1(), QCryptographicHash::Md5 );
+                    md5_password1.append(bb.toHex());
+                    txtOutput << md5_password1 << endl;
+                    bb = QCryptographicHash::hash ( password2.toLatin1(), QCryptographicHash::Md5 );
+                    md5_password2.append(bb.toHex());
+                    txtOutput << md5_password2 << endl;
                     txtOutput << department << endl;
                     Login *login = new Login();
                     QMessageBox::information(this, "提示", "注册成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);

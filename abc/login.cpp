@@ -10,6 +10,7 @@
 #include <QFile>
 #include <QMessageBox>
 #include <global_variable.h>
+#include <QCryptographichash.h> //md5加密封装类
 
 
 Login::Login(QWidget *parent) :
@@ -40,9 +41,12 @@ void Login::on_registerButton_clicked()
 
 void Login::on_loginButton_clicked()
 {
-    QString username,password, usrname_input,password_input;
+    QString username,password, usrname_input,password_input,md5_password;
+    QByteArray bb;
     usrname_input = ui->user_nameInput->text();
     password_input = ui->passwordInput->text();
+    bb = QCryptographicHash::hash ( password_input.toLatin1(), QCryptographicHash::Md5 );
+    md5_password.append(bb.toHex());
     //从用户表查找登录信息
     if(ui->user_option->isChecked() == true){
         int flag = 0,sign = 0;
@@ -61,7 +65,7 @@ void Login::on_loginButton_clicked()
                 {
                     flag = 1;
                     password = txtInput.readLine();
-                    if(password_input == password)//验证密码
+                    if(md5_password == password)//验证密码
                     {
                         sign = 1;
                         MainWindow *mwins = new MainWindow();//说明main_i指针指向了副窗口，其中main_interface类在main_interface.h中定义
@@ -117,7 +121,7 @@ void Login::on_loginButton_clicked()
                     {
                         flag = 1;
                         password = txtInput.readLine();
-                        if(password_input == password)//验证密码
+                        if(md5_password == password)//验证密码
                         {
                             sign = 1;
                             MainWindow_Manage *mwins_mag = new MainWindow_Manage();  //指向管理员窗口

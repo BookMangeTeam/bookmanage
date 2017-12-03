@@ -45,7 +45,7 @@ border-image: url(:/1.jpg);
    <widget class="QLabel" name="title">
     <property name="geometry">
      <rect>
-      <x>80</x>
+      <x>87</x>
       <y>100</y>
       <width>271</width>
       <height>61</height>
@@ -55,8 +55,8 @@ border-image: url(:/1.jpg);
      <font>
       <family>等线</family>
       <pointsize>32</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
+      <weight>75</weight>
+      <bold>true</bold>
      </font>
     </property>
     <property name="autoFillBackground">
@@ -188,7 +188,7 @@ border-image: url(:/1.jpg);
    <widget class="QRadioButton" name="administrator_option">
     <property name="geometry">
      <rect>
-      <x>240</x>
+      <x>250</x>
       <y>380</y>
       <width>91</width>
       <height>21</height>

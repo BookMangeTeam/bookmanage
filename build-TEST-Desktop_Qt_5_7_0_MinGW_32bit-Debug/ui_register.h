@@ -62,8 +62,8 @@ public:
         QFont font;
         font.setFamily(QString::fromUtf8("\347\255\211\347\272\277"));
         font.setPointSize(36);
-        font.setBold(false);
-        font.setWeight(50);
+        font.setBold(true);
+        font.setWeight(75);
         register_2->setFont(font);
         register_2->setAlignment(Qt::AlignCenter);
         register_userName = new QLabel(registerBackgroundFrame);
