@@ -58,6 +58,7 @@ public:
         registerBackgroundFrame->setFrameShadow(QFrame::Raised);
         register_2 = new QLabel(registerBackgroundFrame);
         register_2->setObjectName(QStringLiteral("register_2"));
+        register_2->setEnabled(true);
         register_2->setGeometry(QRect(125, 20, 211, 61));
         QFont font;
         font.setFamily(QString::fromUtf8("\347\255\211\347\272\277"));
@@ -65,6 +66,7 @@ public:
         font.setBold(true);
         font.setWeight(75);
         register_2->setFont(font);
+        register_2->setAutoFillBackground(false);
         register_2->setAlignment(Qt::AlignCenter);
         register_userName = new QLabel(registerBackgroundFrame);
         register_userName->setObjectName(QStringLiteral("register_userName"));

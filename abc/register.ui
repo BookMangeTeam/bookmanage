@@ -37,6 +37,9 @@ background-image: url(:/2.jpg);
     <enum>QFrame::Raised</enum>
    </property>
    <widget class="QLabel" name="register_2">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
     <property name="geometry">
      <rect>
       <x>125</x>
@@ -52,6 +55,9 @@ background-image: url(:/2.jpg);
       <weight>75</weight>
       <bold>true</bold>
      </font>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
     </property>
     <property name="text">
      <string>注册</string>

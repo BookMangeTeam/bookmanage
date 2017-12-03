@@ -18,7 +18,6 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QStatusBar>
@@ -68,7 +67,6 @@ public:
     QPushButton *borrowRecordButton;
     QPushButton *borrowButton;
     QPushButton *btn_SignupManager;
-    QMenuBar *menubar;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *MainWindow_Manage)
@@ -76,11 +74,13 @@ public:
         if (MainWindow_Manage->objectName().isEmpty())
             MainWindow_Manage->setObjectName(QStringLiteral("MainWindow_Manage"));
         MainWindow_Manage->resize(1034, 652);
+        MainWindow_Manage->setStyleSheet(QStringLiteral(""));
         centralwidget = new QWidget(MainWindow_Manage);
         centralwidget->setObjectName(QStringLiteral("centralwidget"));
         stackedWidgetPermary = new QStackedWidget(centralwidget);
         stackedWidgetPermary->setObjectName(QStringLiteral("stackedWidgetPermary"));
         stackedWidgetPermary->setGeometry(QRect(10, 20, 851, 561));
+        stackedWidgetPermary->setStyleSheet(QStringLiteral(""));
         page = new QWidget();
         page->setObjectName(QStringLiteral("page"));
         name = new QLabel(page);
@@ -268,10 +268,6 @@ public:
         btn_SignupManager->setFont(font5);
         btn_SignupManager->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;"));
         MainWindow_Manage->setCentralWidget(centralwidget);
-        menubar = new QMenuBar(MainWindow_Manage);
-        menubar->setObjectName(QStringLiteral("menubar"));
-        menubar->setGeometry(QRect(0, 0, 1034, 26));
-        MainWindow_Manage->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow_Manage);
         statusbar->setObjectName(QStringLiteral("statusbar"));
         MainWindow_Manage->setStatusBar(statusbar);
