@@ -18,6 +18,22 @@ public:
 private slots:
     void on_btn_SignupManager_clicked();
 
+    void on_addButton_clicked();
+
+    void on_returnButtonAdd_clicked();
+
+    void on_deleteButton_clicked();
+
+    void on_returnButtonDelate_clicked();
+
+    void on_updateButton_clicked();
+
+    void on_returnButtonUpdate_clicked();
+
+    void on_borrowRecordButtonManage_clicked();
+
+    void on_returnBottonBRManage_clicked();
+
 private:
     Ui::MainWindow_Manage *ui;
 };

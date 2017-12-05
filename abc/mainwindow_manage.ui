@@ -6,34 +6,34 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1034</width>
-    <height>652</height>
+    <width>1093</width>
+    <height>651</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true"/>
+   <string notr="true">background-color:#fff</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QStackedWidget" name="stackedWidgetPermary">
+   <widget class="QStackedWidget" name="stackedWidgetManage">
     <property name="geometry">
      <rect>
       <x>10</x>
       <y>20</y>
       <width>851</width>
-      <height>561</height>
+      <height>611</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="page">
-     <widget class="QLabel" name="name">
+     <widget class="QLabel" name="nameManage">
       <property name="geometry">
        <rect>
         <x>160</x>
@@ -57,7 +57,7 @@
        <set>Qt::AlignCenter</set>
       </property>
      </widget>
-     <widget class="QLineEdit" name="searchLineEditPermary">
+     <widget class="QLineEdit" name="searchLineEditManage">
       <property name="geometry">
        <rect>
         <x>150</x>
@@ -70,7 +70,7 @@
        <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;</string>
       </property>
      </widget>
-     <widget class="QPushButton" name="searchButtonPermary">
+     <widget class="QPushButton" name="searchButtonManage">
       <property name="geometry">
        <rect>
         <x>390</x>
@@ -87,6 +87,9 @@
         <bold>false</bold>
        </font>
       </property>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
       <property name="styleSheet">
        <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
       </property>
@@ -96,12 +99,597 @@
      </widget>
     </widget>
     <widget class="QWidget" name="page_2">
-     <widget class="QLineEdit" name="searchLineEditBorrow">
+     <widget class="QPushButton" name="affirmBottonAdd">
       <property name="geometry">
        <rect>
-        <x>160</x>
-        <y>20</y>
+        <x>720</x>
+        <y>520</y>
+        <width>91</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>等线</family>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
+      </property>
+      <property name="text">
+       <string>增加</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="returnButtonAdd">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>520</y>
+        <width>91</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>等线</family>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
+      </property>
+      <property name="text">
+       <string>返回</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="add_ISBN">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>10</y>
+        <width>271</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Arial</family>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="isbn">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>10</y>
+        <width>91</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>等线</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>ISBN码</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="bookName">
+      <property name="geometry">
+       <rect>
+        <x>195</x>
+        <y>76</y>
+        <width>91</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>等线</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>书名</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="add_bookName">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>70</y>
+        <width>271</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Arial</family>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="author">
+      <property name="geometry">
+       <rect>
+        <x>206</x>
+        <y>137</y>
+        <width>71</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>等线</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>作者</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="add_author">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>130</y>
+        <width>271</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Arial</family>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="publish">
+      <property name="geometry">
+       <rect>
+        <x>205</x>
+        <y>195</y>
+        <width>71</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>等线</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>出版社</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="price">
+      <property name="geometry">
+       <rect>
+        <x>212</x>
+        <y>316</y>
+        <width>54</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>等线</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>价格</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="add_price">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>310</y>
+        <width>271</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Arial</family>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="amount">
+      <property name="geometry">
+       <rect>
+        <x>212</x>
+        <y>377</y>
+        <width>54</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>等线</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>数量</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="add_amount">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>370</y>
+        <width>271</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Arial</family>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="status">
+      <property name="geometry">
+       <rect>
+        <x>210</x>
+        <y>436</y>
+        <width>54</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>等线</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>状态</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="add_status">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>430</y>
+        <width>111</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>等线</family>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;</string>
+      </property>
+      <item>
+       <property name="text">
+        <string>    可借阅</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>   不可借阅</string>
+       </property>
+      </item>
+     </widget>
+     <widget class="QLabel" name="publishTime">
+      <property name="geometry">
+       <rect>
+        <x>200</x>
+        <y>257</y>
+        <width>81</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>等线</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>出版时间</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="add_publish">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>190</y>
+        <width>271</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;</string>
+      </property>
+     </widget>
+     <widget class="QDateEdit" name="add_publishTime">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>250</y>
+        <width>271</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>等线</family>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_3">
+     <widget class="QTableView" name="bookInformationDelate">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>90</y>
+        <width>821</width>
+        <height>411</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="returnButtonDelate">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>520</y>
+        <width>91</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>等线</family>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
+      </property>
+      <property name="text">
+       <string>返回</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="affirmBottonDelate">
+      <property name="geometry">
+       <rect>
+        <x>720</x>
+        <y>520</y>
+        <width>91</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>等线</family>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
+      </property>
+      <property name="text">
+       <string>删除</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="searchLineEditDelate">
+      <property name="geometry">
+       <rect>
+        <x>170</x>
+        <y>30</y>
         <width>451</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="searchButtonDelate">
+      <property name="geometry">
+       <rect>
+        <x>680</x>
+        <y>30</y>
+        <width>71</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>等线</family>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
+      </property>
+      <property name="text">
+       <string>搜索</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_4">
+     <widget class="QTableView" name="bookInformationUpdate">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>90</y>
+        <width>851</width>
+        <height>251</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="returnButtonUpdate">
+      <property name="geometry">
+       <rect>
+        <x>50</x>
+        <y>520</y>
+        <width>91</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>等线</family>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
+      </property>
+      <property name="text">
+       <string>返回</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="affirmBottonUpdate">
+      <property name="geometry">
+       <rect>
+        <x>720</x>
+        <y>520</y>
+        <width>91</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>等线</family>
+        <pointsize>14</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
+      </property>
+      <property name="text">
+       <string>更改</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="updateOption">
+      <property name="geometry">
+       <rect>
+        <x>180</x>
+        <y>376</y>
+        <width>142</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>等线</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>项目</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="updateOption_CB">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>370</y>
+        <width>161</width>
         <height>31</height>
        </rect>
       </property>
@@ -113,15 +701,100 @@
       <property name="styleSheet">
        <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;</string>
       </property>
-      <property name="text">
-       <string/>
-      </property>
+      <item>
+       <property name="text">
+        <string>       ISBN</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>       书名</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>       作者</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>     出版社</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>    出版时间</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>       价格</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>       数量</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
+        <string>       状态</string>
+       </property>
+      </item>
      </widget>
-     <widget class="QPushButton" name="searchButtonBorrow">
+     <widget class="QLabel" name="updateTo">
       <property name="geometry">
        <rect>
-        <x>650</x>
-        <y>20</y>
+        <x>220</x>
+        <y>435</y>
+        <width>71</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>等线</family>
+        <pointsize>15</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>更改为</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="updateTo_Input">
+      <property name="geometry">
+       <rect>
+        <x>370</x>
+        <y>430</y>
+        <width>291</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="searchLineEditUpdate">
+      <property name="geometry">
+       <rect>
+        <x>170</x>
+        <y>30</y>
+        <width>451</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="searchButtonUpdate">
+      <property name="geometry">
+       <rect>
+        <x>680</x>
+        <y>30</y>
         <width>71</width>
         <height>31</height>
        </rect>
@@ -134,6 +807,9 @@
         <bold>false</bold>
        </font>
       </property>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
+      </property>
       <property name="styleSheet">
        <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
       </property>
@@ -141,199 +817,12 @@
        <string>搜索</string>
       </property>
      </widget>
-     <widget class="QTableView" name="bookInformationborrow">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>70</y>
-        <width>801</width>
-        <height>441</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="affirmBottonBorrow">
-      <property name="geometry">
-       <rect>
-        <x>720</x>
-        <y>520</y>
-        <width>91</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>等线</family>
-        <pointsize>14</pointsize>
-        <weight>50</weight>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
-      </property>
-      <property name="text">
-       <string>借书</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="returnButtonBorrow">
-      <property name="geometry">
-       <rect>
-        <x>10</x>
-        <y>530</y>
-        <width>91</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>等线</family>
-        <pointsize>14</pointsize>
-        <weight>50</weight>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
-      </property>
-      <property name="text">
-       <string>返回</string>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="page_3">
-     <widget class="QTableView" name="bookInformationRepay">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>40</y>
-        <width>811</width>
-        <height>461</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="returnButtonRepay">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>520</y>
-        <width>91</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>等线</family>
-        <pointsize>14</pointsize>
-        <weight>50</weight>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
-      </property>
-      <property name="text">
-       <string>返回</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="affirmBottonRepay">
-      <property name="geometry">
-       <rect>
-        <x>720</x>
-        <y>520</y>
-        <width>91</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>等线</family>
-        <pointsize>14</pointsize>
-        <weight>50</weight>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
-      </property>
-      <property name="text">
-       <string>还书</string>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="page_4">
-     <widget class="QTableView" name="bookInformationRenew">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>40</y>
-        <width>811</width>
-        <height>461</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="returnButtonRenew">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>520</y>
-        <width>91</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>等线</family>
-        <pointsize>14</pointsize>
-        <weight>50</weight>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
-      </property>
-      <property name="text">
-       <string>返回</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="affirmBottonRenew">
-      <property name="geometry">
-       <rect>
-        <x>720</x>
-        <y>520</y>
-        <width>91</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>等线</family>
-        <pointsize>14</pointsize>
-        <weight>50</weight>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
-      </property>
-      <property name="text">
-       <string>续借</string>
-      </property>
-     </widget>
     </widget>
     <widget class="QWidget" name="page_5">
-     <widget class="QTableView" name="bookInformationBorrowR">
+     <widget class="QTableView" name="bookInformationBRManage">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>10</x>
         <y>40</y>
         <width>811</width>
         <height>461</height>
@@ -343,10 +832,10 @@
        <string notr="true"/>
       </property>
      </widget>
-     <widget class="QPushButton" name="returnBottonBorrowR">
+     <widget class="QPushButton" name="returnBottonBRManage">
       <property name="geometry">
        <rect>
-        <x>0</x>
+        <x>50</x>
         <y>520</y>
         <width>91</width>
         <height>31</height>
@@ -360,124 +849,8 @@
         <bold>false</bold>
        </font>
       </property>
-      <property name="styleSheet">
-       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
-      </property>
-      <property name="text">
-       <string>返回</string>
-      </property>
-     </widget>
-    </widget>
-    <widget class="QWidget" name="page_6">
-     <widget class="QTableView" name="inDebtInformation">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>50</y>
-        <width>811</width>
-        <height>231</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-     </widget>
-     <widget class="QTableView" name="paymentInformation">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>300</y>
-        <width>451</width>
-        <height>201</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-     </widget>
-     <widget class="QLabel" name="passwordMoney">
-      <property name="geometry">
-       <rect>
-        <x>600</x>
-        <y>340</y>
-        <width>121</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>等线</family>
-        <pointsize>14</pointsize>
-        <weight>50</weight>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>请输入密码</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-     <widget class="QLineEdit" name="passwordMoneyInput">
-      <property name="geometry">
-       <rect>
-        <x>550</x>
-        <y>380</y>
-        <width>221</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="echoMode">
-       <enum>QLineEdit::PasswordEchoOnEdit</enum>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="affirmButtonMoney">
-      <property name="geometry">
-       <rect>
-        <x>620</x>
-        <y>450</y>
-        <width>91</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>等线</family>
-        <pointsize>14</pointsize>
-        <weight>50</weight>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
-      </property>
-      <property name="text">
-       <string>确认</string>
-      </property>
-     </widget>
-     <widget class="QPushButton" name="returnButtonMoney">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>520</y>
-        <width>91</width>
-        <height>31</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <family>等线</family>
-        <pointsize>14</pointsize>
-        <weight>50</weight>
-        <bold>false</bold>
-       </font>
+      <property name="cursor">
+       <cursorShape>PointingHandCursor</cursorShape>
       </property>
       <property name="styleSheet">
        <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
@@ -488,11 +861,11 @@
      </widget>
     </widget>
    </widget>
-   <widget class="QPushButton" name="moneyBotton">
+   <widget class="QPushButton" name="deleteButton">
     <property name="geometry">
      <rect>
-      <x>910</x>
-      <y>300</y>
+      <x>940</x>
+      <y>150</y>
       <width>91</width>
       <height>31</height>
      </rect>
@@ -505,35 +878,14 @@
       <bold>false</bold>
      </font>
     </property>
-    <property name="styleSheet">
-     <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
-    </property>
-    <property name="text">
-     <string>缴/欠费</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="repayButton">
-    <property name="geometry">
-     <rect>
-      <x>910</x>
-      <y>120</y>
-      <width>91</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <family>等线</family>
-      <pointsize>12</pointsize>
-      <weight>50</weight>
-      <bold>false</bold>
-     </font>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="styleSheet">
      <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
     </property>
     <property name="text">
-     <string>还书</string>
+     <string>删除图书</string>
     </property>
    </widget>
    <widget class="Line" name="line">
@@ -549,11 +901,11 @@
      <enum>Qt::Vertical</enum>
     </property>
    </widget>
-   <widget class="QPushButton" name="quitButton">
+   <widget class="QPushButton" name="quitButtonManage">
     <property name="geometry">
      <rect>
-      <x>910</x>
-      <y>500</y>
+      <x>940</x>
+      <y>540</y>
       <width>91</width>
       <height>31</height>
      </rect>
@@ -565,6 +917,9 @@
       <weight>50</weight>
       <bold>false</bold>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="styleSheet">
      <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
@@ -573,11 +928,11 @@
      <string>退出</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="renewButton">
+   <widget class="QPushButton" name="updateButton">
     <property name="geometry">
      <rect>
-      <x>910</x>
-      <y>180</y>
+      <x>940</x>
+      <y>230</y>
       <width>91</width>
       <height>31</height>
      </rect>
@@ -590,18 +945,21 @@
       <bold>false</bold>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="styleSheet">
      <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
     </property>
     <property name="text">
-     <string>续借</string>
+     <string>更改信息</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="borrowRecordButton">
+   <widget class="QPushButton" name="borrowRecordButtonManage">
     <property name="geometry">
      <rect>
-      <x>910</x>
-      <y>240</y>
+      <x>940</x>
+      <y>310</y>
       <width>91</width>
       <height>31</height>
      </rect>
@@ -614,18 +972,21 @@
       <bold>false</bold>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="styleSheet">
      <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
     </property>
     <property name="text">
-     <string>借书记录</string>
+     <string>借阅记录</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="borrowButton">
+   <widget class="QPushButton" name="addButton">
     <property name="geometry">
      <rect>
-      <x>910</x>
-      <y>60</y>
+      <x>940</x>
+      <y>70</y>
       <width>91</width>
       <height>31</height>
      </rect>
@@ -638,18 +999,21 @@
       <bold>false</bold>
      </font>
     </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
     <property name="styleSheet">
      <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
     </property>
     <property name="text">
-     <string>借书</string>
+     <string>增加图书</string>
     </property>
    </widget>
    <widget class="QPushButton" name="btn_SignupManager">
     <property name="geometry">
      <rect>
-      <x>910</x>
-      <y>360</y>
+      <x>940</x>
+      <y>390</y>
       <width>93</width>
       <height>28</height>
      </rect>
@@ -659,6 +1023,9 @@
       <family>等线</family>
       <pointsize>12</pointsize>
      </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
     </property>
     <property name="styleSheet">
      <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;</string>
