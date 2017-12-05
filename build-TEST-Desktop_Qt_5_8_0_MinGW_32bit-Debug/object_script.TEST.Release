@@ -4,10 +4,9 @@ INPUT(
 ./release\login.o
 ./release\register.o
 ./release\mainwindow_manage.o
-./release\registermanager.o
+./release\qrc_picture.o
 ./release\moc_mainwindow.o
 ./release\moc_login.o
 ./release\moc_register.o
 ./release\moc_mainwindow_manage.o
-./release\moc_registermanager.o
 );

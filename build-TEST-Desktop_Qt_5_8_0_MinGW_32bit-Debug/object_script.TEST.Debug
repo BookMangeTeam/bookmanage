@@ -4,10 +4,9 @@ INPUT(
 ./debug\login.o
 ./debug\register.o
 ./debug\mainwindow_manage.o
-./debug\registermanager.o
+./debug\qrc_picture.o
 ./debug\moc_mainwindow.o
 ./debug\moc_login.o
 ./debug\moc_register.o
 ./debug\moc_mainwindow_manage.o
-./debug\moc_registermanager.o
 );
