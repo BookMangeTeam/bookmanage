@@ -5,7 +5,9 @@
 
 int register_location = 0;
 int manage_jurisdiction = 0;
-int mark = 1;
+int mark = 0;
+int user_key = 0;
+int admin_key = 0;
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);

@@ -12,3 +12,9 @@ extern int register_location;
 
 extern int manage_jurisdiction;
 //判断是超级管理员还是管理员（不同的权限）
+
+extern int user_key;
+//用户表中的Key;
+
+extern int admin_key;
+//管理员表中的Key

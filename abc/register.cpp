@@ -9,6 +9,9 @@
 #include <global_variable.h>
 #include <Qstring>
 #include <QCryptographichash.h> //md5加密封装类
+#include <b_plus_tree.h>
+#include <string.h>
+#include <QByteArray>
 
 
 
@@ -32,6 +35,7 @@ Register::Register(QWidget *parent) :
         ui->user_optionRegister->setEnabled(false);
         ui->user_optionRegister->setChecked(false);
         ui->administrator_optionRegister->setChecked(true);
+        ui->academyInput->setEnabled(false);
     }
 }
 
@@ -43,193 +47,150 @@ Register::~Register()
 void Register::on_affirmReisterButton_clicked()
 {
 
-    QString md5_password1,md5_password2;
+    QString md5_password;
     QByteArray bb;
     //注册信息到用户表
     if(register_location == 1)
     {
-        QFile f("user.txt");
-        if(!f.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append))
+        QString username,password1,password2,department;
+        string username_s;
+        username = ui->register_userNameinput->text();
+        password1 = ui->register_passwordInput->text();
+        password2 = ui->register_passwordAffirmInput->text();
+        department = ui->academyInput->currentText();
+//        username_s = string((const char *)username.toLocal8Bit());
+        username_s = username.toStdString();//Qstring转string
+        //判断成功情况
+        if(username != "" && password1 != "" && password2 != "" && password1 == password2)
         {
-            qDebug() << "Open failed." << endl;
+            //判断用户名是否已经存在
+            int flag = 0;
+            vector<pair< int,vector<Undecide> > > all;
+            all = User.AllLeaf();
+            for(int i = 0; i < all.size(); i++)
+            {
+                if((all[i].second)[0].s == username)
+                {
+                    //用户名已存在
+                    flag = 1;
+                    QMessageBox::critical(this, "critical", "用户名已存在!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                    break;
+                }
+            }
+
+            if(flag == 0)
+            {
+                //将登录信息写进数据库user表
+                //密码md5加密
+                vector<Undecide>vv;
+                Undecide te1,te2,te3;
+                strcpy(te1.s,username_s);
+                bb = QCryptographicHash::hash ( password1.toLatin1(), QCryptographicHash::Md5 );
+                md5_password.append(bb.toHex());
+                strcpy(te2.s,md5_password);
+                strcpy(te3.s,department);
+                vv.push_back(te1);
+                vv.push_back(te2);
+                vv.push_back(te3);
+                User.Insert(user_key,vv);
+                user_key++;
+                Login *login = new Login();
+                QMessageBox::information(this, "提示", "注册成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                this->hide();
+                login->show();
+             }
         }
+
+        //判断失败情况
         else
         {
-            QTextStream txtOutput(&f);
-            QString username,password1,password2,department;
-            username = ui->register_userNameinput->text();
-            password1 = ui->register_passwordInput->text();
-            password2 = ui->register_passwordAffirmInput->text();
-            department = ui->academyInput->currentText();
-            //判断成功情况
-            if(username != "" && password1 != "" && password2 != "" && password1 == password2)
+            if(username == "")
             {
-                //判断用户名是否已经存在
-                QString usernameFile;
-                int n = 1,an,k = 1,flag = 0;
-                QFile f("user.txt");
-                if(!f.open(QIODevice::ReadOnly | QIODevice::Text))
-                {
-                    qDebug() << "Open failed." << endl;
-                }
-
-                else{
-                    QTextStream txtInput(&f);
-                    while(!txtInput.atEnd())//如果你到了文件的末尾，atEnd()返回真。
-                    {
-                        usernameFile = txtInput.readLine();//文件读出的用户名
-                        an = 4 * n - 3;//用户名在1,5,9....行防止密码和用户名重复导致判断错误
-                        if(k == an)
-                        {
-                            if(username == usernameFile)
-                            {
-                                QMessageBox::critical(this, "critical", "用户名已存在!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-                                flag = 1;
-                                break;
-                            }
-                            n++;
-                        }
-                        k++;
-
-                    }
-                }
-                if(flag == 0)
-                {
-                    //将登录信息写进磁盘文件
-                    //密码md5加密
-                    txtOutput << username << endl;
-                    bb = QCryptographicHash::hash ( password1.toLatin1(), QCryptographicHash::Md5 );
-                    md5_password1.append(bb.toHex());
-                    txtOutput << md5_password1 << endl;
-                    bb = QCryptographicHash::hash ( password2.toLatin1(), QCryptographicHash::Md5 );
-                    md5_password2.append(bb.toHex());
-                    txtOutput << md5_password2 << endl;
-                    txtOutput << department << endl;
-                    Login *login = new Login();
-                    QMessageBox::information(this, "提示", "注册成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-                    this->hide();
-                    login->show();
-                }
+                QMessageBox::critical(this, "critical", "请输入用户名!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
             }
-
-            //判断失败情况
-            else
+            else if(password1 == "")
             {
-                if(username == "")
-                {
-                    QMessageBox::critical(this, "critical", "请输入用户名!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-                }
-                else if(password1 == "")
-                {
-                    QMessageBox::critical(this, "critical", "请输入密码!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-                }
-                else if(password2 == "")
-                {
-                    QMessageBox::critical(this, "critical", "请再次确认输入密码!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-                }
+                QMessageBox::critical(this, "critical", "请输入密码!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+            }
+            else if(password2 == "")
+            {
+                QMessageBox::critical(this, "critical", "请再次确认输入密码!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+            }
                 else if(password1 != password2)
-                {
-                     QMessageBox::critical(this, "critical", "两次密码输出不一致!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-                }
+            {
+                QMessageBox::critical(this, "critical", "两次密码输出不一致!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
             }
         }
-        f.close();
-
     }
 
 
     //注册信息到管理员表
     if(register_location == 2)
     {
-        QFile f("administrator.txt");
-        if(!f.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Append))
+        QString adminname,password1,password2,department;;
+        adminname = ui->register_userNameinput->text();
+        password1 = ui->register_passwordInput->text();
+        password2 = ui->register_passwordAffirmInput->text();
+        department = ui->academyInput->currentText();
+        //判断成功情况
+        if(adminname != "" && password1 != "" && password2 != "" && password1 == password2)
         {
-            qDebug() << "Open failed." << endl;
+            //判断用户名是否已经存在
+            int flag = 0;
+            vector<pair< int,vector<Undecide> > > all;
+            all = Admin.AllLeaf();
+            for(int i = 0; i < all.size(); i++)
+            {
+                if((all[i].second)[0].s == adminname)
+                {
+                    //用户名已存在
+                    flag = 1;
+                    QMessageBox::critical(this, "critical", "用户名已存在!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                    break;
+                }
+            }
+
+            if(flag == 0)
+            {
+                //将登录信息写进数据库admin表
+                //密码md5加密
+                vector<Undecide>vv;
+                Undecide te1,te2;
+                strcpy(te1.s,adminname);
+                bb = QCryptographicHash::hash ( password1.toLatin1(), QCryptographicHash::Md5 );
+                md5_password.append(bb.toHex());
+                strcpy(te2.s,md5_password);
+                vv.push_back(te1);
+                vv.push_back(te2);;
+                Admin.Insert(admin_key,vv);
+                admin_key++;
+                Login *login = new Login();
+                QMessageBox::information(this, "提示", "注册成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                this->hide();
+                login->show();
+             }
         }
+
+        //判断失败情况
         else
         {
-            QTextStream txtOutput(&f);
-            QString username,password1,password2,department;
-            username = ui->register_userNameinput->text();
-            password1 = ui->register_passwordInput->text();
-            password2 = ui->register_passwordAffirmInput->text();
-            department = ui->academyInput->currentText();
-            //判断成功情况
-            if(username != "" && password1 != "" && password2 != "" && password1 == password2)
+            if(adminname == "")
             {
-
-                //判断用户名是否已经存在
-                QString usernameFile;
-                int n = 1,an,k = 1,flag = 0;
-                QFile f("administrator.txt");
-                if(!f.open(QIODevice::ReadOnly | QIODevice::Text))
-                {
-                    qDebug() << "Open failed." << endl;
-                }
-
-                else{
-                    QTextStream txtInput(&f);
-                    while(!txtInput.atEnd())//如果你到了文件的末尾，atEnd()返回真。
-                    {
-                        usernameFile = txtInput.readLine();//文件读出的用户名
-                        an = 4 * n - 3;
-                        if(k == an)
-                        {
-                            if(username == usernameFile)
-                            {
-                                QMessageBox::critical(this, "critical", "用户名已存在!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-                                flag = 1;
-                                break;
-                            }
-                            n++;
-                        }
-                        k++;
-
-                    }
-                }
-                if(flag == 0)
-                {
-                    //将登录信息写进磁盘文件
-                    //md5密码加密
-                    txtOutput << username << endl;
-                    bb = QCryptographicHash::hash ( password1.toLatin1(), QCryptographicHash::Md5 );
-                    md5_password1.append(bb.toHex());
-                    txtOutput << md5_password1 << endl;
-                    bb = QCryptographicHash::hash ( password2.toLatin1(), QCryptographicHash::Md5 );
-                    md5_password2.append(bb.toHex());
-                    txtOutput << md5_password2 << endl;
-                    txtOutput << department << endl;
-                    Login *login = new Login();
-                    QMessageBox::information(this, "提示", "注册成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-                    this->hide();
-                    login->show();
-                }
+                QMessageBox::critical(this, "critical", "请输入用户名!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+            }
+            else if(password1 == "")
+            {
+                QMessageBox::critical(this, "critical", "请输入密码!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+            }
+            else if(password2 == "")
+            {
+                QMessageBox::critical(this, "critical", "请再次确认输入密码!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+            }
+            else if(password1 != password2)
+            {
+                QMessageBox::critical(this, "critical", "两次密码输出不一致!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
             }
 
-            //判断失败情况
-            else
-            {
-                if(username == "")
-                {
-                    QMessageBox::critical(this, "critical", "请输入用户名!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-                }
-                else if(password1 == "")
-                {
-                    QMessageBox::critical(this, "critical", "请输入密码!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-                }
-                else if(password2 == "")
-                {
-                    QMessageBox::critical(this, "critical", "请再次确认输入密码!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-                }
-                else if(password1 != password2)
-                {
-                     QMessageBox::critical(this, "critical", "两次密码输出不一致!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-                }
-
-            }
-         }
-
-        f.close();
-
+        }
     }
 }

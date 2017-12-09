@@ -11,6 +11,7 @@
 #include <QMessageBox>
 #include <global_variable.h>
 #include <QCryptographichash.h> //md5加密封装类
+#include <b_plus_tree.h>
 
 
 Login::Login(QWidget *parent) :
@@ -41,59 +42,59 @@ void Login::on_registerButton_clicked()
 
 void Login::on_loginButton_clicked()
 {
-    QString username,password, usrname_input,password_input,md5_password;
-    QByteArray bb;
-    usrname_input = ui->user_nameInput->text();
-    password_input = ui->passwordInput->text();
-    bb = QCryptographicHash::hash ( password_input.toLatin1(), QCryptographicHash::Md5 );
-    md5_password.append(bb.toHex());
     //从用户表查找登录信息
-    if(ui->user_option->isChecked() == true){
+    if(ui->user_option->isChecked() == true)
+    {
         int flag = 0,sign = 0;
-        QFile f("user.txt");
-        if(!f.open(QIODevice::ReadOnly | QIODevice::Text))
-        {
-            qDebug() << "Open failed." << endl;
-        }
+        QString usrname_input,password_input,md5_password;
+        QByteArray bb;
+        usrname_input = ui->user_nameInput->text();
+        password_input = ui->passwordInput->text();
+        bb = QCryptographicHash::hash ( password_input.toLatin1(), QCryptographicHash::Md5 );
+        md5_password.append(bb.toHex());
 
-        else{
-            QTextStream txtInput(&f);
-            while(!txtInput.atEnd())//如果你到了文件的末尾，atEnd()返回真。
+
+        vector<pair< int,vector<Undecide> > > all;
+//        all = User.AllLeaf();
+        for(int i = 0; i < all.size(); i++)
+        {
+            if((all[i].second)[0].s == usrname_input)
             {
-                username = txtInput.readLine();//文件读出的用户名
-                if(usrname_input == username)//验证用户名
+                //验证用户名
+                flag = 1;
+                if((all[i].second)[1].s == md5_password)
                 {
-                    flag = 1;
-                    password = txtInput.readLine();
-                    if(md5_password == password)//验证密码
-                    {
-                        sign = 1;
-                        MainWindow *mwins = new MainWindow();//说明main_i指针指向了副窗口，其中main_interface类在main_interface.h中定义
-                        this->hide();//隐藏父窗口，this指针指向父窗口
-                        mwins->show();
-                        break;
-                    }
+                    //验证密码
+                    sign = 1;
+                    MainWindow *mwins = new MainWindow();//说明mwins指针指向了副窗口，其中MainWindow类在MainWindow.h中定义
+                    this->hide();//隐藏父窗口，this指针指向父窗口
+                    mwins->show();
+                    break;
                 }
             }
-            if(flag == 0 && usrname_input != "" && password_input != "")
-                QMessageBox::critical(this, "critical", "用户名不存在!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-            else if(flag == 1 && sign == 0 && usrname_input != "" && password_input != "")
-                QMessageBox::critical(this, "critical", "密码错误!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-
-            if(usrname_input == "")
-                QMessageBox::critical(this, "critical", "请输入用户名再登录!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-            else if(usrname_input != "" && password_input == "")
-                QMessageBox::critical(this, "critical", "请输入密码再登录!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-
         }
-        f.close();
+        if(flag == 0 && usrname_input != "" && password_input != "")
+            QMessageBox::critical(this, "critical", "用户名不存在!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+        else if(flag == 1 && sign == 0 && usrname_input != "" && password_input != "")
+            QMessageBox::critical(this, "critical", "密码错误!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+
+        if(usrname_input == "")
+            QMessageBox::critical(this, "critical", "请输入用户名再登录!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+        else if(usrname_input != "" && password_input == "")
+            QMessageBox::critical(this, "critical", "请输入密码再登录!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
     }
 
     //从管理员表查找信息
     if(ui->administrator_option->isChecked() == true)
     {
+        QString adminname_input,password_input,md5_password;
+        QByteArray bb;
+        adminname_input = ui->user_nameInput->text();
+        password_input = ui->passwordInput->text();
+        bb = QCryptographicHash::hash ( password_input.toLatin1(), QCryptographicHash::Md5 );
+        md5_password.append(bb.toHex());
         int flag = 0,sign = 0;
-        if(usrname_input == "admin")
+        if(adminname_input == "admin")
         {
             flag = 1;
             if(password_input == "system123")
@@ -104,45 +105,37 @@ void Login::on_loginButton_clicked()
                 mwins_mag->show();
             }
         }
-        else if(usrname_input != "admin")
+        else if(adminname_input != "admin")
         {
-             QFile f("administrator.txt");
-             if(!f.open(QIODevice::ReadOnly | QIODevice::Text))
-             {
-                qDebug() << "Open failed." << endl;
-             }
-             else
-             {
-                QTextStream txtInput(&f);
-                while(!txtInput.atEnd())//如果你到了文件的末尾，atEnd()返回真。
+            vector<pair< int,vector<Undecide> > > all;
+//            all = Admin.AllLeaf();
+            for(int i = 0; i < all.size(); i++)
+            {
+                if((all[i].second)[0].s == adminname_input)
                 {
-                    username = txtInput.readLine();//文件读出的用户名
-                    if(usrname_input == username)//验证用户名
+                    //验证用户名
+                    flag = 1;
+                    if((all[i].second)[1].s == md5_password)
                     {
-                        flag = 1;
-                        password = txtInput.readLine();
-                        if(md5_password == password)//验证密码
-                        {
-                            sign = 1;
-                            MainWindow_Manage *mwins_mag = new MainWindow_Manage();  //指向管理员窗口
-                            this->hide();
-                            mwins_mag->show();
-                            break;
-                        }
+                        //验证密码
+                        sign = 1;
+                        MainWindow *mwins = new MainWindow();//说明mwins指针指向了副窗口，其中MainWindow类在MainWindow.h中定义
+                        this->hide();//隐藏父窗口，this指针指向父窗口
+                        mwins->show();
+                        break;
                     }
                 }
-             }
-             f.close();
-          }
+            }
+        }
 
-            if(flag == 0 && usrname_input != "" && password_input != "")
+            if(flag == 0 && adminname_input != "" && password_input != "")
                 QMessageBox::critical(NULL, "critical", "用户名不存在!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-            else if(flag == 1 && sign == 0 && usrname_input != "" && password_input != "")
+            else if(flag == 1 && sign == 0 && adminname_input != "" && password_input != "")
                 QMessageBox::critical(NULL, "critical", "密码错误!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
-            if(usrname_input == "")
+            if(adminname_input == "")
                 QMessageBox::critical(NULL, "critical", "请输入用户名再登录!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-            else if(usrname_input != "" && password_input == "")
+            else if(adminname_input != "" && password_input == "")
                 QMessageBox::critical(NULL, "critical", "请输入密码再登录!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
     }
 }
