@@ -1363,7 +1363,7 @@ vector<pair< T1,vector<Undecide> > > BPlusTree<T1>:: AllLeaf(){
     return all;
 }
 
-int main(){
+/*int main(){
     BPlusTree<int> test;//新建一个对象
     test.BuildTree("test");//表的名字为test
     vector<short>testv;//表的属性列
@@ -1413,11 +1413,11 @@ int main(){
         cout << all[i].first << (all[i].second)[0].s << (all[i].second)[1].num<<endl;
     }
     test.SaveHead();//保存树的信息
-     /*读取test这个树的方法
+     //读取test这个树的方法
         BPlusTree<int> a;
         a.BuildTree("test");
-        a.ReadHead();*/
-}
+        a.ReadHead();
+}*/
 
 // int main1(){
 // 	BPlusTree<int> test;

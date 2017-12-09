@@ -23,7 +23,8 @@ HEADERS  += mainwindow.h \
     register.h \
     mainwindow_manage.h \
     global_variable.h \
-    b_plus_tree.h
+    b_plus_tree.h \
+    initial.h
 
 FORMS    += mainwindow.ui \
     login.ui \
