@@ -25,7 +25,6 @@ Register::Register(QWidget *parent) :
     ui->register_passwordAffirmInput->setToolTip("请再次输入密码");
     if(register_location == 1)
     {
-        ui->administrator_optionRegister->setEnabled(false);
         ui->user_optionRegister->setChecked(true);
         ui->administrator_optionRegister->setChecked(false);
 
@@ -47,53 +46,55 @@ Register::~Register()
 void Register::on_affirmReisterButton_clicked()
 {
 
-    QString md5_password;
-    QByteArray bb;
+    //std::string md5_password;
+    //QByteArray bb;
     //注册信息到用户表
     if(register_location == 1)
     {
         QString username,password1,password2,department;
-        string username_s;
+
         username = ui->register_userNameinput->text();
         password1 = ui->register_passwordInput->text();
         password2 = ui->register_passwordAffirmInput->text();
         department = ui->academyInput->currentText();
-//        username_s = string((const char *)username.toLocal8Bit());
-        username_s = username.toStdString();//Qstring转string
+        //username_s = string((const char *)username.toLocal8Bit());!!!!!!!!!!!!
+        const char *username_s = username.toStdString().data();//Qstring转const char*
+        const char *password_s = password1.toStdString().data();
+        const char *department_s = department.toStdString().data();
+        string username_fin = username.toStdString();  //将Qstring转化为string类型
+
         //判断成功情况
         if(username != "" && password1 != "" && password2 != "" && password1 == password2)
         {
-            //判断用户名是否已经存在
-            int flag = 0;
-            vector<pair< int,vector<Undecide> > > all;
-            all = User.AllLeaf();
-            for(int i = 0; i < all.size(); i++)
-            {
-                if((all[i].second)[0].s == username)
-                {
-                    //用户名已存在
-                    flag = 1;
-                    QMessageBox::critical(this, "critical", "用户名已存在!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-                    break;
-                }
-            }
+            BPlusTree<string> User;
+            User.BuildTree("User");
+            User.ReadHead();
 
-            if(flag == 0)
+            //判断用户名是否已经存在
+            Return3 result1 = User.Search(username_s,User.GetRootName());    //!!!!!!!!
+            if(result1.Succ)
             {
-                //将登录信息写进数据库user表
+                //用户名已存在
+                QMessageBox::critical(this, "critical", "用户名已存在!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+            }
+            else
+            {
+                //将登录信息写进数据库User表
                 //密码md5加密
-                vector<Undecide>vv;
-                Undecide te1,te2,te3;
+                vector<Undecide>userv;
+                Undecide te1, te2, te3, te4;
                 strcpy(te1.s,username_s);
-                bb = QCryptographicHash::hash ( password1.toLatin1(), QCryptographicHash::Md5 );
-                md5_password.append(bb.toHex());
-                strcpy(te2.s,md5_password);
-                strcpy(te3.s,department);
-                vv.push_back(te1);
-                vv.push_back(te2);
-                vv.push_back(te3);
-                User.Insert(user_key,vv);
-                user_key++;
+                //bb = QCryptographicHash::hash ( password1.toLatin1(), QCryptographicHash::Md5 );
+                //md5_password.append(bb.toHex());
+
+                strcpy(te2.s,password_s);
+                strcpy(te3.s,department_s);
+                te4.num = 0;
+                userv.push_back(te1);
+                userv.push_back(te2);
+                userv.push_back(te3);
+                userv.push_back(te4);
+                User.Insert(username_fin,userv);
                 Login *login = new Login();
                 QMessageBox::information(this, "提示", "注册成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
                 this->hide();
@@ -125,7 +126,7 @@ void Register::on_affirmReisterButton_clicked()
 
 
     //注册信息到管理员表
-    if(register_location == 2)
+    /*if(register_location == 2)
     {
         QString adminname,password1,password2,department;;
         adminname = ui->register_userNameinput->text();
@@ -192,5 +193,5 @@ void Register::on_affirmReisterButton_clicked()
             }
 
         }
-    }
+    }*/
 }

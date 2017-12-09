@@ -1,7 +1,7 @@
 #ifndef B_PLUS_TREE_H
 #define B_PLUS_TREE_H
 
-#endif // B_PLUS_TREE_H
+
 
 #include<iostream>
 #include<algorithm>
@@ -1363,69 +1363,6 @@ vector<pair< T1,vector<Undecide> > > BPlusTree<T1>:: AllLeaf(){
     return all;
 }
 
-int main(){
-//    BPlusTree<int> test;//新建一个对象
-//    test.BuildTree("test");//表的名字为test
-//    vector<short>testv;//表的属性列
-//    //0->string  1->int  2->longlong  3->bool
-//    testv.push_back(0);	//第一个属性是string类型
-//    testv.push_back(1); //第二个属性是int类型
-//    test.SetTable(testv);//使用testv设置表的属性列
-//    for(int i = 19; i >0; i-=2){
-//        vector<Undecide>vv;
-//        Undecide te;
-//        strcpy(te.s,"testing_string");
-//        Undecide te2;
-//        te2.num = 1;
-//        vv.push_back(te);
-//        vv.push_back(te2);
-//        test.Insert(i,vv);	//插入一个key  对应的参数是vv
-//    }
-//    for(int i = 0; i <= 20; i+=2){
-//        vector<Undecide>vv;
-//        Undecide te;
-//        strcpy(te.s,"testing_string");
-//        Undecide te2;
-//        te2.num = 2;
-//        vv.push_back(te);
-//        vv.push_back(te2);
-//        test.Insert(i,vv);
-//    }
-//    Return3 a = test.Search(5,test.GetRootName()); //查找key=5的项
-//    //cout << a.Succ << " " << a.filename << " " << a.ve[0].s << endl;//输出查找的结果
-//    Return3 b = test.Search(27,test.GetRootName());
-//    //cout << b.Succ << " " << b.filename << endl;
-//    vector<Undecide>vv;
-//    Undecide te;
-//    strcpy(te.s,"******");
-//    Undecide te2;
-//    te2.num = 3;
-//    vv.push_back(te);
-//    vv.push_back(te2);
-//    test.Update(7,vv);//更新key=7的元组，更新的属性存在vv中
-//    test.Update(8,vv);
-//    test.Update(18,vv);
-//    test.Delete(3);
-//    //遍历所有的元组，得到一个vector，里面的元素是一个个pair，pair的first中存key,second中存这个元组的属性vector
-//    vector<pair< int,vector<Undecide> > > all;
-//    all = test.AllLeaf();
-//    for(int i = 0; i < all.size(); i++){
-//        cout << all[i].first << (all[i].second)[0].s << (all[i].second)[1].num<<endl;
-//    }
-//    test.SaveHead();//保存树的信息
-//     //读取test这个树的方法
-//        BPlusTree<int> a;
-//        a.BuildTree("test");
-//        a.ReadHead();
-}
+#endif
 
-// int main1(){
-// 	BPlusTree<int> test;
-// 	test.BuildTree("test");
-// 	test.ReadHead();
-// 	Return3 a = test.Search(5,test.GetRootName());
-// 	cout << a.Succ << " " << a.filename << endl;
-// 	Return3 b = test.Search(27,test.GetRootName());
-// 	cout << b.Succ << " " << b.filename << endl;
-// 	test.Delete(3);
-// }
+

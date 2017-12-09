@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
         userv.push_back(0);	//用户名是string类型
         userv.push_back(0); //密码是string类型
         userv.push_back(0); //院系是string类型
-        userv.push_back(1); //目前类型还没有设置double 用int代替
+        userv.push_back(1); //欠费目前类型还没有设置double 用int代替
         User.SetTable(userv); //使用testv设置表的属性列
 
         //Admin表
@@ -78,6 +78,7 @@ int main(int argc, char *argv[])
         BookB.SetTable(bookbv);
 
     }
+
     Login loginWin;
     loginWin.show();
 
