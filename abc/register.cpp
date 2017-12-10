@@ -62,13 +62,13 @@ void Register::on_affirmReisterButton_clicked()
         const char *password_s = password1.toStdString().data();
         const char *department_s = department.toStdString().data();
         string username_fin = username.toStdString();  //将Qstring转化为string类型
-        printf("1");
+        //printf("1");
         //判断成功情况
         if(username != "" && password1 != "" && password2 != "" && password1 == password2)
         {
             BPlusTree<string> User;
             User.BuildTree("User");
-//            User.ReadHead();
+            User.ReadHead();  //读取文件
 
             //判断用户名是否已经存在
             Return3 result1 = User.Search(username_s,User.GetRootName());    //!!!!!!!!
@@ -79,7 +79,7 @@ void Register::on_affirmReisterButton_clicked()
             }
             else
             {
-                printf("2");
+                //printf("2");
                 //将登录信息写进数据库User表
                 //密码md5加密
                 vector<Undecide>userv;
@@ -90,15 +90,16 @@ void Register::on_affirmReisterButton_clicked()
 
                 strcpy(te2.s,password_s);
                 strcpy(te3.s,department_s);
-                printf("3");
+                //printf("3");
                 te4.num = 0;
                 userv.push_back(te1);
                 userv.push_back(te2);
                 userv.push_back(te3);
                 userv.push_back(te4);
-                printf("4");
+                //printf("4");
                 User.Insert(username_fin,userv);
-                printf("5");
+                //printf("5");
+                User.SaveHead();//一定要记得保存！
                 Login *login = new Login();
                 QMessageBox::information(this, "提示", "注册成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
                 this->hide();

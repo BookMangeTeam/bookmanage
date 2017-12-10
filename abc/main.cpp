@@ -6,6 +6,7 @@
 int register_location = 0;
 int manage_jurisdiction = 0;
 int mark = 0;
+int savesign = 1;
 int user_key = 0;
 int admin_key = 0;
 int main(int argc, char *argv[])
@@ -23,6 +24,8 @@ int main(int argc, char *argv[])
         userv.push_back(0); //院系是string类型
         userv.push_back(1); //欠费目前类型还没有设置double 用int代替
         User.SetTable(userv); //使用testv设置表的属性列
+        savesign = User.SaveHead();
+        cout<<savesign<<endl;
 
         //Admin表
         BPlusTree<string> Admin;
@@ -32,6 +35,8 @@ int main(int argc, char *argv[])
         adminv.push_back(0); //用户名作为索引值string类型
         adminv.push_back(0); //密码string类型
         Admin.SetTable(adminv);
+        savesign = Admin.SaveHead();
+        cout<<savesign<<endl;
 
         //Borrow表
         BPlusTree<int> Borrow;
@@ -41,6 +46,8 @@ int main(int argc, char *argv[])
         borrowv.push_back(0); //用户索引（用户表用户名）string类型
         borrowv.push_back(0); //借阅时间string类型
         Borrow.SetTable(borrowv);
+        savesign = Borrow.SaveHead();
+        cout<<savesign<<endl;
 
         //History表
         BPlusTree<int> History;
@@ -52,6 +59,8 @@ int main(int argc, char *argv[])
         historyv.push_back(0); //借阅时间string类型
         historyv.push_back(0); //归还时间string类型
         History.SetTable(historyv);
+        savesign = History.SaveHead();
+        cout<<savesign<<endl;
 
         //BookA表
         BPlusTree<string> BookA;
@@ -64,6 +73,8 @@ int main(int argc, char *argv[])
         bookav.push_back(3); //标志位表示是否被标记为删去bool类型
         bookav.push_back(0); //ISBN码string类型（作为BookB的映射联系）
         BookA.SetTable(bookav);
+        savesign = BookA.SaveHead();
+        cout<<savesign<<endl;
 
         //BookB表
         BPlusTree<string> BookB;
@@ -76,6 +87,8 @@ int main(int argc, char *argv[])
         bookbv.push_back(0); //出版时间string类型
         bookbv.push_back(0); //价格暂时string（后面会用double代替）
         BookB.SetTable(bookbv);
+        savesign = BookB.SaveHead();
+        cout<<savesign<<endl;
 
     }
 
