@@ -50,27 +50,27 @@ void Login::on_loginButton_clicked()
         QByteArray bb;
         usrname_input = ui->user_nameInput->text();
         password_input = ui->passwordInput->text();
-        bb = QCryptographicHash::hash ( password_input.toLatin1(), QCryptographicHash::Md5 );
-        md5_password.append(bb.toHex());
+        const char *username_s = usrname_input.toStdString().data();//Qstring转const char*
+        const char *password_s = password_input.toStdString().data();
+//        bb = QCryptographicHash::hash ( password_input.toLatin1(), QCryptographicHash::Md5 );
+//        md5_password.append(bb.toHex());
 
 
-        vector<pair< int,vector<Undecide> > > all;
-//        all = User.AllLeaf();
-        for(int i = 0; i < all.size(); i++)
+        BPlusTree<string> User;
+        User.SetTableName(string("User"));;
+        User.ReadHead();  //读取文件
+
+        //判断用户名是否已经存在
+        Return3 result1 = User.Search(username_s,User.GetRootName());    //!!!!!!!!
+        if(result1.Succ)
         {
-            if((all[i].second)[0].s == usrname_input)
+            flag = 1;
+            if(password_input == result1.ve[1].s)
             {
-                //验证用户名
-                flag = 1;
-                if((all[i].second)[1].s == md5_password)
-                {
-                    //验证密码
-                    sign = 1;
-                    MainWindow *mwins = new MainWindow();//说明mwins指针指向了副窗口，其中MainWindow类在MainWindow.h中定义
-                    this->hide();//隐藏父窗口，this指针指向父窗口
-                    mwins->show();
-                    break;
-                }
+                sign = 1;
+                MainWindow *mwins = new MainWindow();//说明mwins指针指向了副窗口，其中MainWindow类在MainWindow.h中定义
+                this->hide();//隐藏父窗口，this指针指向父窗口
+                mwins->show();
             }
         }
         if(flag == 0 && usrname_input != "" && password_input != "")
@@ -91,8 +91,10 @@ void Login::on_loginButton_clicked()
         QByteArray bb;
         adminname_input = ui->user_nameInput->text();
         password_input = ui->passwordInput->text();
-        bb = QCryptographicHash::hash ( password_input.toLatin1(), QCryptographicHash::Md5 );
-        md5_password.append(bb.toHex());
+        const char *adminname_s = adminname_input.toStdString().data();//Qstring转const char*
+        const char *password_s = password_input.toStdString().data();
+//        bb = QCryptographicHash::hash ( password_input.toLatin1(), QCryptographicHash::Md5 );
+//        md5_password.append(bb.toHex());
         int flag = 0,sign = 0;
         if(adminname_input == "admin")
         {
@@ -107,23 +109,22 @@ void Login::on_loginButton_clicked()
         }
         else if(adminname_input != "admin")
         {
-            vector<pair< int,vector<Undecide> > > all;
-//            all = Admin.AllLeaf();
-            for(int i = 0; i < all.size(); i++)
+            BPlusTree<string> Admin;
+            Admin.SetTableName(string("Admin"));;
+            Admin.ReadHead();  //读取文件
+
+            //判断用户名是否已经存在
+            Return3 result1 = Admin.Search(adminname_s,Admin.GetRootName());    //!!!!!!!!
+            if(result1.Succ)
             {
-                if((all[i].second)[0].s == adminname_input)
+                flag = 1;
+                if(password_input == result1.ve[1].s)
                 {
-                    //验证用户名
-                    flag = 1;
-                    if((all[i].second)[1].s == md5_password)
-                    {
-                        //验证密码
-                        sign = 1;
-                        MainWindow *mwins = new MainWindow();//说明mwins指针指向了副窗口，其中MainWindow类在MainWindow.h中定义
-                        this->hide();//隐藏父窗口，this指针指向父窗口
-                        mwins->show();
-                        break;
-                    }
+                    sign = 1;
+                    MainWindow *mwins = new MainWindow();//说明mwins指针指向了副窗口，其中MainWindow类在MainWindow.h中定义
+                    MainWindow_Manage *mwman = new MainWindow_Manage();
+                    this->hide();//隐藏父窗口，this指针指向父窗口
+                    mwman->show();
                 }
             }
         }

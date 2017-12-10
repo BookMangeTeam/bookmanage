@@ -26,6 +26,7 @@ Register::Register(QWidget *parent) :
     if(register_location == 1)
     {
         ui->user_optionRegister->setChecked(true);
+        ui->administrator_optionRegister->setEnabled(false);
         ui->administrator_optionRegister->setChecked(false);
 
     }
@@ -67,7 +68,7 @@ void Register::on_affirmReisterButton_clicked()
         if(username != "" && password1 != "" && password2 != "" && password1 == password2)
         {
             BPlusTree<string> User;
-            User.BuildTree("User");
+            User.SetTableName(string("User"));;
             User.ReadHead();  //读取文件
 
             //判断用户名是否已经存在
@@ -79,7 +80,6 @@ void Register::on_affirmReisterButton_clicked()
             }
             else
             {
-                //printf("2");
                 //将登录信息写进数据库User表
                 //密码md5加密
                 vector<Undecide>userv;
@@ -90,15 +90,12 @@ void Register::on_affirmReisterButton_clicked()
 
                 strcpy(te2.s,password_s);
                 strcpy(te3.s,department_s);
-                //printf("3");
                 te4.num = 0;
                 userv.push_back(te1);
                 userv.push_back(te2);
                 userv.push_back(te3);
-                userv.push_back(te4);
-                //printf("4");
+                userv.push_back(te4);;
                 User.Insert(username_fin,userv);
-                //printf("5");
                 User.SaveHead();//一定要记得保存！
                 Login *login = new Login();
                 QMessageBox::information(this, "提示", "注册成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
@@ -131,50 +128,51 @@ void Register::on_affirmReisterButton_clicked()
 
 
     //注册信息到管理员表
-    /*if(register_location == 2)
+    if(register_location == 2)
     {
         QString adminname,password1,password2,department;;
         adminname = ui->register_userNameinput->text();
         password1 = ui->register_passwordInput->text();
         password2 = ui->register_passwordAffirmInput->text();
-        department = ui->academyInput->currentText();
+        const char *adminname_s = adminname.toStdString().data();//Qstring转const char*
+        const char *password_s = password1.toStdString().data();
+        string adminname_fin = adminname.toStdString();  //将Qstring转化为string类型
         //判断成功情况
         if(adminname != "" && password1 != "" && password2 != "" && password1 == password2)
         {
             //判断用户名是否已经存在
-            int flag = 0;
-            vector<pair< int,vector<Undecide> > > all;
-            all = Admin.AllLeaf();
-            for(int i = 0; i < all.size(); i++)
-            {
-                if((all[i].second)[0].s == adminname)
-                {
-                    //用户名已存在
-                    flag = 1;
-                    QMessageBox::critical(this, "critical", "用户名已存在!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-                    break;
-                }
-            }
+            BPlusTree<string> Admin;
+            Admin.SetTableName(string("Admin"));;
+            Admin.ReadHead();  //读取文件
 
-            if(flag == 0)
+            //判断用户名是否已经存在
+            Return3 result1 = Admin.Search(adminname_s,Admin.GetRootName());    //!!!!!!!!
+            if(result1.Succ)
             {
-                //将登录信息写进数据库admin表
+                //用户名已存在
+                QMessageBox::critical(this, "critical", "用户名已存在!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+            }
+            else
+            {
+                //将登录信息写进数据库User表
                 //密码md5加密
-                vector<Undecide>vv;
-                Undecide te1,te2;
-                strcpy(te1.s,adminname);
-                bb = QCryptographicHash::hash ( password1.toLatin1(), QCryptographicHash::Md5 );
-                md5_password.append(bb.toHex());
-                strcpy(te2.s,md5_password);
-                vv.push_back(te1);
-                vv.push_back(te2);;
-                Admin.Insert(admin_key,vv);
-                admin_key++;
+                vector<Undecide>userv;
+                Undecide te1, te2;
+                strcpy(te1.s,adminname_s);
+//                bb = QCryptographicHash::hash ( password1.toLatin1(), QCryptographicHash::Md5 );
+//                md5_password.append(bb.toHex());
+
+                strcpy(te2.s,password_s);
+                userv.push_back(te1);
+                userv.push_back(te2);
+                Admin.Insert(adminname_fin,userv);
+                Admin.SaveHead();//一定要记得保存！
                 Login *login = new Login();
                 QMessageBox::information(this, "提示", "注册成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
                 this->hide();
                 login->show();
              }
+
         }
 
         //判断失败情况
@@ -198,5 +196,5 @@ void Register::on_affirmReisterButton_clicked()
             }
 
         }
-    }*/
+    }
 }

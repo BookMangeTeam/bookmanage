@@ -1,8 +1,3 @@
-#ifndef B_PLUS_TREE_H
-#define B_PLUS_TREE_H
-
-
-
 #include<iostream>
 #include<algorithm>
 #include<cstdio>
@@ -26,7 +21,7 @@ B+树存的Key是子树最小值
 需要重新命名，同一个key名对应多个
  */
 using namespace std;
-#define MAXNODE 4
+#define MAXNODE 50
 
 union Undecide{//数据库的存储单元
     char s[100];
@@ -86,6 +81,7 @@ public:
     bool ReadHead();
     void SetSonAll(string filename, string newfather);
     bool Update(T1 Key, vector<Undecide>ve);
+    bool SetTableName(string s);
     vector<pair< T1,vector<Undecide> > > AllLeaf();
 private:
     //储存表的结构，每个位置对应一个数字
@@ -95,6 +91,10 @@ private:
     string RootName;
 };
 
+template<typename T1>
+bool BPlusTree<T1>::SetTableName(string s){
+    TableName = s;
+}
 
 template<typename T1>
 string BPlusTree<T1>::GetRootName(){
@@ -786,7 +786,6 @@ bool BPlusTree<T1>::Delete2(string filename, T1 Key){
                 else in >> ttt.is;
                 v[i].push_back(ttt);
             }
-
         }
         in.close();
         //如果删除的是father节点的key，那么需要循环更改
@@ -947,7 +946,7 @@ Return4<T1> BPlusTree<T1>::UnionNodes(string filename, T1 Key){
 
 template<typename T1>
 bool BPlusTree<T1>::Union2(string file1, string file2){
-    cout << "Union two file :" << file1 << " and " << file2 << endl;
+    // cout << "Union two file :" << file1 << " and " << file2 << endl;
     ifstream in1;
     ifstream in2;
     in1.open(file1.c_str());
@@ -1045,7 +1044,7 @@ bool BPlusTree<T1>::Union2(string file1, string file2){
             out << tempkey[i] << " ";
             out << tempfilename[i] << " ";
         }
-        cout << "Setson " << file2 << " to " << file1 << endl;
+        // cout << "Setson " << file2 << " to " << file1 << endl;
         SetSonAll(file2,file1);
         remove(file1.c_str());
         remove(file2.c_str());
@@ -1224,19 +1223,35 @@ bool BPlusTree<T1>::SaveHead(){
     string Add = string(".dat");
     FILE * fp;
     fp = fopen((Previous+TableName+Add).c_str(),"wb");
-    int k;
-    k = TypeList.size();
-    fwrite(&k,sizeof(k),1,fp);
-    for(int i = 0; i < TypeList.size(); i++){
-        fwrite(&TypeList[i],sizeof(TypeList[i]),1,fp);
+    struct Temp{
+        int num;
+        int k;
+        short List[150];
+        char s1[500];
+        char s2[500];
+    };
+    Temp aa;
+    aa.num = NodeNum;
+    aa.k = TypeList.size();
+    for(int i = 0; i < aa.k; i++){
+        aa.List[i] = TypeList[i];
     }
-    fwrite(&NodeNum,sizeof(NodeNum),1,fp);
-    k = RootName.capacity()+1;
-    fwrite(&k,sizeof(k),1,fp);
-    fwrite(RootName.c_str(),sizeof(char)*k,1,fp);
-    k = TableName.capacity()+1;
-    fwrite(&k,sizeof(k),1,fp);
-    fwrite(TableName.c_str(),sizeof(char)*k,1,fp);
+    strcpy(aa.s1,RootName.c_str());
+    strcpy(aa.s2,TableName.c_str());
+    fwrite(&aa,sizeof(aa),1,fp);
+    // int k;
+    // k = TypeList.size();
+    // fwrite(&k,sizeof(k),1,fp);
+    // for(int i = 0; i < TypeList.size(); i++){
+    // 	fwrite(&TypeList[i],sizeof(TypeList[i]),1,fp);
+    // }
+    // fwrite(&NodeNum,sizeof(NodeNum),1,fp);
+    // k = RootName.capacity()+1;
+    // fwrite(&k,sizeof(k),1,fp);
+    // fwrite(RootName.c_str(),sizeof(char)*k,1,fp);
+    // k = TableName.capacity()+1;
+    // fwrite(&k,sizeof(k),1,fp);
+    // fwrite(TableName.c_str(),sizeof(char)*k,1,fp);
     fclose(fp);
 }
 
@@ -1246,27 +1261,21 @@ bool BPlusTree<T1>::ReadHead(){
     string Add = string(".dat");
     FILE * fp;
     fp = fopen((Previous+TableName+Add).c_str(),"rb");
-    int num;
-    fread(&num,sizeof(num),1,fp);
-    for(int i = 0; i < num; i++){
-        short temp;
-        fread(&temp,sizeof(temp),1,fp);
-        TypeList.push_back(temp);
-    }
-    fread(&NodeNum,sizeof(NodeNum),1,fp);
-    int k;
-    char RName[150];
-    fread(&k,sizeof(k),1,fp);
-    fread(RName,sizeof(char)*k,1,fp);
-    char TName[150];
-    fread(&k,sizeof(k),1,fp);
-    fread(TName,sizeof(char)*k,1,fp);
-    RootName.assign(RName);
-    TableName.assign(TName);
+    struct Temp{
+        int num;
+        int k;
+        short List[150];
+        char s1[500];
+        char s2[500];
+    };
+    Temp aa;
+    fread(&aa,sizeof(aa),1,fp);
+    NodeNum = aa.num;
+    for(int i = 0; i < aa.k; i++)
+        TypeList.push_back(aa.List[i]);
+    RootName.assign(aa.s1);
+    TableName.assign(aa.s2);
     fclose(fp);
-    // cout << RootName << endl;
-    // cout << TableName << endl;
-    // cout << TypeList[0] << endl;
 }
 
 template<typename T1>
@@ -1362,7 +1371,5 @@ vector<pair< T1,vector<Undecide> > > BPlusTree<T1>:: AllLeaf(){
     }
     return all;
 }
-
-#endif
 
 
