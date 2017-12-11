@@ -6,6 +6,7 @@
 #include <QHeaderView>
 #include <QMessageBox>
 #include "qstring.h"
+#include <b_plus_tree.h>
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -24,10 +25,10 @@ MainWindow::MainWindow(QWidget *parent) :
     //借书信息表
     //设置表头
     QStandardItemModel *bookInformationborrow = new QStandardItemModel();
-    bookInformationborrow->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("索引号")));
+    bookInformationborrow->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("编号")));
     bookInformationborrow->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("书名")));
-    bookInformationborrow->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("出版社")));
-    bookInformationborrow->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("出版日期")));
+    bookInformationborrow->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("作者")));
+    bookInformationborrow->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("出版社")));
     bookInformationborrow->setHorizontalHeaderItem(4, new QStandardItem(QObject::tr("状态")));//已借，可借
 
     //利用setModel()方法将数据模型与QTableView绑定
@@ -42,8 +43,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //设置表格的各列的宽度值
     ui->bookInformationborrow->setColumnWidth(0,110);
     ui->bookInformationborrow->setColumnWidth(1,230);
-    ui->bookInformationborrow->setColumnWidth(2,230);
-    ui->bookInformationborrow->setColumnWidth(3,130);
+    ui->bookInformationborrow->setColumnWidth(2,130);
+    ui->bookInformationborrow->setColumnWidth(3,230);
     ui->bookInformationborrow->setColumnWidth(4,80);
 
     //设置选中时为整行选中
@@ -60,6 +61,10 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //如果你用在QTableView中使用右键菜单，需启用该属性
     ui->bookInformationborrow->setContextMenuPolicy(Qt::CustomContextMenu);
+    //显示居左
+    ui->bookInformationborrow->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
+
+    bookInformationborrow->setItem(0,0,new QStandardItem(QString::fromLocal8Bit("哈哈")));
 
 
     //还书信息表
@@ -287,6 +292,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //如果你用在QTableView中使用右键菜单，需启用该属性
     ui->paymentInformation->setContextMenuPolicy(Qt::CustomContextMenu);
 
+
+
 }
 
 MainWindow::~MainWindow()
@@ -376,7 +383,6 @@ void MainWindow::on_searchButtonBorrow_clicked()
 {
     //在借书页面的搜索按钮
     QString search_info = ui->searchLineEditBorrow->text();
-
     if(search_info == NULL)
     {
         //输入内容为空
@@ -385,7 +391,11 @@ void MainWindow::on_searchButtonBorrow_clicked()
     else
     {
         //根据输入内容到数据库进行搜索并且返回内容显示到table中
-        QMessageBox::critical(this, "critical", "test", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+        const char *search_info_s = search_info.toStdString().data();
+        BPlusTree<string> BookB;
+        BookB.SetTableName(string("BookB"));
+        BookB.ReadHead();  //读取文件
 
+        Return3 result1 = BookB.Search(search_info_s,BookB.GetRootName());
     }
 }
