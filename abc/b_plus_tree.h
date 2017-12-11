@@ -21,7 +21,7 @@ B+树存的Key是子树最小值
 需要重新命名，同一个key名对应多个
  */
 using namespace std;
-#define MAXNODE 50
+#define MAXNODE 5
 
 union Undecide{//数据库的存储单元
     char s[100];

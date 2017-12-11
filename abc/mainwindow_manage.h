@@ -34,6 +34,8 @@ private slots:
 
     void on_returnBottonBRManage_clicked();
 
+    void on_affirmBottonAdd_clicked();
+
 private:
     Ui::MainWindow_Manage *ui;
 };

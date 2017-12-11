@@ -1,7 +1,10 @@
 #include "mainwindow_manage.h"
 #include "ui_mainwindow_manage.h"
+#include "b_plus_tree.h"
+#include <QMessageBox>
 #include <global_variable.h>
 #include <register.h>
+#include<iostream>
 #include <QStandardItemModel> //用于存储定制数据的通用模型
 MainWindow_Manage::MainWindow_Manage(QWidget *parent) :
     QMainWindow(parent),
@@ -207,4 +210,67 @@ void MainWindow_Manage::on_btn_SignupManager_clicked()
     this->hide();//隐藏父窗口，this指针指向父窗口
     reg->show();
 
+}
+
+void MainWindow_Manage::on_affirmBottonAdd_clicked()
+{
+    //添加图书
+    QString bookISBN, bookName, bookAuthur, bookPublish, publishTime, bookPrice, bookNumber;
+    int countN = 0;  //用来遍历BookA时候计算数量
+    bookISBN = ui->add_ISBN->text();
+    bookName = ui->add_bookName->text();
+    bookAuthur = ui->add_author->text();
+    bookPublish = ui->add_publish->text();
+    publishTime = ui->add_publishTime->text();
+    bookPrice = ui->add_price->text();
+    bookNumber = ui->add_amount->text();
+    //相关类型转换
+    const char *bookISBN_s = bookISBN.toStdString().data();
+    const char *bookName_s = bookName.toStdString().data();
+    const char *bookAuthur_s = bookAuthur.toStdString().data();
+    const char *bookPublish_s = bookPublish.toStdString().data();
+    const char *publishTime_s = publishTime.toStdString().data();
+    const char *bookPrice_s = bookPrice.toStdString().data();
+    const char *bookNumber_s = bookNumber.toStdString().data();
+    string bookISBN_fin = bookISBN.toStdString();
+//    const char *publicTime_s = publicTime.toStdString().data();
+//    std::cout<<publicTime_s;
+    if(bookISBN != "" && bookName != "" && bookAuthur != "" && bookPublish != "" & publishTime != "" && bookPrice != "" && bookNumber !="")
+    {
+        //判断输入正确
+        //先到BookB表去查找是否存在这本书（利用ISBN作为key去查找） 这还有一种是ISBN被删除的情况，后面再添加
+        BPlusTree<string> BookB;
+        BookB.SetTableName(string("BookB"));
+        BookB.ReadHead();
+        Return3 result1 = BookB.Search(bookISBN_fin, BookB.GetRootName());
+
+        if(result1.Succ)
+        {
+            //如果找到，再到BookA表去遍历对应的本数，获得应该的数量编号
+            BPlusTree<string> BookA;
+            BookA.SetTableName(string("BookA"));
+            BookA.ReadHead();
+            vector<pair< string,vector<Undecide> > > all;
+            all = BookA.AllLeaf();
+            cout<<all.size();
+            for(int i = 0; i < all.size(); i++)
+            {
+                if( (all[i].second)[5].s == bookISBN_s )
+                {
+                    countN = countN + 1;
+                }
+            }
+            //设定插入的编码
+
+
+        }
+
+        //如果找不到，数量编号设为000
+
+    }
+    else
+    {
+        //判断输入有误
+        QMessageBox::critical(this, "critical", "请输入完整信息!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    }
 }

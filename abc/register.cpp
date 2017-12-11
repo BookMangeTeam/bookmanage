@@ -68,7 +68,7 @@ void Register::on_affirmReisterButton_clicked()
         if(username != "" && password1 != "" && password2 != "" && password1 == password2)
         {
             BPlusTree<string> User;
-            User.SetTableName(string("User"));;
+            User.SetTableName(string("User"));
             User.ReadHead();  //读取文件
 
             //判断用户名是否已经存在
@@ -130,7 +130,7 @@ void Register::on_affirmReisterButton_clicked()
     //注册信息到管理员表
     if(register_location == 2)
     {
-        QString adminname,password1,password2,department;;
+        QString adminname,password1,password2,department;
         adminname = ui->register_userNameinput->text();
         password1 = ui->register_passwordInput->text();
         password2 = ui->register_passwordAffirmInput->text();
@@ -142,7 +142,7 @@ void Register::on_affirmReisterButton_clicked()
         {
             //判断用户名是否已经存在
             BPlusTree<string> Admin;
-            Admin.SetTableName(string("Admin"));;
+            Admin.SetTableName(string("Admin"));
             Admin.ReadHead();  //读取文件
 
             //判断用户名是否已经存在
