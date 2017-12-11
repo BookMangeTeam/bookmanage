@@ -217,6 +217,7 @@ void MainWindow_Manage::on_affirmBottonAdd_clicked()
     //添加图书
     QString bookISBN, bookName, bookAuthur, bookPublish, publishTime, bookPrice, bookNumber;
     int countN = 0;  //用来遍历BookA时候计算数量
+
     bookISBN = ui->add_ISBN->text();
     bookName = ui->add_bookName->text();
     bookAuthur = ui->add_author->text();
@@ -231,7 +232,7 @@ void MainWindow_Manage::on_affirmBottonAdd_clicked()
     const char *bookPublish_s = bookPublish.toStdString().data();
     const char *publishTime_s = publishTime.toStdString().data();
     const char *bookPrice_s = bookPrice.toStdString().data();
-    const char *bookNumber_s = bookNumber.toStdString().data();
+    const char *bookNumber_s = bookNumber.toStdString().data();   //批量添加先不设定
     string bookISBN_fin = bookISBN.toStdString();
 //    const char *publicTime_s = publicTime.toStdString().data();
 //    std::cout<<publicTime_s;
@@ -246,7 +247,8 @@ void MainWindow_Manage::on_affirmBottonAdd_clicked()
 
         if(result1.Succ)
         {
-            //如果找到，再到BookA表去遍历对应的本数，获得应该的数量编号
+            cout<<result1.Succ;
+            //如果找到，再到BookA表去遍历对应的本书，获得应该的数量编号
             BPlusTree<string> BookA;
             BookA.SetTableName(string("BookA"));
             BookA.ReadHead();
@@ -261,11 +263,128 @@ void MainWindow_Manage::on_affirmBottonAdd_clicked()
                 }
             }
             //设定插入的编码
+            //将countN转化为string类型
+            stringstream ss;
+            string str;
+            string add;
+            ss<<countN;
+            ss>>str;
+            int len = str.length();
+            switch(len)
+            {
+                case 1: add = "00";
+                        add.append(str);
+                        bookISBN_fin.append(add);
+                        break;
+                case 2: add = "0";
+                        add.append(str);
+                        bookISBN_fin.append(add);
+                        break;
+                case 3: bookISBN_fin.append(str);
+                        break;
+                default:
+                        cout<<"no one book has been found";
+                        break;
+            }
+
+            if(len)
+            {
+                //在BookA找到的情况，包括标记为删除的部分
+                //类型转换(string->const char*)
+                const char *ISBNThree = bookISBN_fin.data();
+                vector<Undecide>bookav;
+                Undecide te1, te2, te3, te4, te5, te6;
+                strcpy(te1.s, ISBNThree);
+                strcpy(te2.s, "none");   //初始化用户存储为"none"
+                strcpy(te3.s, "none");   //初始化时间为"none"
+                te4.is = 0;            //是否被续借初始为0
+                te5.is = 0;            //是否被标记为删除初始为0
+                strcpy(te6.s, bookISBN_s);
+                bookav.push_back(te1);
+                bookav.push_back(te2);
+                bookav.push_back(te3);
+                bookav.push_back(te4);
+                bookav.push_back(te5);
+                bookav.push_back(te6);
+                BookA.Insert(bookISBN_fin, bookav);
+                BookA.SaveHead();  //保存信息
+                QMessageBox::information(this, "提示", "添加成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+            }
+            else
+            {
+                //如果在BookA没有找到的情况(在BookB中是存在的)
+                bookISBN_fin.append("001");  //创建为BookA的第一本
+                const char *ISBNThree = bookISBN_fin.data(); //转换类型
+                vector<Undecide>bookav;
+                Undecide te1, te2, te3, te4, te5, te6;
+                strcpy(te1.s, ISBNThree);    //这里实际上是ISBN+三位
+                strcpy(te2.s, NULL);   //初始化用户存储为NULL
+                strcpy(te3.s, NULL);   //初始化时间为NULL
+                te4.is = 0;            //是否被续借初始为0
+                te5.is = 0;            //是否被标记为删除初始为0
+                strcpy(te6.s, bookISBN_s);
+                bookav.push_back(te1);
+                bookav.push_back(te2);
+                bookav.push_back(te3);
+                bookav.push_back(te4);
+                bookav.push_back(te5);
+                bookav.push_back(te6);
+                BookA.Insert(bookISBN_fin, bookav);
+                BookA.SaveHead();  //保存信息
+                QMessageBox::information(this, "提示", "添加成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+            }
 
 
         }
+        else
+        {
+            //如果在BookB里面没有找到
+            //先将书添加到BookB表中
+            vector<Undecide> bookbv;
+            Undecide t1, t2, t3, t4, t5, t6;
+            strcpy(t1.s, bookISBN_s);
+            strcpy(t2.s, bookName_s);
+            strcpy(t3.s, bookAuthur_s);
+            strcpy(t4.s, bookPublish_s);
+            strcpy(t5.s, publishTime_s);
+            strcpy(t6.s, bookPrice_s);
+            bookbv.push_back(t1);
+            bookbv.push_back(t2);
+            bookbv.push_back(t3);
+            bookbv.push_back(t4);
+            bookbv.push_back(t5);
+            bookbv.push_back(t6);
+            BookB.Insert(bookISBN_fin, bookbv);
+            BookB.SaveHead();  //保存信息
 
-        //如果找不到，数量编号设为000
+            //再将书添加到BookA中
+            BPlusTree<string> BookA;
+            BookA.SetTableName(string("BookA"));
+            BookA.ReadHead();
+            bookISBN_fin.append("001");  //创建为BookA的第一本
+            cout<<"test1##############";
+
+            const char *ISBNThree = bookISBN_fin.data(); //转换类型
+            vector<Undecide>bookav;
+            Undecide te1, te2, te3, te4, te5, te6;
+            strcpy(te1.s, ISBNThree);    //这里实际上是ISBN+三位
+            strcpy(te2.s, "none");   //初始化用户存储为"none"
+            strcpy(te3.s, "none");   //初始化时间为"none"
+            te4.is = 0;            //是否被续借初始为0
+            te5.is = 0;            //是否被标记为删除初始为0
+            strcpy(te6.s, bookISBN_s);
+            bookav.push_back(te1);
+            bookav.push_back(te2);
+            bookav.push_back(te3);
+            bookav.push_back(te4);
+            bookav.push_back(te5);
+            bookav.push_back(te6);
+            BookA.Insert(bookISBN_fin, bookav);
+            BookA.SaveHead();  //保存信息
+            QMessageBox::information(this, "提示", "添加成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+        }
+
+
 
     }
     else
