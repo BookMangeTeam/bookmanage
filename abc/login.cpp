@@ -46,14 +46,15 @@ void Login::on_loginButton_clicked()
     if(ui->user_option->isChecked() == true)
     {
         int flag = 0,sign = 0;
-        QString usrname_input,password_input,md5_password;
+        QString usrname_input,password_input;
+        std::string md5_password;
         QByteArray bb;
         usrname_input = ui->user_nameInput->text();
         password_input = ui->passwordInput->text();
         const char *username_s = usrname_input.toStdString().data();//Qstring转const char*
         const char *password_s = password_input.toStdString().data();
-//        bb = QCryptographicHash::hash ( password_input.toLatin1(), QCryptographicHash::Md5 );
-//        md5_password.append(bb.toHex());
+        bb = QCryptographicHash::hash ( password_input.toLatin1(), QCryptographicHash::Md5 );
+        md5_password.append(bb.toHex());
 
 
         BPlusTree<string> User;
@@ -65,7 +66,7 @@ void Login::on_loginButton_clicked()
         if(result1.Succ)
         {
             flag = 1;
-            if(password_input == result1.ve[1].s)
+            if(md5_password == result1.ve[1].s)
             {
                 sign = 1;
                 MainWindow *mwins = new MainWindow();//说明mwins指针指向了副窗口，其中MainWindow类在MainWindow.h中定义
@@ -93,11 +94,12 @@ void Login::on_loginButton_clicked()
         password_input = ui->passwordInput->text();
         const char *adminname_s = adminname_input.toStdString().data();//Qstring转const char*
         const char *password_s = password_input.toStdString().data();
-//        bb = QCryptographicHash::hash ( password_input.toLatin1(), QCryptographicHash::Md5 );
-//        md5_password.append(bb.toHex());
+        bb = QCryptographicHash::hash ( password_input.toLatin1(), QCryptographicHash::Md5 );
+        md5_password.append(bb.toHex());
         int flag = 0,sign = 0;
         if(adminname_input == "admin")
         {
+            manage_jurisdiction = 1;
             flag = 1;
             if(password_input == "system123")
             {
@@ -118,8 +120,9 @@ void Login::on_loginButton_clicked()
             if(result1.Succ)
             {
                 flag = 1;
-                if(password_input == result1.ve[1].s)
+                if(md5_password == result1.ve[1].s)
                 {
+                    manage_jurisdiction = 2;
                     sign = 1;
                     MainWindow *mwins = new MainWindow();//说明mwins指针指向了副窗口，其中MainWindow类在MainWindow.h中定义
                     MainWindow_Manage *mwman = new MainWindow_Manage();

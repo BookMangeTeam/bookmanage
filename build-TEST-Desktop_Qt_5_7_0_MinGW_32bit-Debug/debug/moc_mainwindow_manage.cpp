@@ -19,8 +19,8 @@
 
 QT_BEGIN_MOC_NAMESPACE
 struct qt_meta_stringdata_MainWindow_Manage_t {
-    QByteArrayData data[11];
-    char stringdata0[272];
+    QByteArrayData data[12];
+    char stringdata0[299];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -39,7 +39,8 @@ QT_MOC_LITERAL(6, 120, 29), // "on_returnButtonDelate_clicked"
 QT_MOC_LITERAL(7, 150, 23), // "on_updateButton_clicked"
 QT_MOC_LITERAL(8, 174, 29), // "on_returnButtonUpdate_clicked"
 QT_MOC_LITERAL(9, 204, 35), // "on_borrowRecordButtonManage_c..."
-QT_MOC_LITERAL(10, 240, 31) // "on_returnBottonBRManage_clicked"
+QT_MOC_LITERAL(10, 240, 31), // "on_returnBottonBRManage_clicked"
+QT_MOC_LITERAL(11, 272, 26) // "on_affirmBottonAdd_clicked"
 
     },
     "MainWindow_Manage\0on_btn_SignupManager_clicked\0"
@@ -49,7 +50,8 @@ QT_MOC_LITERAL(10, 240, 31) // "on_returnBottonBRManage_clicked"
     "on_updateButton_clicked\0"
     "on_returnButtonUpdate_clicked\0"
     "on_borrowRecordButtonManage_clicked\0"
-    "on_returnBottonBRManage_clicked"
+    "on_returnBottonBRManage_clicked\0"
+    "on_affirmBottonAdd_clicked"
 };
 #undef QT_MOC_LITERAL
 
@@ -59,7 +61,7 @@ static const uint qt_meta_data_MainWindow_Manage[] = {
        7,       // revision
        0,       // classname
        0,    0, // classinfo
-       9,   14, // methods
+      10,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -67,17 +69,19 @@ static const uint qt_meta_data_MainWindow_Manage[] = {
        0,       // signalCount
 
  // slots: name, argc, parameters, tag, flags
-       1,    0,   59,    2, 0x08 /* Private */,
-       3,    0,   60,    2, 0x08 /* Private */,
-       4,    0,   61,    2, 0x08 /* Private */,
-       5,    0,   62,    2, 0x08 /* Private */,
-       6,    0,   63,    2, 0x08 /* Private */,
-       7,    0,   64,    2, 0x08 /* Private */,
-       8,    0,   65,    2, 0x08 /* Private */,
-       9,    0,   66,    2, 0x08 /* Private */,
-      10,    0,   67,    2, 0x08 /* Private */,
+       1,    0,   64,    2, 0x08 /* Private */,
+       3,    0,   65,    2, 0x08 /* Private */,
+       4,    0,   66,    2, 0x08 /* Private */,
+       5,    0,   67,    2, 0x08 /* Private */,
+       6,    0,   68,    2, 0x08 /* Private */,
+       7,    0,   69,    2, 0x08 /* Private */,
+       8,    0,   70,    2, 0x08 /* Private */,
+       9,    0,   71,    2, 0x08 /* Private */,
+      10,    0,   72,    2, 0x08 /* Private */,
+      11,    0,   73,    2, 0x08 /* Private */,
 
  // slots: parameters
+    QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
     QMetaType::Void,
@@ -106,6 +110,7 @@ void MainWindow_Manage::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
         case 6: _t->on_returnButtonUpdate_clicked(); break;
         case 7: _t->on_borrowRecordButtonManage_clicked(); break;
         case 8: _t->on_returnBottonBRManage_clicked(); break;
+        case 9: _t->on_affirmBottonAdd_clicked(); break;
         default: ;
         }
     }
@@ -137,13 +142,13 @@ int MainWindow_Manage::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 9)
+        if (_id < 10)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 9;
+        _id -= 10;
     } else if (_c == QMetaObject::RegisterMethodArgumentMetaType) {
-        if (_id < 9)
+        if (_id < 10)
             *reinterpret_cast<int*>(_a[0]) = -1;
-        _id -= 9;
+        _id -= 10;
     }
     return _id;
 }

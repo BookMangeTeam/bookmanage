@@ -48,8 +48,8 @@ void Register::on_affirmReisterButton_clicked()
 {
 
 
-    //std::string md5_password;
-    //QByteArray bb;
+    std::string md5_password;
+    QByteArray bb;
     //注册信息到用户表
     if(register_location == 1)
     {
@@ -63,7 +63,6 @@ void Register::on_affirmReisterButton_clicked()
         const char *password_s = password1.toStdString().data();
         const char *department_s = department.toStdString().data();
         string username_fin = username.toStdString();  //将Qstring转化为string类型
-        //printf("1");
         //判断成功情况
         if(username != "" && password1 != "" && password2 != "" && password1 == password2)
         {
@@ -85,10 +84,10 @@ void Register::on_affirmReisterButton_clicked()
                 vector<Undecide>userv;
                 Undecide te1, te2, te3, te4;
                 strcpy(te1.s,username_s);
-//                bb = QCryptographicHash::hash ( password1.toLatin1(), QCryptographicHash::Md5 );
-//                md5_password.append(bb.toHex());
-
-                strcpy(te2.s,password_s);
+                bb = QCryptographicHash::hash ( password1.toLatin1(), QCryptographicHash::Md5 );
+                md5_password.append(bb.toHex());
+                const char* md5_password_s = md5_password.c_str();
+                strcpy(te2.s,md5_password_s);
                 strcpy(te3.s,department_s);
                 te4.num = 0;
                 userv.push_back(te1);
@@ -159,10 +158,10 @@ void Register::on_affirmReisterButton_clicked()
                 vector<Undecide>userv;
                 Undecide te1, te2;
                 strcpy(te1.s,adminname_s);
-//                bb = QCryptographicHash::hash ( password1.toLatin1(), QCryptographicHash::Md5 );
-//                md5_password.append(bb.toHex());
-
-                strcpy(te2.s,password_s);
+                bb = QCryptographicHash::hash ( password1.toLatin1(), QCryptographicHash::Md5 );
+                md5_password.append(bb.toHex());
+                const char* md5_password_s = md5_password.c_str();
+                strcpy(te2.s,md5_password_s);
                 userv.push_back(te1);
                 userv.push_back(te2);
                 Admin.Insert(adminname_fin,userv);
