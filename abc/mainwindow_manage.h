@@ -36,6 +36,8 @@ private slots:
 
     void on_affirmBottonAdd_clicked();
 
+    void on_affirmBottonDelate_clicked();
+
 private:
     Ui::MainWindow_Manage *ui;
 };

@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
         Borrow.BuildTree("Borrow");
         vector<short>borrowv;
         borrowv.push_back(1); //图书借阅表key值为int类型
-        borrowv.push_back(0); //图书编号ISBNstring为类型
+        borrowv.push_back(0); //图书编号ISBN加三位string类型
         borrowv.push_back(0); //用户索引（用户表用户名）string类型
         borrowv.push_back(0); //借阅时间string类型
         Borrow.SetTable(borrowv);
@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
         History.BuildTree("History");
         vector<short>historyv;
         historyv.push_back(1); //历史借阅表key值为int类型
-        historyv.push_back(1); //图书索引值int类型
+        historyv.push_back(0); //图书索引值ISBN后三位string类型
         historyv.push_back(0); //用户索引值string类型
         historyv.push_back(0); //借阅时间string类型
         historyv.push_back(0); //归还时间string类型

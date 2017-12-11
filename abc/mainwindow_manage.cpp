@@ -3,9 +3,14 @@
 #include "b_plus_tree.h"
 #include <QMessageBox>
 #include <global_variable.h>
+#include <QTableView>
 #include <register.h>
+#include <qstring.h>
 #include<iostream>
 #include <QStandardItemModel> //用于存储定制数据的通用模型
+
+QStandardItemModel *bookInformationDelate;
+
 MainWindow_Manage::MainWindow_Manage(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow_Manage)
@@ -18,7 +23,7 @@ MainWindow_Manage::MainWindow_Manage(QWidget *parent) :
 
     //删除信息表
     //设置表头
-    QStandardItemModel *bookInformationDelate = new QStandardItemModel();
+    bookInformationDelate = new QStandardItemModel();
     bookInformationDelate->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("书籍编号")));
     bookInformationDelate->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("书名")));
     bookInformationDelate->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("出版社")));
@@ -62,7 +67,7 @@ MainWindow_Manage::MainWindow_Manage(QWidget *parent) :
     //更新信息信息表
     //设置表头
     QStandardItemModel *bookInformationUpdate = new QStandardItemModel();
-    bookInformationUpdate->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("ISBN")));
+    bookInformationUpdate->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("图书索引值")));
     bookInformationUpdate->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("书名")));
     bookInformationUpdate->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("出版社")));
     bookInformationUpdate->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("出版日期")));
@@ -392,4 +397,40 @@ void MainWindow_Manage::on_affirmBottonAdd_clicked()
         //判断输入有误
         QMessageBox::critical(this, "critical", "请输入完整信息!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
     }
+}
+
+void MainWindow_Manage::on_affirmBottonDelate_clicked()
+{
+    //管理员删除图书
+    //在搜索框中输入书名
+    //QStandardItemModel* model = new QStandardItemModel();
+
+    //读取BookA表
+//    BPlusTree<string> BookA;
+//    BookA.SetTableName(string("BookA"));
+//    BookA.ReadHead();
+//    vector<pair< string,vector<Undecide> > > allA;
+//    allA = BookA.AllLeaf();
+//    //读取BookB表
+//    BPlusTree<string> BookB;
+//    BookB.SetTableName(string("BookB"));
+//    BookB.ReadHead();
+
+//    for(int i=0; i<allA.size(); i++)
+//    {
+//        char* bookNumber = const_cast<char*>((allA[i].second)[0].s);//const char*转char*
+//        QString bookNumber_q = QString(QLatin1String(bookNumber));//char*转QString
+//        bookInformationDelate->setItem(i,0,new QStandardItem(QString::fromLocal8Bit(bookNumber_q)));
+//        bookInformationDelate->setItem(i,1,new QStandardItem(QString::fromLocal8Bit(bookNumber_q)));
+//        bookInformationDelate->setItem(i,2,new QStandardItem(QString::fromLocal8Bit(bookNumber_q)));
+//        bookInformationDelate->setItem(i,3,new QStandardItem(QString::fromLocal8Bit(bookNumber_q)));
+//        bookInformationDelate->setItem(i,4,new QStandardItem(QString::fromLocal8Bit(bookNumber_q)));
+//        bookInformationDelate->setItem(i,5,new QStandardItem(QString::fromLocal8Bit(bookNumber_q)));
+//    }
+
+
+
+
+
+
 }
