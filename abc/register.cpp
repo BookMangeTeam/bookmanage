@@ -162,7 +162,7 @@ void Register::on_affirmReisterButton_clicked()
                 md5_password.append(bb.toHex());
                 const char* md5_password_s = md5_password.c_str();
                 strcpy(te2.s,md5_password_s);
-                userv.push_back(te1);
+                //userv.push_back(te1);
                 userv.push_back(te2);
                 Admin.Insert(adminname_fin,userv);
                 Admin.SaveHead();//一定要记得保存！

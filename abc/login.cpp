@@ -121,7 +121,7 @@ void Login::on_loginButton_clicked()
             if(result1.Succ)
             {
                 flag = 1;
-                if(md5_password == result1.ve[1].s)
+                if(md5_password == result1.ve[0].s)
                 {
                     manage_jurisdiction = 2;
                     sign = 1;
