@@ -254,7 +254,7 @@ void MainWindow::on_repayButton_clicked()
         bookInformationRepay_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("索引号")));
         bookInformationRepay_model->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("书名")));
         bookInformationRepay_model->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("出版社")));
-        bookInformationRepay_model->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("出版日期")));
+        bookInformationRepay_model->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("作者")));
         bookInformationRepay_model->setHorizontalHeaderItem(4, new QStandardItem(QObject::tr("最后还书日期")));
         bookInformationRepay_model->setHorizontalHeaderItem(5, new QStandardItem(QObject::tr("状态")));//超期，未超期
 
@@ -287,61 +287,86 @@ void MainWindow::on_repayButton_clicked()
 
         //设置只能选择一行，不能多行选中
         ui->bookInformationRepay->setSelectionMode(QAbstractItemView::SingleSelection);
-//    int i,line = 0;
-//    ui->stackedWidgetPermary->setCurrentIndex(2);
+    int i,line = 0;
+    ui->stackedWidgetPermary->setCurrentIndex(2);
 
-//    BPlusTree<int> Borrow;
-//    Borrow.SetTableName(string("Borrow"));
-//    Borrow.ReadHead();  //读取文件
+    BPlusTree<int> Borrow;
+    Borrow.SetTableName(string("Borrow"));
+    Borrow.ReadHead();  //读取文件
 
-//    while(1)
-//    {
-//        for(i = 0;i < 100000;i++)
-//        {
-//            Return3 result1 = Borrow.Search(i,Borrow.GetRootName());
-//            if(result1.Succ)
-//            {
-//                char* bookNumber = const_cast<char*>(result1.ve[1].s);//const char*转char*
-//                QString bookNumber_q = QString(QLatin1String(bookNumber));//char*转QString
-//                ui->bookInformationRepay->setItem(line,0,new QStandardItem(bookNumber_q)); //图书编号
+    const char* record_username_s = record_username.toStdString().data();//who登录的转const char*
+    vector<pair< int,vector<Undecide> > > all;
+    all = Borrow.AllLeaf();//遍历借书表查找此用户借的书
+    for(int i = 0; i < all.size(); i++)
+    {
+        cout << (all[i].second)[1].s;
+        cout << record_username_s;
+        if(((all[i].second)[1].s) == record_username)//找到此人
+        {
+            //all[i].first为借的书的key
+            //(all[i].second)[0].s为书籍编号
+            QString bookNumber_q = QString::fromStdString((all[i].second)[0].s);//string转qstring
+            bookInformationRepay_model->setItem(line,0,new QStandardItem(bookNumber_q)); //图书编号
 
-//                char* borrowTime = const_cast<char*>(result1.ve[3].s);//const char*转char*
-//                QString borrowTime_q = QString(QLatin1String(borrowTime));//char*转QString
-//                //QDate borrowTime_q1 = borrowTime_q.addDays(30);//最后还书日期加30天//？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？？
-//                ui->bookInformationRepay->setItem(line,0,new QStandardItem(borrowTime_q1));//借阅时间
+            //(all[i].second)[2].s为借阅时间
+            //最后还书日期
+            char* borrowTime = const_cast<char*>((all[i].second)[2].s);//const char*转char*
+            QString borrowTime_q = QString(QLatin1String(borrowTime));//char*转QString
+            QDateTime borrowTime_qq = QDateTime::fromString(borrowTime_q, "yyyy/MM/dd");//借书时间QString转化为QDateTime
+            QDateTime lastTime = borrowTime_qq.addDays(30);
+            QString lastTime_q = lastTime.toString("yyyy/MM/dd");
+            bookInformationRepay_model->setItem(line,4,new QStandardItem(lastTime_q));
 
-//                BPlusTree<string> BookA;
-//                BookA.SetTableName(string("BookA"));
-//                BookA.ReadHead();  //读取文件
-//                Return3 result2 = BookA.Search(result1.ve[1].s,BookA.GetRootName());//根据书的编号查ISBN
-//                if(result2.Succ)
-//                {
-//                    BPlusTree<string> BookB;
-//                    BookB.SetTableName(string("BookB"));
-//                    BookB.ReadHead();  //读取文件
+            //获取当前时间
+            QDateTime current_date_time = QDateTime::currentDateTime();
+//            QString current_date = current_date_time.toString("yyyy/MM/dd");
+//            const char *current_date_s = current_date.toStdString().data();
 
-//                    Return3 result3 = BookB.Search(result2.ve[5].s,BookB.GetRootName());
-//                    //根据ISBN查书的信息并显示
-//                    if(result3.Succ)
-//                    {
-//                        char* bookName = const_cast<char*>(result3.ve[1].s);//const char*转char*
-//                        QString bookName_q = QString(QLatin1String(bookName));//char*转QString
-//                        ui->bookInformationRepay->setItem(line,0,new QStandardItem(bookName_q));//书名
+            if(lastTime.operator <=(current_date_time))
+            {
+                int days;
+                bookInformationRepay_model->setItem(line,5,new QStandardItem("超期"));
+                days = lastTime.daysTo(current_date_time);
+                //根据天数计算钱
+            }
+            else
+            {
+                bookInformationRepay_model->setItem(line,5,new QStandardItem("未超期"));
+            }
 
-//                        char* author = const_cast<char*>(result3.ve[2].s);//const char*转char*
-//                        QString author_q = QString(QLatin1String(author));//char*转QString
-//                        ui->bookInformationRepay->setItem(line,0,new QStandardItem(author_q));//作者
+            //BookA里查isbn
+            BPlusTree<string> BookA;
+            BookA.SetTableName(string("BookA"));
+            BookA.ReadHead();  //读取文件
 
-//                        char* publishHouse = const_cast<char*>(result3.ve[3].s);//const char*转char*
-//                        QString publishHouse_q = QString(QLatin1String(publishHouse));//char*转QString
-//                        ui->bookInformationRepay->setItem(line,0,new QStandardItem(publishHouse_q));//出版社
-//                    }
+            Return3 result1 = BookA.Search((all[i].second)[0].s,BookA.GetRootName());
+            if(result1.Succ)
+            {
+                //result1.ve[4].s为isbn
+                //去BookB表查询书籍信息
+                BPlusTree<string> BookB;
+                BookB.SetTableName(string("BookB"));
+                BookB.ReadHead();  //读取文件
+                Return3 result2 = BookB.Search(result1.ve[4].s,BookB.GetRootName());
 
-//                }
-//                line++;
-//            }
-//        }
-//    }
+                if(result2.Succ)
+                {
+                    //书名
+                    char* bookName = const_cast<char*>(result2.ve[0].s);//const char*转char*
+                    QString bookName_q = QString(QLatin1String(bookName));//char*转QString
+                    bookInformationRepay_model->setItem(line,1,new QStandardItem(bookName_q));
+                    //作者
+                    char* author = const_cast<char*>(result2.ve[2].s);//const char*转char*
+                    QString author_q = QString(QLatin1String(author));//char*转QString
+                    bookInformationRepay_model->setItem(line,2,new QStandardItem(author_q));
+                    //出版社
+                    char* publishHouse = const_cast<char*>(result2.ve[1].s);//const char*转char*
+                    QString publishHouse_q = QString(QLatin1String(publishHouse));//char*转QString
+                    bookInformationRepay_model->setItem(line,3,new QStandardItem(publishHouse_q));
+                }
+            }
+        }
+    }
 
 }
 void MainWindow::on_returnButtonRepay_clicked()
@@ -446,10 +471,7 @@ void MainWindow::on_searchButtonBorrow_clicked()
     //设置只能选择一行，不能多行选中
     ui->bookInformationborrow->setSelectionMode(QAbstractItemView::SingleSelection);
 
-//    //显示居左
-//    ui->bookInformationborrow->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft);
     int line = 0;
-    //QStandardItemModel *bookInformationborrow_model;
     //在借书页面的搜索按钮
     QString search_info = ui->searchLineEditBorrow->text();
     if(search_info == NULL)
@@ -515,13 +537,11 @@ void MainWindow::on_affirmBottonBorrow_clicked()
     Borrow.ReadHead();
 
     int row = ui->bookInformationborrow->currentIndex().row();//选中行的行号
-    cout << row <<" ";
     //获取书的编号
     QAbstractItemModel *model = ui->bookInformationborrow->model();
     QModelIndex index = model->index(row,0);//选中行第一列的内容
     QVariant data = model->data(index);
     const char *data_s = data.toString().toStdString().data();//先转Qstring再转const char*
-    cout << data_s;
 
     BPlusTree<string> BookA;
     BookA.SetTableName(string("BookA"));
@@ -572,5 +592,10 @@ void MainWindow::on_affirmBottonBorrow_clicked()
 
     }
     borrow_key++;
+
+}
+
+void MainWindow::on_affirmBottonRepay_clicked()
+{
 
 }

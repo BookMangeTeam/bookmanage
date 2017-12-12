@@ -44,6 +44,8 @@ private slots:
 
     void on_affirmBottonBorrow_clicked();
 
+    void on_affirmBottonRepay_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

@@ -342,7 +342,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        stackedWidgetPermary->setCurrentIndex(1);
+        stackedWidgetPermary->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
