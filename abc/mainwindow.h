@@ -42,6 +42,8 @@ private slots:
 
     void on_searchButtonBorrow_clicked();
 
+    void on_affirmBottonBorrow_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

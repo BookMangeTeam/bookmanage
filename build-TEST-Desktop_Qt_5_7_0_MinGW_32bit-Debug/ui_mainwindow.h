@@ -150,9 +150,7 @@ public:
         mainWindowBackGroundFrame2 = new QFrame(page);
         mainWindowBackGroundFrame2->setObjectName(QStringLiteral("mainWindowBackGroundFrame2"));
         mainWindowBackGroundFrame2->setGeometry(QRect(0, 0, 861, 641));
-        mainWindowBackGroundFrame2->setStyleSheet(QLatin1String("#mainWindowBackGroundFrame2{\n"
-"border-image: url(:/6.png);\n"
-"}"));
+        mainWindowBackGroundFrame2->setStyleSheet(QStringLiteral(""));
         mainWindowBackGroundFrame2->setFrameShape(QFrame::StyledPanel);
         mainWindowBackGroundFrame2->setFrameShadow(QFrame::Raised);
         name = new QLabel(mainWindowBackGroundFrame2);
@@ -187,9 +185,7 @@ public:
         mainWindowBackGroundFrame3 = new QFrame(page_2);
         mainWindowBackGroundFrame3->setObjectName(QStringLiteral("mainWindowBackGroundFrame3"));
         mainWindowBackGroundFrame3->setGeometry(QRect(0, 0, 861, 641));
-        mainWindowBackGroundFrame3->setStyleSheet(QLatin1String("#mainWindowBackGroundFrame3{\n"
-"border-image: url(:/6.png);\n"
-"}"));
+        mainWindowBackGroundFrame3->setStyleSheet(QStringLiteral(""));
         mainWindowBackGroundFrame3->setFrameShape(QFrame::StyledPanel);
         mainWindowBackGroundFrame3->setFrameShadow(QFrame::Raised);
         searchLineEditBorrow = new QLineEdit(mainWindowBackGroundFrame3);
@@ -232,10 +228,7 @@ public:
         mainWindowBackGroundFrame4 = new QFrame(page_3);
         mainWindowBackGroundFrame4->setObjectName(QStringLiteral("mainWindowBackGroundFrame4"));
         mainWindowBackGroundFrame4->setGeometry(QRect(0, 0, 861, 641));
-        mainWindowBackGroundFrame4->setStyleSheet(QLatin1String("#mainWindowBackGroundFrame4\n"
-"{\n"
-"	border-image: url(:/6.png);\n"
-"}"));
+        mainWindowBackGroundFrame4->setStyleSheet(QStringLiteral(""));
         mainWindowBackGroundFrame4->setFrameShape(QFrame::StyledPanel);
         mainWindowBackGroundFrame4->setFrameShadow(QFrame::Raised);
         bookInformationRepay = new QTableView(mainWindowBackGroundFrame4);
@@ -260,10 +253,7 @@ public:
         mainWindowBackGroundFrame5 = new QFrame(page_4);
         mainWindowBackGroundFrame5->setObjectName(QStringLiteral("mainWindowBackGroundFrame5"));
         mainWindowBackGroundFrame5->setGeometry(QRect(0, 0, 861, 641));
-        mainWindowBackGroundFrame5->setStyleSheet(QLatin1String("#mainWindowBackGroundFrame5\n"
-"{\n"
-"border-image: url(:/6.png);\n"
-"}"));
+        mainWindowBackGroundFrame5->setStyleSheet(QStringLiteral(""));
         mainWindowBackGroundFrame5->setFrameShape(QFrame::StyledPanel);
         mainWindowBackGroundFrame5->setFrameShadow(QFrame::Raised);
         bookInformationRenew = new QTableView(mainWindowBackGroundFrame5);
@@ -288,10 +278,7 @@ public:
         mainWindowBackGroundFrame6 = new QFrame(page_5);
         mainWindowBackGroundFrame6->setObjectName(QStringLiteral("mainWindowBackGroundFrame6"));
         mainWindowBackGroundFrame6->setGeometry(QRect(0, 0, 861, 641));
-        mainWindowBackGroundFrame6->setStyleSheet(QLatin1String("#mainWindowBackGroundFrame6\n"
-"{\n"
-"border-image: url(:/6.png);\n"
-"}"));
+        mainWindowBackGroundFrame6->setStyleSheet(QStringLiteral(""));
         mainWindowBackGroundFrame6->setFrameShape(QFrame::StyledPanel);
         mainWindowBackGroundFrame6->setFrameShadow(QFrame::Raised);
         bookInformationBorrowR = new QTableView(mainWindowBackGroundFrame6);

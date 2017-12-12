@@ -251,9 +251,7 @@ border-image: url(:/3.jpg);
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">#mainWindowBackGroundFrame2{
-border-image: url(:/6.png);
-}</string>
+       <string notr="true"/>
       </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -341,9 +339,7 @@ border-image: url(:/6.png);
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">#mainWindowBackGroundFrame3{
-border-image: url(:/6.png);
-}</string>
+       <string notr="true"/>
       </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -479,10 +475,7 @@ border-image: url(:/6.png);
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">#mainWindowBackGroundFrame4
-{
-	border-image: url(:/6.png);
-}</string>
+       <string notr="true"/>
       </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -570,10 +563,7 @@ border-image: url(:/6.png);
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">#mainWindowBackGroundFrame5
-{
-border-image: url(:/6.png);
-}</string>
+       <string notr="true"/>
       </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>
@@ -661,10 +651,7 @@ border-image: url(:/6.png);
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">#mainWindowBackGroundFrame6
-{
-border-image: url(:/6.png);
-}</string>
+       <string notr="true"/>
       </property>
       <property name="frameShape">
        <enum>QFrame::StyledPanel</enum>

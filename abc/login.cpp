@@ -68,6 +68,7 @@ void Login::on_loginButton_clicked()
             flag = 1;
             if(md5_password == result1.ve[1].s)
             {
+                record_username = usrname_input;
                 sign = 1;
                 MainWindow *mwins = new MainWindow();//说明mwins指针指向了副窗口，其中MainWindow类在MainWindow.h中定义
                 this->hide();//隐藏父窗口，this指针指向父窗口

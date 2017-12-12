@@ -23,16 +23,16 @@ MainWindow_Manage::MainWindow_Manage(QWidget *parent) :
 
     //删除信息表
     //设置表头
-    bookInformationDelate = new QStandardItemModel();
-    bookInformationDelate->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("书籍编号")));
-    bookInformationDelate->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("书名")));
-    bookInformationDelate->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("出版社")));
-    bookInformationDelate->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("出版日期")));
-    bookInformationDelate->setHorizontalHeaderItem(4, new QStandardItem(QObject::tr("价格")));
-    bookInformationDelate->setHorizontalHeaderItem(5, new QStandardItem(QObject::tr("状态")));//已借，可借
+    QStandardItemModel *bookInformationDelate_model = new QStandardItemModel();
+    bookInformationDelate_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("书籍编号")));
+    bookInformationDelate_model->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("书名")));
+    bookInformationDelate_model->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("出版社")));
+    bookInformationDelate_model->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("出版日期")));
+    bookInformationDelate_model->setHorizontalHeaderItem(4, new QStandardItem(QObject::tr("价格")));
+    bookInformationDelate_model->setHorizontalHeaderItem(5, new QStandardItem(QObject::tr("状态")));//已借，可借
 
     //利用setModel()方法将数据模型与QTableView绑定
-    ui->bookInformationDelate->setModel(bookInformationDelate);
+    ui->bookInformationDelate->setModel(bookInformationDelate_model);
 
     //设置列宽不可变动，即不能通过鼠标拖动增加列宽
     ui->bookInformationDelate->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
@@ -66,17 +66,17 @@ MainWindow_Manage::MainWindow_Manage(QWidget *parent) :
 
     //更新信息信息表
     //设置表头
-    QStandardItemModel *bookInformationUpdate = new QStandardItemModel();
-    bookInformationUpdate->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("图书索引值")));
-    bookInformationUpdate->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("书名")));
-    bookInformationUpdate->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("出版社")));
-    bookInformationUpdate->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("出版日期")));
-    bookInformationUpdate->setHorizontalHeaderItem(4, new QStandardItem(QObject::tr("价格")));
-    bookInformationUpdate->setHorizontalHeaderItem(5, new QStandardItem(QObject::tr("数量")));
-    bookInformationUpdate->setHorizontalHeaderItem(6, new QStandardItem(QObject::tr("状态")));//已借，可借
+    QStandardItemModel *bookInformationUpdate_model = new QStandardItemModel();
+    bookInformationUpdate_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("图书索引值")));
+    bookInformationUpdate_model->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("书名")));
+    bookInformationUpdate_model->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("出版社")));
+    bookInformationUpdate_model->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("出版日期")));
+    bookInformationUpdate_model->setHorizontalHeaderItem(4, new QStandardItem(QObject::tr("价格")));
+    bookInformationUpdate_model->setHorizontalHeaderItem(5, new QStandardItem(QObject::tr("数量")));
+    bookInformationUpdate_model->setHorizontalHeaderItem(6, new QStandardItem(QObject::tr("状态")));//已借，可借
 
     //利用setModel()方法将数据模型与QTableView绑定
-    ui->bookInformationUpdate->setModel(bookInformationUpdate);
+    ui->bookInformationUpdate->setModel(bookInformationUpdate_model);
 
     //设置列宽不可变动，即不能通过鼠标拖动增加列宽
     ui->bookInformationUpdate->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
@@ -113,17 +113,17 @@ MainWindow_Manage::MainWindow_Manage(QWidget *parent) :
 
     //借书记录表
     //设置表头
-    QStandardItemModel *bookInformationBRManage = new QStandardItemModel();
-    bookInformationBRManage->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("书籍编号")));
-    bookInformationBRManage->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("用户名")));
-    bookInformationBRManage->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("书名")));
-    bookInformationBRManage->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("借/续书日期")));
-    bookInformationBRManage->setHorizontalHeaderItem(4, new QStandardItem(QObject::tr("最后还书日期")));
-    bookInformationBRManage->setHorizontalHeaderItem(5, new QStandardItem(QObject::tr("状态")));//借，续
-    bookInformationBRManage->setHorizontalHeaderItem(6, new QStandardItem(QObject::tr("扣费")));
+    QStandardItemModel *bookInformationBRManage_model = new QStandardItemModel();
+    bookInformationBRManage_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("书籍编号")));
+    bookInformationBRManage_model->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("用户名")));
+    bookInformationBRManage_model->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("书名")));
+    bookInformationBRManage_model->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("借/续书日期")));
+    bookInformationBRManage_model->setHorizontalHeaderItem(4, new QStandardItem(QObject::tr("最后还书日期")));
+    bookInformationBRManage_model->setHorizontalHeaderItem(5, new QStandardItem(QObject::tr("状态")));//借，续
+    bookInformationBRManage_model->setHorizontalHeaderItem(6, new QStandardItem(QObject::tr("扣费")));
 
     //利用setModel()方法将数据模型与QTableView绑定
-    ui->bookInformationBRManage->setModel(bookInformationBRManage);
+    ui->bookInformationBRManage->setModel(bookInformationBRManage_model);
 
     //设置列宽不可变动，即不能通过鼠标拖动增加列宽
     ui->bookInformationBRManage->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);

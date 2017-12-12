@@ -85,7 +85,7 @@ void Register::on_affirmReisterButton_clicked()
                 Undecide te1, te2, te3, te4;
                 strcpy(te1.s,username_s);
                 bb = QCryptographicHash::hash ( password1.toLatin1(), QCryptographicHash::Md5 );
-                md5_password.append(bb.toHex());
+                md5_password.append(bb.toHex());               
                 const char* md5_password_s = md5_password.c_str();
                 strcpy(te2.s,md5_password_s);
                 strcpy(te3.s,department_s);
@@ -93,7 +93,7 @@ void Register::on_affirmReisterButton_clicked()
                 userv.push_back(te1);
                 userv.push_back(te2);
                 userv.push_back(te3);
-                userv.push_back(te4);;
+                userv.push_back(te4);
                 User.Insert(username_fin,userv);
                 User.SaveHead();//一定要记得保存！
                 Login *login = new Login();

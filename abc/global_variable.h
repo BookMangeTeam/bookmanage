@@ -4,7 +4,7 @@
 #endif // GLOBAL_VARIABLE_H
 
 //全局变量类
-
+#include <QString>
 
 extern int register_location;
 //判断注册按钮信号是来自登录界面还是超级管理员窗口
@@ -13,8 +13,9 @@ extern int register_location;
 extern int manage_jurisdiction;
 //判断是超级管理员还是管理员（不同的权限）
 
-extern int user_key;
-//用户表中的Key;
+extern int borrow_key;
+//借阅表中的Key;
 
-extern int admin_key;
-//管理员表中的Key
+extern QString record_username;
+//记录正在登陆的用户的用户名
+
