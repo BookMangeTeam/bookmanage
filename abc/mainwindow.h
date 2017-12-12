@@ -46,6 +46,8 @@ private slots:
 
     void on_affirmBottonRepay_clicked();
 
+    void on_affirmBottonRenew_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

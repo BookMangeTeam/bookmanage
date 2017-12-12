@@ -10,6 +10,7 @@
 #include <global_variable.h>
 #include <QDateTime>
 #include <QDate>
+#include <QDebug>
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -25,187 +26,6 @@ MainWindow::MainWindow(QWidget *parent) :
     //首页界面
     ui->stackedWidgetPermary->setCurrentIndex(0);
 
-    //续借信息表
-    //设置表头
-    QStandardItemModel *bookInformationRenew_model = new QStandardItemModel();
-    bookInformationRenew_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("索引号")));
-    bookInformationRenew_model->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("书名")));
-    bookInformationRenew_model->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("出版社")));
-    bookInformationRenew_model->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("出版日期")));
-    bookInformationRenew_model->setHorizontalHeaderItem(4, new QStandardItem(QObject::tr("最后还书日期")));
-    bookInformationRenew_model->setHorizontalHeaderItem(5, new QStandardItem(QObject::tr("状态")));//可续借，不可续借（超过续借次数）
-
-    //利用setModel()方法将数据模型与QTableView绑定
-    ui->bookInformationRenew->setModel(bookInformationRenew_model);
-
-    //设置列宽不可变动，即不能通过鼠标拖动增加列宽
-    ui->bookInformationRenew->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
-    ui->bookInformationRenew->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
-    ui->bookInformationRenew->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
-    ui->bookInformationRenew->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Fixed);
-    ui->bookInformationRenew->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Fixed);
-    ui->bookInformationRenew->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Fixed);
-    //设置表格的各列的宽度值
-    ui->bookInformationRenew->setColumnWidth(0,110);
-    ui->bookInformationRenew->setColumnWidth(1,180);
-    ui->bookInformationRenew->setColumnWidth(2,180);
-    ui->bookInformationRenew->setColumnWidth(3,125);
-    ui->bookInformationRenew->setColumnWidth(4,125);
-    ui->bookInformationRenew->setColumnWidth(5,80);
-
-    //设置选中时为整行选中
-    ui->bookInformationRenew->setSelectionBehavior(QAbstractItemView::SelectRows);
-
-    //设置表格的单元为只读属性，即不能编辑
-    ui->bookInformationRenew->setEditTriggers(QAbstractItemView::NoEditTriggers);
-
-    //设置隔一行变一颜色，即：一灰一白
-    ui->bookInformationRenew->setAlternatingRowColors(true);
-
-    //设置只能选择一行，不能多行选中
-    ui->bookInformationRenew->setSelectionMode(QAbstractItemView::SingleSelection);
-
-    //如果你用在QTableView中使用右键菜单，需启用该属性
-    ui->bookInformationRenew->setContextMenuPolicy(Qt::CustomContextMenu);
-
-
-    //借书记录表
-    //设置表头
-    QStandardItemModel *bookInformationBorrowR_model = new QStandardItemModel();
-    bookInformationBorrowR_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("索引号")));
-    bookInformationBorrowR_model->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("书名")));
-    bookInformationBorrowR_model->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("出版社")));
-    bookInformationBorrowR_model->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("借/续书日期")));
-    bookInformationBorrowR_model->setHorizontalHeaderItem(4, new QStandardItem(QObject::tr("最后还书日期")));
-    bookInformationBorrowR_model->setHorizontalHeaderItem(5, new QStandardItem(QObject::tr("状态")));//借，续
-    bookInformationBorrowR_model->setHorizontalHeaderItem(6, new QStandardItem(QObject::tr("扣费")));
-
-    //利用setModel()方法将数据模型与QTableView绑定
-    ui->bookInformationBorrowR->setModel(bookInformationBorrowR_model);
-
-    //设置列宽不可变动，即不能通过鼠标拖动增加列宽
-    ui->bookInformationBorrowR->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
-    ui->bookInformationBorrowR->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
-    ui->bookInformationBorrowR->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
-    ui->bookInformationBorrowR->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Fixed);
-    ui->bookInformationBorrowR->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Fixed);
-    ui->bookInformationBorrowR->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Fixed);
-    ui->bookInformationBorrowR->horizontalHeader()->setSectionResizeMode(6, QHeaderView::Fixed);
-    //设置表格的各列的宽度值
-    ui->bookInformationBorrowR->setColumnWidth(0,80);
-    ui->bookInformationBorrowR->setColumnWidth(1,180);
-    ui->bookInformationBorrowR->setColumnWidth(2,180);
-    ui->bookInformationBorrowR->setColumnWidth(3,100);
-    ui->bookInformationBorrowR->setColumnWidth(4,100);
-    ui->bookInformationBorrowR->setColumnWidth(5,80);
-    ui->bookInformationBorrowR->setColumnWidth(6,80);
-
-    //设置选中时为整行选中
-    ui->bookInformationBorrowR->setSelectionBehavior(QAbstractItemView::SelectRows);
-
-    //设置表格的单元为只读属性，即不能编辑
-    ui->bookInformationBorrowR->setEditTriggers(QAbstractItemView::NoEditTriggers);
-
-    //设置隔一行变一颜色，即：一灰一白
-    ui->bookInformationBorrowR->setAlternatingRowColors(true);
-
-    //设置只能选择一行，不能多行选中
-    ui->bookInformationBorrowR->setSelectionMode(QAbstractItemView::SingleSelection);
-
-    //如果你用在QTableView中使用右键菜单，需启用该属性
-    ui->bookInformationBorrowR->setContextMenuPolicy(Qt::CustomContextMenu);
-
-
-    //欠费记录表
-    //设置表头
-    QStandardItemModel *inDebtInformation_model = new QStandardItemModel();
-    inDebtInformation_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("索引号")));
-    inDebtInformation_model->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("书名")));
-    inDebtInformation_model->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("出版社")));
-    inDebtInformation_model->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("还书日期")));
-    inDebtInformation_model->setHorizontalHeaderItem(4, new QStandardItem(QObject::tr("状态")));
-    inDebtInformation_model->setHorizontalHeaderItem(5, new QStandardItem(QObject::tr("扣费")));
-    inDebtInformation_model->setHorizontalHeaderItem(6, new QStandardItem(QObject::tr("余额")));
-
-    //利用setModel()方法将数据模型与QTableView绑定
-    ui->inDebtInformation->setModel(inDebtInformation_model);
-
-    //设置列宽不可变动，即不能通过鼠标拖动增加列宽
-    ui->inDebtInformation->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
-    ui->inDebtInformation->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
-    ui->inDebtInformation->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
-    ui->inDebtInformation->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Fixed);
-    ui->inDebtInformation->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Fixed);
-    ui->inDebtInformation->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Fixed);
-    ui->inDebtInformation->horizontalHeader()->setSectionResizeMode(6, QHeaderView::Fixed);
-    //设置表格的各列的宽度值
-    ui->inDebtInformation->setColumnWidth(0,80);
-    ui->inDebtInformation->setColumnWidth(1,180);
-    ui->inDebtInformation->setColumnWidth(2,180);
-    ui->inDebtInformation->setColumnWidth(3,100);
-    ui->inDebtInformation->setColumnWidth(4,100);
-    ui->inDebtInformation->setColumnWidth(5,80);
-    ui->inDebtInformation->setColumnWidth(6,80);
-
-    //设置选中时为整行选中
-    ui->inDebtInformation->setSelectionBehavior(QAbstractItemView::SelectRows);
-
-    //设置表格的单元为只读属性，即不能编辑
-    ui->inDebtInformation->setEditTriggers(QAbstractItemView::NoEditTriggers);
-
-    //设置隔一行变一颜色，即：一灰一白
-    ui->inDebtInformation->setAlternatingRowColors(true);
-
-    //设置只能选择一行，不能多行选中
-    ui->inDebtInformation->setSelectionMode(QAbstractItemView::SingleSelection);
-
-    //如果你用在QTableView中使用右键菜单，需启用该属性
-    ui->inDebtInformation->setContextMenuPolicy(Qt::CustomContextMenu);
-
-
-    //缴费记录表
-    //设置表头
-    QStandardItemModel *paymentInformation_model = new QStandardItemModel();
-    paymentInformation_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("缴费时间")));
-    paymentInformation_model->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("缴费金额")));
-    paymentInformation_model->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("余额")));
-    paymentInformation_model->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("状态")));//成功 失败
-
-
-    //利用setModel()方法将数据模型与QTableView绑定
-    ui->paymentInformation->setModel(paymentInformation_model);
-
-    //设置列宽不可变动，即不能通过鼠标拖动增加列宽
-    ui->paymentInformation->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
-    ui->paymentInformation->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
-    ui->paymentInformation->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
-    ui->paymentInformation->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Fixed);
-
-
-    //设置表格的各列的宽度值
-    ui->paymentInformation->setColumnWidth(0,110);
-    ui->paymentInformation->setColumnWidth(1,110);
-    ui->paymentInformation->setColumnWidth(2,110);
-    ui->paymentInformation->setColumnWidth(3,110);
-
-
-    //设置选中时为整行选中
-    ui->paymentInformation->setSelectionBehavior(QAbstractItemView::SelectRows);
-
-    //设置表格的单元为只读属性，即不能编辑
-    ui->paymentInformation->setEditTriggers(QAbstractItemView::NoEditTriggers);
-
-    //设置隔一行变一颜色，即：一灰一白
-    ui->paymentInformation->setAlternatingRowColors(true);
-
-    //设置只能选择一行，不能多行选中
-    ui->paymentInformation->setSelectionMode(QAbstractItemView::SingleSelection);
-
-    //如果你用在QTableView中使用右键菜单，需启用该属性
-    ui->paymentInformation->setContextMenuPolicy(Qt::CustomContextMenu);
-
-
-
 }
 
 MainWindow::~MainWindow()
@@ -220,7 +40,7 @@ void MainWindow::on_borrowButton_clicked()
     //借书信息表
     //设置表头
     QStandardItemModel *bookInformationborrow_model = new QStandardItemModel();
-    bookInformationborrow_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("编号")));
+    bookInformationborrow_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("图书编号")));
     bookInformationborrow_model->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("书名")));
     bookInformationborrow_model->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("作者")));
     bookInformationborrow_model->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("出版社")));
@@ -251,7 +71,7 @@ void MainWindow::on_repayButton_clicked()
     //还书信息表
         //设置表头
         QStandardItemModel *bookInformationRepay_model = new QStandardItemModel();
-        bookInformationRepay_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("索引号")));
+        bookInformationRepay_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("图书编号")));
         bookInformationRepay_model->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("书名")));
         bookInformationRepay_model->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("出版社")));
         bookInformationRepay_model->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("作者")));
@@ -299,70 +119,79 @@ void MainWindow::on_repayButton_clicked()
     all = Borrow.AllLeaf();//遍历借书表查找此用户借的书
     for(int i = 0; i < all.size(); i++)
     {
-        cout << (all[i].second)[1].s;
-        cout << record_username_s;
         if(((all[i].second)[1].s) == record_username)//找到此人
         {
-            //all[i].first为借的书的key
-            //(all[i].second)[0].s为书籍编号
-            QString bookNumber_q = QString::fromStdString((all[i].second)[0].s);//string转qstring
-            bookInformationRepay_model->setItem(line,0,new QStandardItem(bookNumber_q)); //图书编号
-
-            //(all[i].second)[2].s为借阅时间
-            //最后还书日期
-            char* borrowTime = const_cast<char*>((all[i].second)[2].s);//const char*转char*
-            QString borrowTime_q = QString(QLatin1String(borrowTime));//char*转QString
-            QDateTime borrowTime_qq = QDateTime::fromString(borrowTime_q, "yyyy/MM/dd");//借书时间QString转化为QDateTime
-            QDateTime lastTime = borrowTime_qq.addDays(30);
-            QString lastTime_q = lastTime.toString("yyyy/MM/dd");
-            bookInformationRepay_model->setItem(line,4,new QStandardItem(lastTime_q));
-
-            //获取当前时间
-            QDateTime current_date_time = QDateTime::currentDateTime();
-//            QString current_date = current_date_time.toString("yyyy/MM/dd");
-//            const char *current_date_s = current_date.toStdString().data();
-
-            if(lastTime.operator <=(current_date_time))
-            {
-                int days;
-                bookInformationRepay_model->setItem(line,5,new QStandardItem("超期"));
-                days = lastTime.daysTo(current_date_time);
-                //根据天数计算钱
-            }
-            else
-            {
-                bookInformationRepay_model->setItem(line,5,new QStandardItem("未超期"));
-            }
-
-            //BookA里查isbn
             BPlusTree<string> BookA;
             BookA.SetTableName(string("BookA"));
             BookA.ReadHead();  //读取文件
-
-            Return3 result1 = BookA.Search((all[i].second)[0].s,BookA.GetRootName());
-            if(result1.Succ)
+            Return3 result3 = BookA.Search((all[i].second)[0].s,BookA.GetRootName());
+            if(result3.Succ)
             {
-                //result1.ve[4].s为isbn
-                //去BookB表查询书籍信息
-                BPlusTree<string> BookB;
-                BookB.SetTableName(string("BookB"));
-                BookB.ReadHead();  //读取文件
-                Return3 result2 = BookB.Search(result1.ve[4].s,BookB.GetRootName());
-
-                if(result2.Succ)
+                //没还就显示
+                if(result3.ve[2].is == 1)
                 {
-                    //书名
-                    char* bookName = const_cast<char*>(result2.ve[0].s);//const char*转char*
-                    QString bookName_q = QString(QLatin1String(bookName));//char*转QString
-                    bookInformationRepay_model->setItem(line,1,new QStandardItem(bookName_q));
-                    //作者
-                    char* author = const_cast<char*>(result2.ve[2].s);//const char*转char*
-                    QString author_q = QString(QLatin1String(author));//char*转QString
-                    bookInformationRepay_model->setItem(line,2,new QStandardItem(author_q));
-                    //出版社
-                    char* publishHouse = const_cast<char*>(result2.ve[1].s);//const char*转char*
-                    QString publishHouse_q = QString(QLatin1String(publishHouse));//char*转QString
-                    bookInformationRepay_model->setItem(line,3,new QStandardItem(publishHouse_q));
+                    //all[i].first为借的书的key
+                    //(all[i].second)[0].s为书籍编号
+                    QString bookNumber_q = QString::fromStdString((all[i].second)[0].s);//string转qstring
+                    bookInformationRepay_model->setItem(line,0,new QStandardItem(bookNumber_q)); //图书编号
+
+                    //(all[i].second)[2].s为借阅时间
+                    //最后还书日期
+                    char* borrowTime = const_cast<char*>((all[i].second)[2].s);//const char*转char*
+                    QString borrowTime_q = QString(QLatin1String(borrowTime));//char*转QString
+                    QDateTime borrowTime_qq = QDateTime::fromString(borrowTime_q, "yyyy/MM/dd");//借书时间QString转化为QDateTime
+                    QDateTime lastTime = borrowTime_qq.addDays(30);
+                    QString lastTime_q = lastTime.toString("yyyy/MM/dd");
+                    bookInformationRepay_model->setItem(line,4,new QStandardItem(lastTime_q));
+
+                    //获取当前时间
+                    QDateTime current_date_time = QDateTime::currentDateTime();
+        //            QString current_date = current_date_time.toString("yyyy/MM/dd");
+        //            const char *current_date_s = current_date.toStdString().data();
+
+                    if(lastTime.operator <=(current_date_time))
+                    {
+                        int days;
+                        bookInformationRepay_model->setItem(line,5,new QStandardItem("超期"));
+                        days = lastTime.daysTo(current_date_time);
+                        //根据天数计算钱
+                    }
+                    else
+                    {
+                        bookInformationRepay_model->setItem(line,5,new QStandardItem("未超期"));
+                    }
+
+                    //BookA里查isbn
+                    BPlusTree<string> BookA;
+                    BookA.SetTableName(string("BookA"));
+                    BookA.ReadHead();  //读取文件
+
+                    Return3 result1 = BookA.Search((all[i].second)[0].s,BookA.GetRootName());
+                    if(result1.Succ)
+                    {
+                        //result1.ve[4].s为isbn
+                        //去BookB表查询书籍信息
+                        BPlusTree<string> BookB;
+                        BookB.SetTableName(string("BookB"));
+                        BookB.ReadHead();  //读取文件
+                        Return3 result2 = BookB.Search(result1.ve[4].s,BookB.GetRootName());
+
+                        if(result2.Succ)
+                        {
+                            //书名
+                            char* bookName = const_cast<char*>(result2.ve[0].s);//const char*转char*
+                            QString bookName_q = QString(QLatin1String(bookName));//char*转QString
+                            bookInformationRepay_model->setItem(line,1,new QStandardItem(bookName_q));
+                            //作者
+                            char* author = const_cast<char*>(result2.ve[2].s);//const char*转char*
+                            QString author_q = QString(QLatin1String(author));//char*转QString
+                            bookInformationRepay_model->setItem(line,2,new QStandardItem(author_q));
+                            //出版社
+                            char* publishHouse = const_cast<char*>(result2.ve[1].s);//const char*转char*
+                            QString publishHouse_q = QString(QLatin1String(publishHouse));//char*转QString
+                            bookInformationRepay_model->setItem(line,3,new QStandardItem(publishHouse_q));
+                        }
+                    }
                 }
             }
         }
@@ -378,6 +207,120 @@ void MainWindow::on_returnButtonRepay_clicked()
 void MainWindow::on_renewButton_clicked()
 {
     ui->stackedWidgetPermary->setCurrentIndex(3);
+    //续借信息表
+    //设置表头
+    QStandardItemModel *bookInformationRenew_model = new QStandardItemModel();
+    bookInformationRenew_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("图书编号")));
+    bookInformationRenew_model->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("书名")));
+    bookInformationRenew_model->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("作者")));
+    bookInformationRenew_model->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("出版社")));
+    bookInformationRenew_model->setHorizontalHeaderItem(4, new QStandardItem(QObject::tr("最后还书日期")));
+    bookInformationRenew_model->setHorizontalHeaderItem(5, new QStandardItem(QObject::tr("状态")));//可续借，不可续借（超过续借次数）
+
+    //利用setModel()方法将数据模型与QTableView绑定
+    ui->bookInformationRenew->setModel(bookInformationRenew_model);
+
+    //设置列宽不可变动，即不能通过鼠标拖动增加列宽
+    ui->bookInformationRenew->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
+    ui->bookInformationRenew->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
+    ui->bookInformationRenew->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
+    ui->bookInformationRenew->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Fixed);
+    ui->bookInformationRenew->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Fixed);
+    ui->bookInformationRenew->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Fixed);
+    //设置表格的各列的宽度值
+    ui->bookInformationRenew->setColumnWidth(0,110);
+    ui->bookInformationRenew->setColumnWidth(1,180);
+    ui->bookInformationRenew->setColumnWidth(2,125);
+    ui->bookInformationRenew->setColumnWidth(3,180);
+    ui->bookInformationRenew->setColumnWidth(4,125);
+    ui->bookInformationRenew->setColumnWidth(5,80);
+
+    //设置选中时为整行选中
+    ui->bookInformationRenew->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    //设置表格的单元为只读属性，即不能编辑
+    ui->bookInformationRenew->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    //设置隔一行变一颜色，即：一灰一白
+    ui->bookInformationRenew->setAlternatingRowColors(true);
+
+    //设置只能选择一行，不能多行选中
+    ui->bookInformationRenew->setSelectionMode(QAbstractItemView::SingleSelection);
+
+    //图书编号 书名  作者 出版社 最后还书日期 状态
+    int line = 0;
+    const char* record_username_s = record_username.toStdString().data();//who登录的转const char*
+    BPlusTree<int> Borrow;
+    Borrow.SetTableName(string("Borrow"));
+    Borrow.ReadHead();  //读取文件
+    //在borrow中找这个用户所借或借过的书
+    vector<pair< int,vector<Undecide> > > all;
+    all = Borrow.AllLeaf();
+    for(int i = 0; i < all.size(); i++)
+    {
+        if((all[i].second)[1].s == record_username) //找到这个人
+        {
+            //(all[i].second)[0].s这个人借的书的编号
+            //显示图书编号
+            char* bookNumber = const_cast<char*>((all[i].second)[0].s);//const char*转char*
+            QString bookNumber_q = QString(QLatin1String(bookNumber));//char*转QString
+            bookInformationRenew_model->setItem(line,0,new QStandardItem(bookNumber_q));
+            //最后还书日期
+            char* lastTime = const_cast<char*>((all[i].second)[2].s);//const char*转char*
+            QString lastTime_q = QString(QLatin1String(lastTime));//char*转QString
+            bookInformationRenew_model->setItem(line,4,new QStandardItem(lastTime_q));
+
+            BPlusTree<string> BookA;
+            BookA.SetTableName(string("BookA"));
+            BookA.ReadHead();
+
+            Return3 result1 = BookA.Search((all[i].second)[0].s,BookA.GetRootName());
+            if(result1.Succ)
+            {
+                BPlusTree<string> BookB;
+                BookB.SetTableName(string("BookB"));
+                BookB.ReadHead();
+                //result1.ve[4].s为isbn
+                Return3 result2 = BookB.Search(result1.ve[4].s,BookB.GetRootName());
+                if(result2.Succ)
+                {
+                    //显示书名
+                    char* bookName = const_cast<char*>(result2.ve[0].s);//const char*转char*
+                    QString bookName_q = QString(QLatin1String(bookName));//char*转QString
+                    bookInformationRenew_model->setItem(line,1,new QStandardItem(bookName_q));
+                    //作者
+                    char* author = const_cast<char*>(result2.ve[1].s);//const char*转char*
+                    QString author_q = QString(QLatin1String(author));//char*转QString
+                    bookInformationRenew_model->setItem(line,2,new QStandardItem(author_q));
+                    //出版社
+                    char* publishHouse = const_cast<char*>(result2.ve[2].s);//const char*转char*
+                    QString publishHouse_q = QString(QLatin1String(publishHouse));//char*转QString
+                    bookInformationRenew_model->setItem(line,3,new QStandardItem(publishHouse_q));
+                }
+            }
+            QDateTime current_date_time = QDateTime::currentDateTime();
+            QDateTime lastTime_qq = QDateTime::fromString(lastTime_q, "yyyy/MM/dd");//借书时间QString转化为QDateTime
+            int days = lastTime_qq.daysTo(current_date_time);
+            if(days <= 0)
+            {
+
+                Return3 result3 = BookA.Search((all[i].second)[0].s,BookA.GetRootName());
+                if(result3.ve[2].is == 1)
+                //没超期并且没还可续借
+                    bookInformationRenew_model->setItem(line,5,new QStandardItem("Y"));
+                else
+                    bookInformationRenew_model->setItem(line,5,new QStandardItem("N"));
+                //在bookA中找isbn
+            }
+            else
+            {
+                //超期了 可能没还 可能还了。没还去还 还了的不可续借，只能从新借
+                bookInformationRenew_model->setItem(line,5,new QStandardItem("N"));
+            }
+            line++;
+        }
+    }
+
 }
 
 void MainWindow::on_returnButtonRenew_clicked()
@@ -388,6 +331,107 @@ void MainWindow::on_returnButtonRenew_clicked()
 void MainWindow::on_borrowRecordButton_clicked()
 {
     ui->stackedWidgetPermary->setCurrentIndex(4);
+    //借书记录表
+    //设置表头
+    QStandardItemModel *bookInformationBorrowR_model = new QStandardItemModel();
+    bookInformationBorrowR_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("图书编号")));
+    bookInformationBorrowR_model->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("书名")));
+    bookInformationBorrowR_model->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("出版社")));
+    bookInformationBorrowR_model->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("借书日期")));
+    bookInformationBorrowR_model->setHorizontalHeaderItem(4, new QStandardItem(QObject::tr("还书日期")));
+    bookInformationBorrowR_model->setHorizontalHeaderItem(5, new QStandardItem(QObject::tr("扣费")));
+
+    //利用setModel()方法将数据模型与QTableView绑定
+    ui->bookInformationBorrowR->setModel(bookInformationBorrowR_model);
+
+    //设置列宽不可变动，即不能通过鼠标拖动增加列宽
+    ui->bookInformationBorrowR->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
+    ui->bookInformationBorrowR->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
+    ui->bookInformationBorrowR->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
+    ui->bookInformationBorrowR->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Fixed);
+    ui->bookInformationBorrowR->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Fixed);
+    ui->bookInformationBorrowR->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Fixed);
+    //设置表格的各列的宽度值
+    ui->bookInformationBorrowR->setColumnWidth(0,100);
+    ui->bookInformationBorrowR->setColumnWidth(1,200);
+    ui->bookInformationBorrowR->setColumnWidth(2,200);
+    ui->bookInformationBorrowR->setColumnWidth(3,110);
+    ui->bookInformationBorrowR->setColumnWidth(4,110);
+    ui->bookInformationBorrowR->setColumnWidth(5,80);
+
+    //设置选中时为整行选中
+    ui->bookInformationBorrowR->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    //设置表格的单元为只读属性，即不能编辑
+    ui->bookInformationBorrowR->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    //设置隔一行变一颜色，即：一灰一白
+    ui->bookInformationBorrowR->setAlternatingRowColors(true);
+
+    //设置只能选择一行，不能多行选中
+    ui->bookInformationBorrowR->setSelectionMode(QAbstractItemView::SingleSelection);
+
+    int line = 0;
+    //从History中找出用户
+    BPlusTree<int> History;
+    History.SetTableName(string("History"));
+    History.ReadHead();
+
+    vector<pair< int,vector<Undecide> > > all;
+    all = History.AllLeaf();
+    const char *record_username_s = record_username.toStdString().data();//Qstring转const char*
+    for(int i = 0; i < all.size(); i++){
+        //cout << all[i].first << (all[i].second)[0].s << endl;
+        cout << (all[i].second)[1].s;
+        cout << record_username_s;
+        //QDebug() << record_username;
+        if((all[i].second)[1].s == record_username)
+        {
+            //(all[i].second)[0].s为图书编号
+            char* bookNumber = const_cast<char*>((all[i].second)[0].s);//const char*转char*
+            QString bookNumber_q = QString(QLatin1String(bookNumber));//char*转QString
+            bookInformationBorrowR_model->setItem(line,0,new QStandardItem(bookNumber_q));
+            //BookA里查isbn
+            BPlusTree<string> BookA;
+            BookA.SetTableName(string("BookA"));
+            BookA.ReadHead();
+            Return3 result1 = BookA.Search((all[i].second)[0].s,BookA.GetRootName());
+            if(result1.Succ)
+            {
+                //result1.ve[4].s  isbn
+                BPlusTree<string> BookB;
+                BookB.SetTableName(string("BookB"));
+                BookB.ReadHead();
+                Return3 result2 = BookB.Search(result1.ve[4].s,BookB.GetRootName());
+                //书名
+                char* bookName = const_cast<char*>(result2.ve[0].s);//const char*转char*
+                QString bookName_q = QString(QLatin1String(bookName));//char*转QString
+                bookInformationBorrowR_model->setItem(line,1,new QStandardItem(bookName_q));
+                //作者
+                char* publishHousse = const_cast<char*>(result2.ve[2].s);//const char*转char*
+                QString publishHousse_q = QString(QLatin1String(publishHousse));//char*转QString
+                bookInformationBorrowR_model->setItem(line,2,new QStandardItem(publishHousse_q));
+            }
+            //借阅时间
+            char* borrowTime = const_cast<char*>((all[i].second)[2].s);//const char*转char*
+            QString borrowTime_q = QString(QLatin1String(borrowTime));//char*转QString
+            bookInformationBorrowR_model->setItem(line,3,new QStandardItem(borrowTime_q));
+
+            //还书时间
+            char* returnTime = const_cast<char*>((all[i].second)[3].s);//const char*转char*
+            QString returnTime_q = QString(QLatin1String(returnTime));//char*转QString
+            bookInformationBorrowR_model->setItem(line,4,new QStandardItem(returnTime_q));
+
+            //扣费
+            QString deduction = QString::number((all[i].second)[4].num,10);
+            bookInformationBorrowR_model->setItem(line,5,new QStandardItem(deduction));
+            line++;
+        }
+    }
+
+
+
+
 }
 
 void MainWindow::on_returnBottonBorrowR_clicked()
@@ -398,6 +442,93 @@ void MainWindow::on_returnBottonBorrowR_clicked()
 void MainWindow::on_moneyBotton_clicked()
 {
     ui->stackedWidgetPermary->setCurrentIndex(5);
+    //欠费记录表
+    //设置表头
+    QStandardItemModel *inDebtInformation_model = new QStandardItemModel();
+    inDebtInformation_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("索引号")));
+    inDebtInformation_model->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("书名")));
+    inDebtInformation_model->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("出版社")));
+    inDebtInformation_model->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("还书日期")));
+    inDebtInformation_model->setHorizontalHeaderItem(4, new QStandardItem(QObject::tr("状态")));
+    inDebtInformation_model->setHorizontalHeaderItem(5, new QStandardItem(QObject::tr("扣费")));
+    inDebtInformation_model->setHorizontalHeaderItem(6, new QStandardItem(QObject::tr("余额")));
+
+    //利用setModel()方法将数据模型与QTableView绑定
+    ui->inDebtInformation->setModel(inDebtInformation_model);
+
+    //设置列宽不可变动，即不能通过鼠标拖动增加列宽
+    ui->inDebtInformation->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
+    ui->inDebtInformation->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
+    ui->inDebtInformation->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
+    ui->inDebtInformation->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Fixed);
+    ui->inDebtInformation->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Fixed);
+    ui->inDebtInformation->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Fixed);
+    ui->inDebtInformation->horizontalHeader()->setSectionResizeMode(6, QHeaderView::Fixed);
+    //设置表格的各列的宽度值
+    ui->inDebtInformation->setColumnWidth(0,80);
+    ui->inDebtInformation->setColumnWidth(1,180);
+    ui->inDebtInformation->setColumnWidth(2,180);
+    ui->inDebtInformation->setColumnWidth(3,100);
+    ui->inDebtInformation->setColumnWidth(4,100);
+    ui->inDebtInformation->setColumnWidth(5,80);
+    ui->inDebtInformation->setColumnWidth(6,80);
+
+    //设置选中时为整行选中
+    ui->inDebtInformation->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    //设置表格的单元为只读属性，即不能编辑
+    ui->inDebtInformation->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    //设置隔一行变一颜色，即：一灰一白
+    ui->inDebtInformation->setAlternatingRowColors(true);
+
+    //设置只能选择一行，不能多行选中
+    ui->inDebtInformation->setSelectionMode(QAbstractItemView::SingleSelection);
+
+
+
+    //缴费记录表
+    //设置表头
+    QStandardItemModel *paymentInformation_model = new QStandardItemModel();
+    paymentInformation_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("缴费时间")));
+    paymentInformation_model->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("缴费金额")));
+    paymentInformation_model->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("余额")));
+    paymentInformation_model->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("状态")));//成功 失败
+
+
+    //利用setModel()方法将数据模型与QTableView绑定
+    ui->paymentInformation->setModel(paymentInformation_model);
+
+    //设置列宽不可变动，即不能通过鼠标拖动增加列宽
+    ui->paymentInformation->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
+    ui->paymentInformation->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
+    ui->paymentInformation->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
+    ui->paymentInformation->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Fixed);
+
+
+    //设置表格的各列的宽度值
+    ui->paymentInformation->setColumnWidth(0,110);
+    ui->paymentInformation->setColumnWidth(1,110);
+    ui->paymentInformation->setColumnWidth(2,110);
+    ui->paymentInformation->setColumnWidth(3,110);
+
+
+    //设置选中时为整行选中
+    ui->paymentInformation->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    //设置表格的单元为只读属性，即不能编辑
+    ui->paymentInformation->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    //设置隔一行变一颜色，即：一灰一白
+    ui->paymentInformation->setAlternatingRowColors(true);
+
+    //设置只能选择一行，不能多行选中
+    ui->paymentInformation->setSelectionMode(QAbstractItemView::SingleSelection);
+
+
+
+
+
 }
 
 void MainWindow::on_returnButtonMoney_clicked()
@@ -426,7 +557,6 @@ void MainWindow::on_searchButtonPermary_clicked()
 //        ui->stackedWidgetPermary->setCurrentIndex(1);
 //        ui->searchLineEditBorrow->setText(search_info);
 //        //ui->searchLineEditBorrow->setCursorMoveStyle(Qt::CursorMoveStyle );
-
 //    }
 
 }
@@ -551,6 +681,7 @@ void MainWindow::on_affirmBottonBorrow_clicked()
     {
         if(result1.ve[2].is == 0)
         {
+
             //导入信息到borrow表
             vector<Undecide>borrowv;
             Undecide te1,te2,te3;
@@ -569,7 +700,7 @@ void MainWindow::on_affirmBottonBorrow_clicked()
 
             QMessageBox::information(this, "提示", "借书成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
-            vector<Undecide>Bookav;//将BookA中的是否可借的值改为false
+            vector<Undecide>bookav;//将BookA中的是否可借的值改为false
             Undecide te4,te5,te6,te7,te8,te9;
             strcpy(te4.s,data_s);
             strcpy(te5.s,result1.ve[0].s);
@@ -577,12 +708,12 @@ void MainWindow::on_affirmBottonBorrow_clicked()
             te7.is = 1;
             te8.is = result1.ve[3].is;
             strcpy(te9.s,result1.ve[4].s);
-            Bookav.push_back(te5);
-            Bookav.push_back(te6);
-            Bookav.push_back(te7);
-            Bookav.push_back(te8);
-            Bookav.push_back(te9);
-            BookA.Update(data_s,Bookav);
+            bookav.push_back(te5);
+            bookav.push_back(te6);
+            bookav.push_back(te7);
+            bookav.push_back(te8);
+            bookav.push_back(te9);
+            BookA.Update(data_s,bookav);
             BookA.SaveHead();
         }
         else
@@ -595,7 +726,167 @@ void MainWindow::on_affirmBottonBorrow_clicked()
 
 }
 
+
+
 void MainWindow::on_affirmBottonRepay_clicked()
 {
 
+    BPlusTree<int> History;
+    History.SetTableName(string("History"));
+    History.ReadHead();  //读取文件
+
+    vector<Undecide>historyv;
+    Undecide te1,te2,te3,te4,te5;
+    //书籍编号 书名 出版社 作者 最后还书时间 是否超期
+    int row = ui->bookInformationRepay->currentIndex().row();//选中行的行号
+    //获取书的编号
+    QAbstractItemModel *model = ui->bookInformationRepay->model();
+    QModelIndex index = model->index(row,0);//选中行第一列的内容
+    QVariant bookNumber = model->data(index);
+    const char *bookNumber_s = bookNumber.toString().toStdString().data();//先转Qstring再转const char*
+
+    //更改BookA中是否被借阅的bool值
+    BPlusTree<string> BookA;
+    BookA.SetTableName(string("BookA"));
+    BookA.ReadHead();  //读取文件
+
+    Return3 result1 = BookA.Search(bookNumber_s,BookA.GetRootName());
+    if(result1.Succ)
+    {
+        //更新bool值
+        vector<Undecide>Bookav;
+        Undecide te6,te7,te8,te9,te10,te11;
+        strcpy(te6.s,bookNumber_s);
+        strcpy(te7.s,result1.ve[0].s);
+        strcpy(te8.s,result1.ve[1].s);
+        te9.is = 0;
+        te10.is = result1.ve[3].is;
+        strcpy(te11.s,result1.ve[4].s);
+        Bookav.push_back(te7);
+        Bookav.push_back(te8);
+        Bookav.push_back(te9);
+        Bookav.push_back(te10);
+        Bookav.push_back(te11);
+        BookA.Update(bookNumber_s,Bookav);
+        BookA.SaveHead();
+
+        Return3 result2 = BookA.Search(bookNumber_s,BookA.GetRootName());
+        if(result2.Succ)
+        {
+            if(result2.ve[2].is == 0)
+            {
+                //更新到History表
+                strcpy(te1.s,bookNumber_s);
+                //用户名
+                const char *record_username_s = record_username.toStdString().data();
+                strcpy(te2.s,record_username_s);
+                //借阅时间
+                //根据用户名和图书编号在borrow中查找
+                BPlusTree<int> Borrow;
+                Borrow.SetTableName(string("Borrow"));;
+                Borrow.ReadHead();  //读取文件
+
+                vector<pair< int,vector<Undecide> > > all;
+                all = Borrow.AllLeaf();
+                for(int i = 0; i < all.size(); i++)
+                {
+                    cout<<(all[i].second)[0].s<<bookNumber_s<<(all[i].second)[1].s<<record_username_s;
+                    if(((all[i].second)[0].s == bookNumber) && ((all[i].second)[1].s == record_username))
+                    {
+                        strcpy(te3.s,(all[i].second)[2].s);
+                    }
+                    break;
+                }
+                //还书日期获取当前时间
+                QDateTime current_date_time = QDateTime::currentDateTime();
+                QString current_date = current_date_time.toString("yyyy/MM/dd");
+                const char *current_date_s = current_date.toStdString().data();
+                strcpy(te4.s,current_date_s);
+
+                //根据天数计算钱
+                QModelIndex index = model->index(row,4);//选中行第4列的内容（最后还书日期）
+                QVariant lastTime = model->data(index);
+                const char *lastTime_s = lastTime.toString().toStdString().data();//先转Qstring再转const char*
+                char* lastTime_sc = const_cast<char*>(lastTime_s);//const char*转char*
+                QString lastTime_scq = QString(QLatin1String(lastTime_sc));//char*转QString
+                QDateTime lastTime_scqq = QDateTime::fromString(lastTime_scq, "yyyy/MM/dd");//借书时间QString转化为QDateTime
+                int days = lastTime_scqq.daysTo(current_date_time);
+                if(days <= 0)
+                {
+                    te5.num = 0;
+                }
+                else
+                {
+                    te5.num = days * 0.2;
+                }
+                historyv.push_back(te1);
+                historyv.push_back(te2);
+                historyv.push_back(te3);
+                historyv.push_back(te4);
+                historyv.push_back(te5);
+                History.Insert(history_key,historyv);
+                History.SaveHead();//一定要记得保存！
+
+                //从borrow表删除
+                history_key++;
+                QMessageBox::information(this, "提示", "还书成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+            }
+            else
+                QMessageBox::information(this, "提示", "还书失败！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+        }
+    }
+}
+
+void MainWindow::on_affirmBottonRenew_clicked()
+{
+    int row = ui->bookInformationRepay->currentIndex().row();//选中行的行号
+    //获取书的编号
+    QAbstractItemModel *model = ui->bookInformationRenew->model();
+    QModelIndex index = model->index(row,5);//选中行第5列的内容
+    QVariant sign = model->data(index);
+    const char *sign_s = sign.toString().toStdString().data();//先转Qstring再转const char*
+    char* sign_c = const_cast<char*>(sign_s);//const char*转char*
+    QString sign_q = QString(QLatin1String(sign_c));//char*转QString
+    cout << "ss";
+    qDebug()<<sign_q;
+    if(sign_q == "Y")
+    {
+        cout << "*****";
+        BPlusTree<int> Borrow;
+        Borrow.SetTableName(string("Borrow"));;
+        Borrow.ReadHead();
+
+        QModelIndex index = model->index(row,0);//选中行第一列的内容
+        QVariant bookNumber = model->data(index);
+        const char *bookNumber_s = bookNumber.toString().toStdString().data();//先转Qstring再转const char*
+        vector<pair< int,vector<Undecide> > > all;
+        all = Borrow.AllLeaf();
+        for(int i = 0; i < all.size(); i++){
+                cout << all[i].first << (all[i].second)[0].s << endl;
+            if(((all[i].second)[0].s == bookNumber) && ((all[i].second)[1].s == record_username))
+            {
+                vector<Undecide>borrowv;
+                Undecide te1,te2,te3,te4;
+                te1.num = all[i].first;
+                strcpy(te2.s,(all[i].second)[0].s);
+                strcpy(te3.s,(all[i].second)[1].s);
+                QDateTime lastTime_qq = lastTime_qq.addDays(30);
+                QString lastTime_q = lastTime_qq.toString("yyyy/MM/dd");
+                const char *lastTime_s = lastTime_q.toStdString().data();//Qstring转const char*
+                //将borrow中的最后还书日期改为上一个最后还书日期+30
+                strcpy(te4.s,lastTime_s);
+                borrowv.push_back(te2);
+                borrowv.push_back(te3);
+                borrowv.push_back(te4);
+                Borrow.Update(all[i].first,borrowv);
+                Borrow.SaveHead();
+                QMessageBox::information(this, "提示", "续借成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+            }
+        }
+    }
+    else if(sign_q == "N")
+    {
+        cout << ".......";
+        QMessageBox::information(this, "提示", "该书不可续借！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    }
 }

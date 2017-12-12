@@ -16,6 +16,9 @@ extern int manage_jurisdiction;
 extern int borrow_key;
 //借阅表中的Key;
 
+extern int history_key;
+//历史借阅表的Key
+
 extern QString record_username;
 //记录正在登陆的用户的用户名
 

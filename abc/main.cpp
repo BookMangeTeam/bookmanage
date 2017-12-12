@@ -8,6 +8,7 @@ int manage_jurisdiction = 0;
 int mark = 0;
 int savesign = 1;
 int borrow_key = 0;
+int history_key = 0;
 QString record_username;
 int main(int argc, char *argv[])
 {
@@ -23,6 +24,8 @@ int main(int argc, char *argv[])
         userv.push_back(0); //密码是string类型
         userv.push_back(0); //院系是string类型
         userv.push_back(1); //欠费目前类型还没有设置double 用int代替
+        userv.push_back(1); //同时借书本书，int型
+        //userv.push_back(1); //最多续借次数，3次 int
         User.SetTable(userv); //使用testv设置表的属性列
         savesign = User.SaveHead();
         cout<<savesign<<endl;
@@ -59,6 +62,7 @@ int main(int argc, char *argv[])
         historyv.push_back(0); //用户索引值string类型
         historyv.push_back(0); //借阅时间string类型
         historyv.push_back(0); //归还时间string类型
+        historyv.push_back(1);//一个用户借的一本书的扣费情况 int类型
         History.SetTable(historyv);
         savesign = History.SaveHead();
         cout<<savesign<<endl;
