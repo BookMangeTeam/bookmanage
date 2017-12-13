@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
 //        vector<Undecide>vvv;
 //               Undecide te1,te2,te3,te4,te5,te6;
 //               strcpy(te1.s,"isbn001");
-//               strcpy(te2.s,"15020031001");
+//               strcpy(te2.s,"15020031001");A
 //               strcpy(te3.s,"2017/1/3");
 //               te4.is = 0;
 //               te5.is = 0;
@@ -118,7 +118,7 @@ int main(int argc, char *argv[])
         //bookbv.push_back(0); //以ISBN作为key值string类型
         bookbv.push_back(0); //书名string类型
         bookbv.push_back(0); //作者string类型
-        bookbv.push_back(0); //出版社string类型
+        bookbv.push_back(0); //出版社string类A型
         bookbv.push_back(0); //出版时间string类型
         bookbv.push_back(0); //价格暂时string（后面会用double代替）
         BookB.SetTable(bookbv);

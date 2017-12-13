@@ -1,6 +1,7 @@
 #include "mainwindow_manage.h"
 #include "ui_mainwindow_manage.h"
 #include "b_plus_tree.h"
+#include "systemmanage.h"
 #include <QMessageBox>
 #include <global_variable.h>
 #include <QTableView>
@@ -518,7 +519,77 @@ void MainWindow_Manage::on_affirmBottonAdd_clicked()
 void MainWindow_Manage::on_affirmBottonDelate_clicked()
 {
     //选中删除书本
-    //int row = ui->bookInformationDelate->currentIndex().row();
+    //获取现在表格中现选中的行row和model
+    int row = ui->bookInformationDelate->currentIndex().row();
+    QAbstractItemModel *model = ui->bookInformationDelate->model();
+
+    QModelIndex index1 = model->index(row,0); //获得第一列内容
+    QVariant data1 = model->data(index1);  //获得data的值
+    QString bookNumber = data1.toString();  //书编号
+
+    QModelIndex index2 = model->index(row,1); //获得第二列内容
+    QVariant data2 = model->data(index2);  //获得data的值
+    QString bookName = data1.toString();   //书名
+
+    QModelIndex index3 = model->index(row,2); //获得第三列内容
+    QVariant data3 = model->data(index3);  //获得data的值
+    QString bookAuthur = data1.toString(); //作者
+
+    QModelIndex index4 = model->index(row,3); //获得第四列内容
+    QVariant data4 = model->data(index4);  //获得data的值
+    QString bookPublish = data1.toString(); //出版社
+
+    QModelIndex index5 = model->index(row,4); //获得第五列内容
+    QVariant data5 = model->data(index5);  //获得data的值
+    QString publishTime = data1.toString(); //出版时间
+
+    QModelIndex index6 = model->index(row,5); //获得第六列内容
+    QVariant data6 = model->data(index6);  //获得data的值
+    QString bookPrice = data1.toString();  //书价格
+
+    QModelIndex index7 = model->index(row,6); //获得第七列内容
+    QVariant data7 = model->data(index7);  //获得data的值
+    QString bookState = data1.toString();  //借阅状态
+
+    //打开BookA
+    BPlusTree<string> BookA;
+    BookA.SetTableName(string("BookA"));
+    BookA.ReadHead();
+
+    //遍搜索BookA（根据图书编码）
+    string bookNumber_fin = bookNumber.toStdString();
+    Return3 result1 = BookA.Search(bookNumber_fin, BookA.GetRootName());
+    if(result1.Succ)
+    {
+        //若成功找到
+        //先要判断一下借阅状态
+        if(result1.ve[2].num != 0)
+        {
+            //若是借阅状态的
+            QMessageBox::information(this, "提示", "这本书当前是借阅状态，确定删除吗", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+
+        }
+        else
+        {
+            //非借阅状态
+            result1.ve[3].is = 1; //将标志位改为删除状态：1
+            BookA.Update(bookNumber_fin,result1.ve);  //更新数据信息
+            //确认删除后将表格中的数据也删除
+            //ui->bookInformationDelate->
+        }
+    }
 
 
+
+
+
+
+}
+
+void MainWindow_Manage::on_manageSystem_clicked()
+{
+    //点击进入关于系统操作的界面
+    this->hide();
+    SystemManage* sysWin = new SystemManage();
+    sysWin->show();
 }

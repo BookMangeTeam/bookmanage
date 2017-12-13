@@ -216,7 +216,6 @@ bool BPlusTree<T1>::Insert(T1 Key, vector<Undecide>v){
 //向filename文件中插入一个Key
 template<typename T1>
 bool BPlusTree<T1>::Insert2(T1 Key, string filename, vector<Undecide>v){
-    // cout << "插入的key为" << Key << endl;
     T1 tempkey[MAXNODE];
     string tempfilename[MAXNODE];
     ifstream in;
@@ -463,16 +462,13 @@ bool BPlusTree<T1>::Insert2(T1 Key, string filename, vector<Undecide>v){
         remove(filename.c_str());
         rename((temp_string+filename).c_str(),filename.c_str());
         if(ISROOT==1){
-            // cout<<"root 分裂"<< endl;
             IsLeaf = 0;
             vector<Undecide> vvv2;
             Undecide ttt2;
             strcpy(ttt2.s,filename.c_str());
             vvv2.push_back(ttt2);
-            // cout << min(Key,tempkey[0]) << " " << father << endl;
             Insert2(min(Key,tempkey[0]),father,vvv2);
         }
-        // cout << second_filename << " " << father << endl;
         Insert2(second_filename,father,vvv);
     }
     else{//如果没超界
@@ -575,7 +571,6 @@ bool BPlusTree<T1>::Insert2(T1 Key, string filename, vector<Undecide>v){
 
 template<typename T1>
 void BPlusTree<T1>::SetSonAll(string filename, string newfather){
-    //cout << filename << " set All son " << newfather << endl;
     ifstream in;
     in.open(filename.c_str());
     int KeyNum;
@@ -598,7 +593,6 @@ void BPlusTree<T1>::SetSonAll(string filename, string newfather){
 
 template<typename T1>
 bool BPlusTree<T1>::SetSon_sFather(string filename, string newfather){
-    //cout << "set single son " << filename << " " << newfather << endl;
     T1 tempkey[MAXNODE];
     string tempfilename[MAXNODE];
     vector<Undecide> v[MAXNODE];
@@ -625,7 +619,6 @@ bool BPlusTree<T1>::SetSon_sFather(string filename, string newfather){
         }
     }
     else{
-        // cout << "开始" << endl;
         //如果这个节点是中间节点
         //遍历输入该文件节点所存储的key和对应的文件名
         for(int i = 0; i < KeyNum; i++){
@@ -671,7 +664,6 @@ Return3 BPlusTree<T1>::SearchForInsert(T1 Key, string filename){
     in >> KeyNum;//输入key值个数
     bool IsLeaf = 0;
     in >> IsLeaf;//输入是否是叶子节点
-    // cout << "Key=" << Key << " IsLeaf = " << IsLeaf << endl;
     string father;
     in >> father;//输入该文件的父节点文件
     if(IsLeaf == true){//如果该文件节点是叶子节点
@@ -703,7 +695,6 @@ Return3 BPlusTree<T1>::SearchForInsert(T1 Key, string filename){
         }
     }
     else{
-        // cout << "开始" << endl;
         //如果这个节点是中间节点
         //遍历输入该文件节点所存储的key和对应的文件名
         for(int i = 0; i < KeyNum; i++){
@@ -722,7 +713,6 @@ Return3 BPlusTree<T1>::SearchForInsert(T1 Key, string filename){
         if(Key >= tempkey[KeyNum-1])
             next_no = KeyNum-1;
         if(Key < tempkey[0]){
-            // cout << "更改key" << endl;
             next_no = 0;
             in.close();
             remove(filename.c_str());
@@ -736,8 +726,6 @@ Return3 BPlusTree<T1>::SearchForInsert(T1 Key, string filename){
                 out << tempkey[i] << " " << tempfilename[i] <<  " ";
             out.close();
         }
-        // cout << next_no << endl;
-        // cout<< "进入" << tempfilename[next_no] << endl;
         //递归搜索下一个应搜索的文件
         return SearchForInsert(Key,tempfilename[next_no]);
     }
@@ -760,7 +748,6 @@ bool BPlusTree<T1>::Delete(T1 Key){
 //输入文件名和要删除的key
 template<typename T1>
 bool BPlusTree<T1>::Delete2(string filename, T1 Key){
-    //cout << filename << " *****************" << Key << endl;
     // if(filename == string("NULL"))return 0;
     ifstream in;
     in.open(filename.c_str());//打开当前文件
@@ -771,7 +758,6 @@ bool BPlusTree<T1>::Delete2(string filename, T1 Key){
     string father;
     in >> father;
     T1 tempkey[MAXNODE];
-    // cout << "start" << endl;
     //不管是否满足，直接删除
     if(IsLeaf == true){//如果删除后符合要求，且为叶节点
         vector<Undecide>v[MAXNODE];//用来储存key的附加信息
@@ -842,21 +828,16 @@ bool BPlusTree<T1>::Delete2(string filename, T1 Key){
             remove(filename.c_str());
         }
     }
-    // cout << "start2" << endl;
     //从这考虑删除后不满足的情况
-//	cout << "single Delete succuessful" << endl;
 
     if(KeyNum-1 < MAXNODE/2 && father!=string("NULL")){//删除后不满足
-//		cout << "unsatisfy" << endl;
         Return4<T1> result;
         //首先考虑借点，如果这个点正好是刚刚从父节点中被删除，则应该传递tempkey1
         //否则直接传递tempkey0
-        // cout << result.Succ << endl;
         if(tempkey[0] == Key)
             result = BorrowNodes(father,tempkey[1]);
         else
             result = BorrowNodes(father,tempkey[0]);
-//		cout << "Borrow success? "<< result.Succ << endl;
         //如果借点成功，那么此时的文件中插入借到的点
         if(result.Succ == true){
             Insert2(result.Key,filename,result.ve);
@@ -871,7 +852,6 @@ bool BPlusTree<T1>::Delete2(string filename, T1 Key){
             else
                 UnionNodes(father,tempkey[0]);
         }
-//		cout << "454545" << endl;
     }
 }
 
@@ -879,7 +859,6 @@ bool BPlusTree<T1>::Delete2(string filename, T1 Key){
 template<typename T1>
 Return4<T1> BPlusTree<T1>::UnionNodes(string filename, T1 Key){
 
-//	cout << "Union nodes from " << filename << "  Near " << Key << endl;
     ifstream in;
     in.open(filename.c_str());
     int KeyNum;
@@ -915,7 +894,6 @@ Return4<T1> BPlusTree<T1>::UnionNodes(string filename, T1 Key){
         }
     }
 
-//	cout << "union nodes Pre= " << Pre << "Next = " << Next << endl;
     //这个地方需要注意，如果这个文件是根文件，而且只有这一个节点，则需要将根节点删除，
     //并且将他的唯一子节点设为根节点
     if(filename==RootName && Pre==string("NULL") && Next==string("NULL")){
@@ -946,7 +924,6 @@ Return4<T1> BPlusTree<T1>::UnionNodes(string filename, T1 Key){
 
 template<typename T1>
 bool BPlusTree<T1>::Union2(string file1, string file2){
-    // cout << "Union two file :" << file1 << " and " << file2 << endl;
     ifstream in1;
     ifstream in2;
     in1.open(file1.c_str());
@@ -1023,7 +1000,6 @@ bool BPlusTree<T1>::Union2(string file1, string file2){
         in1.close();
         in2.close();
         out.close();
-//		cout << "end..............." << endl;
     }
     else{
         ofstream out;
@@ -1044,7 +1020,6 @@ bool BPlusTree<T1>::Union2(string file1, string file2){
             out << tempkey[i] << " ";
             out << tempfilename[i] << " ";
         }
-        // cout << "Setson " << file2 << " to " << file1 << endl;
         SetSonAll(file2,file1);
         remove(file1.c_str());
         remove(file2.c_str());
@@ -1054,13 +1029,11 @@ bool BPlusTree<T1>::Union2(string file1, string file2){
         out.close();
     }
     // exit(0);
-//	cout << "454545454" << endl;
 }
 
 //从filename文件中的key节点的兄弟节点中借一个节点给filename
 template<typename T1>
 Return4<T1> BPlusTree<T1>::BorrowNodes(string filename, T1 Key){
-//	cout << "Borrow from " << filename << " near " << Key << endl;
     ifstream in;
     in.open(filename.c_str());
     int KeyNum;
@@ -1071,9 +1044,12 @@ Return4<T1> BPlusTree<T1>::BorrowNodes(string filename, T1 Key){
     in >> father;
     T1 tempkey[MAXNODE];
     string tempfilename[MAXNODE];
+    string forfile;
     for(int i = 0; i < KeyNum; i++){
         in >> tempkey[i];
         in >> tempfilename[i];
+        tempkey[i] = Key;
+        forfile = tempfilename[i];
     }
     in.close();
     string Pre = string("NULL");
@@ -1084,7 +1060,6 @@ Return4<T1> BPlusTree<T1>::BorrowNodes(string filename, T1 Key){
             if(i+1 < KeyNum) Next = tempfilename[i+1];
         }
     }
-//	cout << "Left:" << Pre << " Right" << Next << endl;
     if(Pre != string("NULL")){//从左兄弟节点借最右边的点
         in.open(Pre.c_str());
         in >> KeyNum;
@@ -1134,6 +1109,7 @@ Return4<T1> BPlusTree<T1>::BorrowNodes(string filename, T1 Key){
             strcpy(tt2.s,Pre.c_str());
             v.push_back(tt2);
             Delete2(Pre,borrowKey);
+            SetSon_sFather(borrowfile,forfile);
             return Return4<T1>(true,borrowKey,borrowfile,v);
         }
     }
@@ -1142,7 +1118,7 @@ Return4<T1> BPlusTree<T1>::BorrowNodes(string filename, T1 Key){
         in >> KeyNum;
         in >> IsLeaf;
         in >> father;
-        // cout << KeyNum << " " << IsLeaf << endl;
+
         if(KeyNum-1>=MAXNODE/2 && IsLeaf==true){
             T1 borrowKey;
             in >> borrowKey;
@@ -1156,7 +1132,6 @@ Return4<T1> BPlusTree<T1>::BorrowNodes(string filename, T1 Key){
                 v.push_back(tt2);
             }
             in.close();
-            // cout << Next << "***" << endl;
             Delete2(Next,borrowKey);
             return Return4<T1>(true,borrowKey,Next,v);
         }
@@ -1171,6 +1146,7 @@ Return4<T1> BPlusTree<T1>::BorrowNodes(string filename, T1 Key){
             vector<Undecide>v;
             v.push_back(t);
             Delete2(Next,borrowKey);
+            SetSon_sFather(borrowfile,forfile);
             return Return4<T1>(true,borrowKey,Next,v);
         }
     }
@@ -1371,5 +1347,75 @@ vector<pair< T1,vector<Undecide> > > BPlusTree<T1>:: AllLeaf(){
     }
     return all;
 }
+
+// int main(){
+// 	BPlusTree<int> test;//新建一个对象
+// 	test.BuildTree("test");//表的名字为test
+// 	vector<short>testv;//表的属性列
+// 	//0->string  1->int  2->longlong  3->bool
+// 	testv.push_back(0);	//第一个属性是string类型
+// 	testv.push_back(1); //第二个属性是int类型
+// 	test.SetTable(testv);//使用testv设置表的属性列
+// 	for(int i = 19; i >0; i-=2){
+// 		vector<Undecide>vv;
+// 		Undecide te;
+// 		strcpy(te.s,"testing_string");
+// 		Undecide te2;
+// 		te2.num = 1;
+// 		vv.push_back(te);
+// 		vv.push_back(te2);
+// 		test.Insert(i,vv);	//插入一个key  对应的参数是vv
+// 	}
+// 	for(int i = 0; i <= 20; i+=2){
+// 		vector<Undecide>vv;
+// 		Undecide te;
+// 		strcpy(te.s,"testing_string");
+// 		Undecide te2;
+// 		te2.num = 2;
+// 		vv.push_back(te);
+// 		vv.push_back(te2);
+// 		test.Insert(i,vv);
+// 	}
+// 	// Return3 a = test.Search(5,test.GetRootName()); //查找key=5的项
+// 	// Return3 b = test.Search(27,test.GetRootName());
+// 	vector<Undecide>vv;
+// 	Undecide te;
+// 	strcpy(te.s,"******");
+// 	Undecide te2;
+//     te2.num = 3;
+// 	vv.push_back(te);
+// 	vv.push_back(te2);
+// 	test.Update(7,vv);//更新key=7的元组，更新的属性存在vv中
+// 	test.Update(8,vv);
+// 	test.Update(18,vv);
+//     test.Delete(3);
+//     test.Delete(4);
+//     test.Delete(5);
+// 	//遍历所有的元组，得到一个vector，里面的元素是一个个pair，pair的first中存key,second中存这个元组的属性vector
+// 	vector<pair< int,vector<Undecide> > > all;
+// 	all = test.AllLeaf();
+// 	for(int i = 0; i < all.size(); i++){
+// 	}
+// 	test.SaveHead();//保存树的信息
+
+// 	 /*读取test这个树的方法
+// 	 	BPlusTree<int> a;
+// 	 	a.BuildTree("test");
+// 	 	a.ReadHead();*/
+// }
+
+// int main1(){
+// 	BPlusTree<int> test;
+// 	test.BuildTree("test");
+// 	test.ReadHead();
+// 	Return3 a = test.Search(5,test.GetRootName());
+// 	Return3 b = test.Search(27,test.GetRootName());
+// 	test.Delete(3);
+// }
+
+
+
+
+
 
 
