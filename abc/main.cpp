@@ -75,7 +75,7 @@ int main(int argc, char *argv[])
         bookav.push_back(0); //用户名string类型
         bookav.push_back(0); //最新借阅时间string类型
         bookav.push_back(1); //借阅状态int类型 0:未借/1:正在借阅/2:续借中
-        bookav.push_back(3); //标志位表示是否被标记为删去bool类型: 0为存在/1为被删去
+        bookav.push_back(1); //标志位表示是否被标记为删去bool类型: 0为存在/1为被删去
         bookav.push_back(0); //ISBN码string类型（作为BookB的映射联系）
         BookA.SetTable(bookav);
 //        vector<Undecide>vvv;

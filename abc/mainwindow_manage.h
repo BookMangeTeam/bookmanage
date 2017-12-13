@@ -38,7 +38,7 @@ private slots:
 
     void on_affirmBottonDelate_clicked();
 
-    void on_manageSystem_clicked();
+    void on_btn_manageSystem_clicked();
 
 private:
     Ui::MainWindow_Manage *ui;

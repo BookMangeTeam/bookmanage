@@ -21,7 +21,7 @@ B+树存的Key是子树最小值
 需要重新命名，同一个key名对应多个
  */
 using namespace std;
-#define MAXNODE 5
+#define MAXNODE 4
 
 union Undecide{//数据库的存储单元
     char s[100];
@@ -136,6 +136,7 @@ void BPlusTree<T1>::BuildTree(string Table){
 //B+树搜索过程，输入要搜索的Key和现在搜索到的文件名称
 template<typename T1>
 Return3 BPlusTree<T1>::Search(T1 Key, string filename){
+    // cout << Key << endl;
     //tempkey用来保存当前文件中的key值
     T1 tempkey[MAXNODE];
     string tempfilename[MAXNODE];
@@ -216,6 +217,7 @@ bool BPlusTree<T1>::Insert(T1 Key, vector<Undecide>v){
 //向filename文件中插入一个Key
 template<typename T1>
 bool BPlusTree<T1>::Insert2(T1 Key, string filename, vector<Undecide>v){
+    // cout << filename << endl;
     T1 tempkey[MAXNODE];
     string tempfilename[MAXNODE];
     ifstream in;
@@ -227,7 +229,9 @@ bool BPlusTree<T1>::Insert2(T1 Key, string filename, vector<Undecide>v){
     string father;
     in >> father;
     int ISROOT = 0;
+    // cout << KeyNum << endl;
     if(KeyNum+1 > MAXNODE){//如果超界
+        // cout << "232：超界" << endl;
         if(filename == RootName){
             ISROOT = 1;
             string newfathername = TableName+TransIntToString(NodeNum)+string(".dat");
@@ -276,36 +280,36 @@ bool BPlusTree<T1>::Insert2(T1 Key, string filename, vector<Undecide>v){
                     //如果插入后将应该首个放在第二个文件中的key
                     //则将其记录key记录在second_filename中
                     //并使用second_flag=1标志第二个文件中已经有key
-                    if(i+flag >= MAXNODE/2 && second_flag==0){
+                    if(i+flag > MAXNODE/2 && second_flag==0){
                         second_flag = 1;
                         second_filename = Key;//第二个文件的key
                     }
-                    if(i+flag < MAXNODE/2)
+                    if(i+flag <= MAXNODE/2)
                         out << Key << " ";
                     else
                         out2 << Key << " ";
                     //遍历应该插入的数据的所有项，v是传入的vector
                     for(int j = 0; j < TypeList.size(); j++){
                         if(TypeList[j] == 0){
-                            if(i+flag < MAXNODE/2)
+                            if(i+flag <= MAXNODE/2)
                                 out << v[j].s << " ";
                             else
                                 out2 << v[j].s << " ";
                         }
                         else if(TypeList[j] == 1){
-                            if(i+flag < MAXNODE/2)
+                            if(i+flag <= MAXNODE/2)
                                 out << v[j].num << " ";
                             else
                                 out2 << v[j].num << " ";
                         }
                         else if(TypeList[j] == 2){
-                            if(i+flag < MAXNODE/2)
+                            if(i+flag <= MAXNODE/2)
                                 out << v[i].LL << " ";
                             else
                                 out2 << v[i].LL << " ";
                         }
                         else{
-                            if(i+flag < MAXNODE/2)
+                            if(i+flag <= MAXNODE/2)
                                 out << v[i].is << " ";
                             else
                                 out2 << v[i].is << " ";
@@ -397,13 +401,13 @@ bool BPlusTree<T1>::Insert2(T1 Key, string filename, vector<Undecide>v){
                 if(tempkey[i] > Key && flag ==0){
                     //插入
                     flag = 1;
-                    if(i+flag >= MAXNODE/2 && second_flag==0){
+                    if(i+flag > MAXNODE/2 && second_flag==0){
                         second_flag = 1;
                         second_filename = Key;
                     }
                     //插入一个filename，这个filename存在vector参数的0位
                     //插入到第一个文件中
-                    if(i+flag < MAXNODE/2){
+                    if(i+flag <= MAXNODE/2){
                         out << Key << " ";
                         out << v[0].s << " ";
                     }
@@ -710,8 +714,13 @@ Return3 BPlusTree<T1>::SearchForInsert(T1 Key, string filename){
                 break;
         }
         //如果这个key比tempkey[keynum-1]还大，则应该在最后一个key中
-        if(Key >= tempkey[KeyNum-1])
+        // cout<<Key << "/*" << tempkey[KeyNum-1] << endl;
+        // cout << Key-tempkey[KeyNum-1] << endl;
+        if(Key >= tempkey[KeyNum-1]){
             next_no = KeyNum-1;
+            // cout << "in" << endl;
+        }
+        // cout << next_no << endl;
         if(Key < tempkey[0]){
             next_no = 0;
             in.close();
@@ -1348,74 +1357,104 @@ vector<pair< T1,vector<Undecide> > > BPlusTree<T1>:: AllLeaf(){
     return all;
 }
 
+//int main1(){
+//	BPlusTree<string> BookA;
+//    BookA.BuildTree("BookA");
+//    vector<short>bookav;
+//    //bookav.push_back(0); //书籍编号作为key值string类型（ISBN+后三位）
+//    bookav.push_back(0); //用户名string类型
+//    // bookav.push_back(0); //最新借阅时间string类型
+//    // bookav.push_back(1); //借阅状态int类型 0:未借/1:正在借阅/2:续借中
+//    // bookav.push_back(3); //标志位表示是否被标记为删去bool类型: 0为存在/1为被删去
+//    // bookav.push_back(0); //ISBN码string类型（作为BookB的映射联系）
+//    BookA.SetTable(bookav);
+//    // BookB.SetTable(bookbv);
+//    BookA.SaveHead();
+
+//    BPlusTree<string> BookB;
+//    BookB.BuildTree("BookB");
+//    vector<short>bookbv;
+//    //bookbv.push_back(0); //以ISBN作为key值string类型
+//    bookbv.push_back(0); //书名string类型
+//    bookbv.push_back(0); //作者string类型
+//    bookbv.push_back(0); //出版社string类A型
+//    bookbv.push_back(0); //出版时间string类型
+//    bookbv.push_back(0); //价格暂时string（后面会用double代替）
+//    BookB.SetTable(bookbv);
+//    BookB.SaveHead();
+
+//}
+
+//int main(){
+//	BPlusTree<string> BookA;
+//    BookA.BuildTree("BookA");
+//    vector<short>bookav;
+//    //bookav.push_back(0); //书籍编号作为key值string类型（ISBN+后三位）
+//    bookav.push_back(0); //用户名string类型
+//    bookav.push_back(0); //最新借阅时间string类型
+//    bookav.push_back(1); //借阅状态int类型 0:未借/1:正在借阅/2:续借中
+//    bookav.push_back(1); //标志位表示是否被标记为删去bool类型: 0为存在/1为被删去
+//    bookav.push_back(0); //ISBN码string类型（作为BookB的映射联系）
+//    BookA.SetTable(bookav);
+//	int num = 200;
+//	for(int i = 0; i < num; i++){
+//		// cout << i << "***" << endl;
+//		vector<Undecide> vv;
+//		Undecide temp;
+//		string ISBNStart = BookA.TransIntToString(10000000);
+//		string Key = ISBNStart+BookA.TransIntToString(i);
+
+//		string string1 = ISBNStart+BookA.TransIntToString(i+1);
+//		strcpy(temp.s,"*****");
+//		vv.push_back(temp);
+//		string string2 = ISBNStart+BookA.TransIntToString(i+2);
+//		strcpy(temp.s,string2.c_str());
+//		vv.push_back(temp);
+//		int int1 = i;
+//		temp.num = int1;
+//		vv.push_back(temp);
+//		int int2 = 0;
+//		temp.num = int2;
+//		vv.push_back(temp);
+//		string string3 = ISBNStart+BookA.TransIntToString(i+3);
+//		strcpy(temp.s,string3.c_str());
+//		vv.push_back(temp);
+//		BookA.Insert(Key,vv);
+//	}
+//	// vector<pair< string,vector<Undecide> > > all;
+//	// all = BookA.AllLeaf();
+//	// for(int i = 0; i < all.size(); i++){
+//	// 	cout << all[i].first << " -  " << (all[i].second)[0].s << endl;
+//	// }
+//	for(int i = 0; i < num; i++){
+//		string ISBNStart = BookA.TransIntToString(10000000);
+//		string Key = ISBNStart+BookA.TransIntToString(i);
+//		Return3	aa = BookA.Search(Key,BookA.GetRootName());
+//		// cout << Key << " " << aa.ve[0].s << " "<< aa.ve[1].s << " "<< aa.ve[2].num << " "<< aa.ve[3].is << " "<< aa.ve[4].s << endl;
+//		cout << Key << " " << aa.ve[0].s << endl;
+//	}
+//	// BookA.SaveHead();
+//}
+
 // int main(){
-// 	BPlusTree<int> test;//新建一个对象
-// 	test.BuildTree("test");//表的名字为test
-// 	vector<short>testv;//表的属性列
-// 	//0->string  1->int  2->longlong  3->bool
-// 	testv.push_back(0);	//第一个属性是string类型
-// 	testv.push_back(1); //第二个属性是int类型
-// 	test.SetTable(testv);//使用testv设置表的属性列
-// 	for(int i = 19; i >0; i-=2){
-// 		vector<Undecide>vv;
-// 		Undecide te;
-// 		strcpy(te.s,"testing_string");
-// 		Undecide te2;
-// 		te2.num = 1;
-// 		vv.push_back(te);
-// 		vv.push_back(te2);
-// 		test.Insert(i,vv);	//插入一个key  对应的参数是vv
-// 	}
-// 	for(int i = 0; i <= 20; i+=2){
-// 		vector<Undecide>vv;
-// 		Undecide te;
-// 		strcpy(te.s,"testing_string");
-// 		Undecide te2;
-// 		te2.num = 2;
-// 		vv.push_back(te);
-// 		vv.push_back(te2);
-// 		test.Insert(i,vv);
-// 	}
-// 	// Return3 a = test.Search(5,test.GetRootName()); //查找key=5的项
-// 	// Return3 b = test.Search(27,test.GetRootName());
-// 	vector<Undecide>vv;
-// 	Undecide te;
-// 	strcpy(te.s,"******");
-// 	Undecide te2;
-//     te2.num = 3;
-// 	vv.push_back(te);
-// 	vv.push_back(te2);
-// 	test.Update(7,vv);//更新key=7的元组，更新的属性存在vv中
-// 	test.Update(8,vv);
-// 	test.Update(18,vv);
-//     test.Delete(3);
-//     test.Delete(4);
-//     test.Delete(5);
-// 	//遍历所有的元组，得到一个vector，里面的元素是一个个pair，pair的first中存key,second中存这个元组的属性vector
-// 	vector<pair< int,vector<Undecide> > > all;
-// 	all = test.AllLeaf();
-// 	for(int i = 0; i < all.size(); i++){
-// 	}
-// 	test.SaveHead();//保存树的信息
+// 	BPlusTree<int> BookA;
+//     BookA.BuildTree("BookA");
+//     vector<short>bookav;
+//     //bookav.push_back(0); //书籍编号作为key值string类型（ISBN+后三位）
+//     bookav.push_back(0); //用户名string类型
+//     BookA.SetTable(bookav);
+//     int num = 1000;
+//     for(int i = 0; i < num; i++){
+//     	cout << i << " **" << endl;
+//     	vector<Undecide> vv;
+//     	Undecide tt;
+//     	strcpy(tt.s,"*******");
+//     	vv.push_back(tt);
+//     	BookA.Insert(i,vv);
+//     }
+//     for(int i = 0; i < num; i++){
+//     	Return3 aa = BookA.Search(i,BookA.GetRootName());
+//     	cout << i << " " << aa.ve[0].s<< endl;
+//     }
 
-// 	 /*读取test这个树的方法
-// 	 	BPlusTree<int> a;
-// 	 	a.BuildTree("test");
-// 	 	a.ReadHead();*/
 // }
-
-// int main1(){
-// 	BPlusTree<int> test;
-// 	test.BuildTree("test");
-// 	test.ReadHead();
-// 	Return3 a = test.Search(5,test.GetRootName());
-// 	Return3 b = test.Search(27,test.GetRootName());
-// 	test.Delete(3);
-// }
-
-
-
-
-
-
-

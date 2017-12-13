@@ -81,7 +81,7 @@ public:
     QPushButton *borrowRecordButtonManage;
     QPushButton *addButton;
     QPushButton *btn_SignupManager;
-    QPushButton *manageSystem;
+    QPushButton *btn_manageSystem;
 
     void setupUi(QMainWindow *MainWindow_Manage)
     {
@@ -373,12 +373,12 @@ public:
         btn_SignupManager->setFont(font5);
         btn_SignupManager->setCursor(QCursor(Qt::PointingHandCursor));
         btn_SignupManager->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;"));
-        manageSystem = new QPushButton(centralwidget);
-        manageSystem->setObjectName(QStringLiteral("manageSystem"));
-        manageSystem->setGeometry(QRect(940, 390, 93, 31));
-        manageSystem->setFont(font5);
-        manageSystem->setCursor(QCursor(Qt::PointingHandCursor));
-        manageSystem->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;"));
+        btn_manageSystem = new QPushButton(centralwidget);
+        btn_manageSystem->setObjectName(QStringLiteral("btn_manageSystem"));
+        btn_manageSystem->setGeometry(QRect(940, 390, 93, 31));
+        btn_manageSystem->setFont(font5);
+        btn_manageSystem->setCursor(QCursor(Qt::PointingHandCursor));
+        btn_manageSystem->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;"));
         MainWindow_Manage->setCentralWidget(centralwidget);
 
         retranslateUi(MainWindow_Manage);
@@ -435,7 +435,7 @@ public:
         borrowRecordButtonManage->setText(QApplication::translate("MainWindow_Manage", "\345\200\237\351\230\205\350\256\260\345\275\225", Q_NULLPTR));
         addButton->setText(QApplication::translate("MainWindow_Manage", "\345\242\236\345\212\240\345\233\276\344\271\246", Q_NULLPTR));
         btn_SignupManager->setText(QApplication::translate("MainWindow_Manage", "\346\263\250\345\206\214", Q_NULLPTR));
-        manageSystem->setText(QApplication::translate("MainWindow_Manage", "\347\263\273\347\273\237\346\223\215\344\275\234", Q_NULLPTR));
+        btn_manageSystem->setText(QApplication::translate("MainWindow_Manage", "\347\263\273\347\273\237\346\223\215\344\275\234", Q_NULLPTR));
     } // retranslateUi
 
 };

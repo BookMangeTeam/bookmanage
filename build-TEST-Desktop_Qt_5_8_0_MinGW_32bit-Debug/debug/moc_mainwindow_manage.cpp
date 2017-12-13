@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_Manage_t {
     QByteArrayData data[14];
-    char stringdata0[353];
+    char stringdata0[357];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -44,7 +44,7 @@ QT_MOC_LITERAL(9, 204, 35), // "on_borrowRecordButtonManage_c..."
 QT_MOC_LITERAL(10, 240, 31), // "on_returnBottonBRManage_clicked"
 QT_MOC_LITERAL(11, 272, 26), // "on_affirmBottonAdd_clicked"
 QT_MOC_LITERAL(12, 299, 29), // "on_affirmBottonDelate_clicked"
-QT_MOC_LITERAL(13, 329, 23) // "on_manageSystem_clicked"
+QT_MOC_LITERAL(13, 329, 27) // "on_btn_manageSystem_clicked"
 
     },
     "MainWindow_Manage\0on_btn_SignupManager_clicked\0"
@@ -57,7 +57,7 @@ QT_MOC_LITERAL(13, 329, 23) // "on_manageSystem_clicked"
     "on_returnBottonBRManage_clicked\0"
     "on_affirmBottonAdd_clicked\0"
     "on_affirmBottonDelate_clicked\0"
-    "on_manageSystem_clicked"
+    "on_btn_manageSystem_clicked"
 };
 #undef QT_MOC_LITERAL
 
@@ -122,7 +122,7 @@ void MainWindow_Manage::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
         case 8: _t->on_returnBottonBRManage_clicked(); break;
         case 9: _t->on_affirmBottonAdd_clicked(); break;
         case 10: _t->on_affirmBottonDelate_clicked(); break;
-        case 11: _t->on_manageSystem_clicked(); break;
+        case 11: _t->on_btn_manageSystem_clicked(); break;
         default: ;
         }
     }

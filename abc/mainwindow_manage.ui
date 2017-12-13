@@ -1034,7 +1034,7 @@
      <string>注册</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="manageSystem">
+   <widget class="QPushButton" name="btn_manageSystem">
     <property name="geometry">
      <rect>
       <x>940</x>

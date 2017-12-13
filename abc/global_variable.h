@@ -5,6 +5,7 @@
 
 //全局变量类
 #include <QString>
+#include <QStandardItemModel>
 
 extern int register_location;
 //判断注册按钮信号是来自登录界面还是超级管理员窗口
@@ -21,4 +22,7 @@ extern int history_key;
 
 extern QString record_username;
 //记录正在登陆的用户的用户名
+
+
+
 

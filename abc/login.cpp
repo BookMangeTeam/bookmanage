@@ -100,7 +100,7 @@ void Login::on_loginButton_clicked()
         int flag = 0,sign = 0;
         if(adminname_input == "admin")
         {
-            manage_jurisdiction = 1;
+            manage_jurisdiction = 1; //全局变量设置变量：表示超级管理员
             flag = 1;
             if(password_input == "system123")
             {

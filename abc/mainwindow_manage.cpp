@@ -18,6 +18,13 @@ MainWindow_Manage::MainWindow_Manage(QWidget *parent) :
     ui->setupUi(this);
     if(manage_jurisdiction == 2){
         ui->btn_SignupManager->setEnabled(false);
+        ui->btn_SignupManager->hide();
+        ui->btn_manageSystem->setEnabled(false);
+        ui->btn_manageSystem->hide();
+    }
+    if(manage_jurisdiction == 1){
+        ui->btn_SignupManager->setEnabled(true);
+        ui->btn_manageSystem->setEnabled(true);
     }
     ui->stackedWidgetManage->setCurrentIndex(0);//首页界面
 
@@ -205,9 +212,6 @@ void MainWindow_Manage::on_deleteButton_clicked()
     {
         for(int i=0; i<allA.size(); i++)
         {
-            //获取书本编号
-            QString bookNumber_q = QString::fromStdString(allA[i].first);
-            bookInformationDelete_model->setItem(i, 0, new QStandardItem(bookNumber_q));
 
             //获取书本借阅时间（只有在借阅时才会有）
             //bookInformationDelete_model->setItem(i, 3, new QStandardItem(bookState));
@@ -234,6 +238,10 @@ void MainWindow_Manage::on_deleteButton_clicked()
             //根据BookA中的ISBN去BookB找信息（这里还需要判断是否被删去的，删去的不显示）
             if(bookState == 0)
             {
+                //获取书本编号
+                QString bookNumber_q = QString::fromStdString(allA[i].first);
+                bookInformationDelete_model->setItem(i, 0, new QStandardItem(bookNumber_q));
+
                 const char *ISBN_s = (allA[i].second)[4].s; //const char*转为string
                 string ISBN(ISBN_s);
                 Return3 result1 = BookB.Search(ISBN, BookB.GetRootName());
@@ -399,7 +407,7 @@ void MainWindow_Manage::on_affirmBottonAdd_clicked()
                 strcpy(te2.s, "none");   //初始化用户存储为"none"
                 strcpy(te3.s, "none");   //初始化时间为"none"
                 te4.num = 0;            //续借状态初始为0，即未被借
-                te5.is = 0;            //是否被标记为删除初始为0
+                te5.num = 0;            //是否被标记为删除初始为0
                 strcpy(te6.s, bookISBN_s);
                 //bookav.push_back(te1);
                 bookav.push_back(te2);
@@ -429,7 +437,7 @@ void MainWindow_Manage::on_affirmBottonAdd_clicked()
                 strcpy(te2.s, "none");   //初始化用户存储为NULL
                 strcpy(te3.s, "none");   //初始化时间为NULL
                 te4.num = 0;            //续借状态初始为0，即未被借
-                te5.is = 0;            //是否被标记为删除初始为0
+                te5.num = 0;            //是否被标记为删除初始为0
                 strcpy(te6.s, bookISBN_s);
                 //bookav.push_back(te1);
                 bookav.push_back(te2);
@@ -486,7 +494,7 @@ void MainWindow_Manage::on_affirmBottonAdd_clicked()
             strcpy(te2.s, "none");   //初始化用户存储为"none"
             strcpy(te3.s, "none");   //初始化时间为"none"
             te4.num = 0;            //借阅状态初始为未借为0
-            te5.is = 0;            //是否被标记为删除初始为0
+            te5.num = 0;            //是否被标记为删除初始为0
             strcpy(te6.s, bookISBN_s);
             //bookav.push_back(te1);
             bookav.push_back(te2);
@@ -575,7 +583,7 @@ void MainWindow_Manage::on_affirmBottonDelate_clicked()
             result1.ve[3].is = 1; //将标志位改为删除状态：1
             BookA.Update(bookNumber_fin,result1.ve);  //更新数据信息
             //确认删除后将表格中的数据也删除
-            //ui->bookInformationDelate->
+            model->removeRow(row,QModelIndex());
         }
     }
 
@@ -586,7 +594,8 @@ void MainWindow_Manage::on_affirmBottonDelate_clicked()
 
 }
 
-void MainWindow_Manage::on_manageSystem_clicked()
+
+void MainWindow_Manage::on_btn_manageSystem_clicked()
 {
     //点击进入关于系统操作的界面
     this->hide();
