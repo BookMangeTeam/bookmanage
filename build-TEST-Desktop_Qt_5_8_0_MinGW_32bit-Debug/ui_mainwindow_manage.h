@@ -265,7 +265,7 @@ public:
         page_4->setObjectName(QStringLiteral("page_4"));
         bookInformationUpdate = new QTableView(page_4);
         bookInformationUpdate->setObjectName(QStringLiteral("bookInformationUpdate"));
-        bookInformationUpdate->setGeometry(QRect(0, 90, 851, 251));
+        bookInformationUpdate->setGeometry(QRect(0, 90, 841, 251));
         bookInformationUpdate->setStyleSheet(QStringLiteral(""));
         returnButtonUpdate = new QPushButton(page_4);
         returnButtonUpdate->setObjectName(QStringLiteral("returnButtonUpdate"));
@@ -383,7 +383,7 @@ public:
 
         retranslateUi(MainWindow_Manage);
 
-        stackedWidgetManage->setCurrentIndex(1);
+        stackedWidgetManage->setCurrentIndex(3);
 
 
         QMetaObject::connectSlotsByName(MainWindow_Manage);
@@ -423,7 +423,6 @@ public:
          << QApplication::translate("MainWindow_Manage", "     \345\207\272\347\211\210\347\244\276", Q_NULLPTR)
          << QApplication::translate("MainWindow_Manage", "    \345\207\272\347\211\210\346\227\266\351\227\264", Q_NULLPTR)
          << QApplication::translate("MainWindow_Manage", "       \344\273\267\346\240\274", Q_NULLPTR)
-         << QApplication::translate("MainWindow_Manage", "       \346\225\260\351\207\217", Q_NULLPTR)
          << QApplication::translate("MainWindow_Manage", "       \347\212\266\346\200\201", Q_NULLPTR)
         );
         updateTo->setText(QApplication::translate("MainWindow_Manage", "\346\233\264\346\224\271\344\270\272", Q_NULLPTR));

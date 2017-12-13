@@ -30,51 +30,7 @@ MainWindow_Manage::MainWindow_Manage(QWidget *parent) :
 
 
 
-    //更新信息信息表
-    //设置表头
-    QStandardItemModel *bookInformationUpdate_model = new QStandardItemModel();
-    bookInformationUpdate_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("图书索引值")));
-    bookInformationUpdate_model->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("书名")));
-    bookInformationUpdate_model->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("出版社")));
-    bookInformationUpdate_model->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("出版日期")));
-    bookInformationUpdate_model->setHorizontalHeaderItem(4, new QStandardItem(QObject::tr("价格")));
-    bookInformationUpdate_model->setHorizontalHeaderItem(5, new QStandardItem(QObject::tr("数量")));
-    bookInformationUpdate_model->setHorizontalHeaderItem(6, new QStandardItem(QObject::tr("状态")));//已借，可借
 
-    //利用setModel()方法将数据模型与QTableView绑定
-    ui->bookInformationUpdate->setModel(bookInformationUpdate_model);
-
-    //设置列宽不可变动，即不能通过鼠标拖动增加列宽
-    ui->bookInformationUpdate->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
-    ui->bookInformationUpdate->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
-    ui->bookInformationUpdate->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
-    ui->bookInformationUpdate->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Fixed);
-    ui->bookInformationUpdate->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Fixed);
-    ui->bookInformationUpdate->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Fixed);
-    ui->bookInformationUpdate->horizontalHeader()->setSectionResizeMode(6, QHeaderView::Fixed);
-    //设置表格的各列的宽度值
-    ui->bookInformationUpdate->setColumnWidth(0,100);
-    ui->bookInformationUpdate->setColumnWidth(1,200);
-    ui->bookInformationUpdate->setColumnWidth(2,190);
-    ui->bookInformationUpdate->setColumnWidth(3,110);
-    ui->bookInformationUpdate->setColumnWidth(4,80);
-    ui->bookInformationUpdate->setColumnWidth(5,80);
-    ui->bookInformationUpdate->setColumnWidth(6,80);
-
-    //设置选中时为整行选中
-    ui->bookInformationUpdate->setSelectionBehavior(QAbstractItemView::SelectRows);
-
-    //设置表格的单元为只读属性，即不能编辑（用户不能编辑，管理员可以）
-    ui->bookInformationUpdate->setEditTriggers(QAbstractItemView::NoEditTriggers);
-
-    //设置隔一行变一颜色，即：一灰一白
-    ui->bookInformationUpdate->setAlternatingRowColors(true);
-
-    //设置只能选择一行，不能多行选中
-    ui->bookInformationUpdate->setSelectionMode(QAbstractItemView::SingleSelection);
-
-    //如果你用在QTableView中使用右键菜单，需启用该属性
-    ui->bookInformationUpdate->setContextMenuPolicy(Qt::CustomContextMenu);
 
 
     //借书记录表
@@ -212,26 +168,6 @@ void MainWindow_Manage::on_deleteButton_clicked()
     {
         for(int i=0; i<allA.size(); i++)
         {
-
-            //获取书本借阅时间（只有在借阅时才会有）
-            //bookInformationDelete_model->setItem(i, 3, new QStandardItem(bookState));
-//            int borrowState = (allA[i].second)[2].num;
-//            switch (borrowState) {
-//                case 0:
-//                    QString State = "未借";
-//                    break;
-//                case 1:
-//                    QString State = "正在借阅";
-//                    break;
-//                case 2:
-//                    QString State = "续借中";
-//                    break;
-//                default:
-//                    break;
-//            }
-
-//            bookInformationDelete_model->setItem(i, 5, new QStandardItem(State));
-
             //获取书本是否被删去的状态
             bool bookState = (allA[i].second)[3].is;
 
@@ -242,6 +178,25 @@ void MainWindow_Manage::on_deleteButton_clicked()
                 QString bookNumber_q = QString::fromStdString(allA[i].first);
                 bookInformationDelete_model->setItem(i, 0, new QStandardItem(bookNumber_q));
 
+                //获取书本借阅时间（只有在借阅时才会有）
+                int borrowState = (allA[i].second)[2].num;
+                QString state;
+                switch (borrowState) {
+                    case 0:
+                        state = "未借";
+                        break;
+                    case 1:
+                        state = "正在借阅";
+                        break;
+                    case 2:
+                        state = "续借中";
+                        break;
+                    default:
+                        break;
+                }
+                bookInformationDelete_model->setItem(i, 6, new QStandardItem(state));
+
+                //去BookB表查找
                 const char *ISBN_s = (allA[i].second)[4].s; //const char*转为string
                 string ISBN(ISBN_s);
                 Return3 result1 = BookB.Search(ISBN, BookB.GetRootName());
@@ -276,14 +231,6 @@ void MainWindow_Manage::on_deleteButton_clicked()
         }
     }
 
-//    bookInformationDelate->setItem(i,1,new QStandardItem(QString::fromLocal8Bit(bookNumber_q)));
-//    bookInformationDelate->setItem(i,2,new QStandardItem(QString::fromLocal8Bit(bookNumber_q)));
-//    bookInformationDelate->setItem(i,3,new QStandardItem(QString::fromLocal8Bit(bookNumber_q)));
-//    bookInformationDelate->setItem(i,4,new QStandardItem(QString::fromLocal8Bit(bookNumber_q)));
-//    bookInformationDelate->setItem(i,5,new QStandardItem(QString::fromLocal8Bit(bookNumber_q)));
-    //      char* bookNumber = const_cast<char*>((allA[i].second)[0].s);//const char*转char*
-    //      QString bookNumber_q = QString(QLatin1String(bookNumber));//char*转QString
-
 }
 
 void MainWindow_Manage::on_returnButtonDelate_clicked()
@@ -293,7 +240,135 @@ void MainWindow_Manage::on_returnButtonDelate_clicked()
 
 void MainWindow_Manage::on_updateButton_clicked()
 {
+    //更改=新书本信息
     ui->stackedWidgetManage->setCurrentIndex(3);
+    //更新信息信息表
+    //设置表头
+    QStandardItemModel *bookInformationUpdate_model = new QStandardItemModel();
+    bookInformationUpdate_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("书籍编号")));
+    bookInformationUpdate_model->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("书名")));
+    bookInformationUpdate_model->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("作者")));
+    bookInformationUpdate_model->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("出版社")));
+    bookInformationUpdate_model->setHorizontalHeaderItem(4, new QStandardItem(QObject::tr("出版日期")));
+    bookInformationUpdate_model->setHorizontalHeaderItem(5, new QStandardItem(QObject::tr("价格")));
+    bookInformationUpdate_model->setHorizontalHeaderItem(6, new QStandardItem(QObject::tr("借阅状态")));//已借，可借
+
+    //利用setModel()方法将数据模型与QTableView绑定
+    ui->bookInformationUpdate->setModel(bookInformationUpdate_model);
+
+    //设置列宽不可变动，即不能通过鼠标拖动增加列宽
+    ui->bookInformationUpdate->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
+    ui->bookInformationUpdate->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
+    ui->bookInformationUpdate->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
+    ui->bookInformationUpdate->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Fixed);
+    ui->bookInformationUpdate->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Fixed);
+    ui->bookInformationUpdate->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Fixed);
+    ui->bookInformationUpdate->horizontalHeader()->setSectionResizeMode(6, QHeaderView::Fixed);
+
+    //设置表格的各列的宽度值
+    ui->bookInformationUpdate->setColumnWidth(0,140);
+    ui->bookInformationUpdate->setColumnWidth(1,140);
+    ui->bookInformationUpdate->setColumnWidth(2,130);
+    ui->bookInformationUpdate->setColumnWidth(3,140);
+    ui->bookInformationUpdate->setColumnWidth(4,110);
+    ui->bookInformationUpdate->setColumnWidth(5,60);
+    ui->bookInformationUpdate->setColumnWidth(6,80);
+
+    //设置选中时为整行选中
+    ui->bookInformationUpdate->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    //设置表格的单元为只读属性，即不能编辑（用户不能编辑，管理员可以）
+    ui->bookInformationUpdate->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    //设置隔一行变一颜色，即：一灰一白
+    ui->bookInformationUpdate->setAlternatingRowColors(true);
+
+    //设置只能选择一行，不能多行选中
+    ui->bookInformationUpdate->setSelectionMode(QAbstractItemView::SingleSelection);
+
+    //如果你用在QTableView中使用右键菜单，需启用该属性
+    ui->bookInformationUpdate->setContextMenuPolicy(Qt::CustomContextMenu);
+
+
+    //首先先显示目前的书目（测试）
+    //读取BookA表
+    BPlusTree<string> BookA;
+    BookA.SetTableName(string("BookA"));
+    BookA.ReadHead();
+    vector<pair< string,vector<Undecide> > > allA;
+    allA = BookA.AllLeaf();
+
+    //读取BookB表
+    BPlusTree<string> BookB;
+    BookB.SetTableName(string("BookB"));
+    BookB.ReadHead();
+    if(allA.size())
+    {
+        for(int i=0; i<allA.size(); i++)
+        {
+            //获取书本是否被删去的状态
+            bool bookState = (allA[i].second)[3].is;
+
+            //根据BookA中的ISBN去BookB找信息（这里还需要判断是否被删去的，删去的不显示）
+            if(bookState == 0)
+            {
+                //获取书本编号
+                QString bookNumber_q = QString::fromStdString(allA[i].first);
+                bookInformationUpdate_model->setItem(i, 0, new QStandardItem(bookNumber_q));
+
+                //获取书本借阅状态
+                int borrowState = (allA[i].second)[2].num;
+                QString state;
+                switch (borrowState) {
+                    case 0:
+                        state = "未借";
+                        break;
+                    case 1:
+                        state = "正在借阅";
+                        break;
+                    case 2:
+                        state = "续借中";
+                        break;
+                    default:
+                        break;
+                }
+                bookInformationUpdate_model->setItem(i, 6, new QStandardItem(state));
+
+                //去BookB中查找相应信息
+                const char *ISBN_s = (allA[i].second)[4].s; //const char*转为string
+                string ISBN(ISBN_s);
+                Return3 result1 = BookB.Search(ISBN, BookB.GetRootName());
+                if(result1.Succ)
+                {
+                    //若在BookB中存在
+                    //获取书名
+                    char* bookName = const_cast<char*>(result1.ve[0].s);  //const char*转char*
+                    //QString bookName_q = QString::fromUtf8(bookName.getData());  //中文编码
+                    //QString bookNumber_q = QString(QLatin1String(bookNumber));   //char*转QString
+                    bookInformationUpdate_model->setItem(i, 1, new QStandardItem(bookName));
+
+                    //获取作者名
+                    char* bookAuthur = const_cast<char*>(result1.ve[1].s);
+                    //QString bookAuthur_q = QString::fromUtf8(bookAuthur.getData());  //中文编码
+                    bookInformationUpdate_model->setItem(i, 2, new QStandardItem(bookAuthur));
+
+                    //获取出版社
+                    char* bookPublish = const_cast<char*>(result1.ve[2].s);
+                    bookInformationUpdate_model->setItem(i, 3, new QStandardItem(bookPublish));
+
+                    //获取出版时间
+                    char* publishTime = const_cast<char*>(result1.ve[3].s);
+                    bookInformationUpdate_model->setItem(i, 4, new QStandardItem(publishTime));
+
+                    //获取书本价格
+                    char* bookPrice = const_cast<char*>(result1.ve[4].s);
+                    bookInformationUpdate_model->setItem(i, 5, new QStandardItem(bookPrice));
+                }
+            }
+
+        }
+    }
+
 }
 
 void MainWindow_Manage::on_returnButtonUpdate_clicked()
@@ -601,4 +676,80 @@ void MainWindow_Manage::on_btn_manageSystem_clicked()
     this->hide();
     SystemManage* sysWin = new SystemManage();
     sysWin->show();
+}
+
+void MainWindow_Manage::on_affirmBottonUpdate_clicked()
+{
+    //点击确定更新书本信息
+    //选中更新书本
+    //获取现在表格中现选中的行row和model
+    int row = ui->bookInformationDelate->currentIndex().row();
+    QAbstractItemModel *model = ui->bookInformationDelate->model();
+
+    QModelIndex index1 = model->index(row,0); //获得第一列内容
+    QVariant data1 = model->data(index1);  //获得data的值
+    QString bookNumber = data1.toString();  //书编号
+
+    QModelIndex index2 = model->index(row,1); //获得第二列内容
+    QVariant data2 = model->data(index2);  //获得data的值
+    QString bookName = data1.toString();   //书名
+
+    QModelIndex index3 = model->index(row,2); //获得第三列内容
+    QVariant data3 = model->data(index3);  //获得data的值
+    QString bookAuthur = data1.toString(); //作者
+
+    QModelIndex index4 = model->index(row,3); //获得第四列内容
+    QVariant data4 = model->data(index4);  //获得data的值
+    QString bookPublish = data1.toString(); //出版社
+
+    QModelIndex index5 = model->index(row,4); //获得第五列内容
+    QVariant data5 = model->data(index5);  //获得data的值
+    QString publishTime = data1.toString(); //出版时间
+
+    QModelIndex index6 = model->index(row,5); //获得第六列内容
+    QVariant data6 = model->data(index6);  //获得data的值
+    QString bookPrice = data1.toString();  //书价格
+
+    QModelIndex index7 = model->index(row,6); //获得第七列内容
+    QVariant data7 = model->data(index7);  //获得data的值
+    QString bookState = data1.toString();  //借阅状态
+
+    //打开BookA
+    BPlusTree<string> BookA;
+    BookA.SetTableName(string("BookA"));
+    BookA.ReadHead();
+
+    //打开BookB
+    BPlusTree<string> BookB;
+    BookB.SetTableName(string("BookB"));
+    BookB.ReadHead();
+
+    //搜索BookA（根据图书编码）
+    string bookNumber_fin = bookNumber.toStdString();
+    Return3 result1 = BookA.Search(bookNumber_fin, BookA.GetRootName());
+    if(result1.Succ)
+    {
+        //若成功找到
+        //获取所要修改的项
+        QString updateItem_q = ui->updateOption_CB->currentText();
+        switch (updateItem_q) {
+        case "ISBN":
+                    break;
+        case "书名":
+                    break;
+        case "作者":
+                    break;
+        case "出版社":
+                    break;
+        case "出版日期":
+                    break;
+        case "价格":
+                    break;
+        case "状态":
+                    break;
+        default:
+            break;
+        }
+
+    }
 }

@@ -40,6 +40,8 @@ private slots:
 
     void on_btn_manageSystem_clicked();
 
+    void on_affirmBottonUpdate_clicked();
+
 private:
     Ui::MainWindow_Manage *ui;
 };
