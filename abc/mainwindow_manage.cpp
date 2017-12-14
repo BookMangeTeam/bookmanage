@@ -164,6 +164,8 @@ void MainWindow_Manage::on_deleteButton_clicked()
     BPlusTree<string> BookB;
     BookB.SetTableName(string("BookB"));
     BookB.ReadHead();
+
+    int row = 0; //设置定位的插入行
     if(allA.size())
     {
         for(int i=0; i<allA.size(); i++)
@@ -176,7 +178,7 @@ void MainWindow_Manage::on_deleteButton_clicked()
             {
                 //获取书本编号
                 QString bookNumber_q = QString::fromStdString(allA[i].first);
-                bookInformationDelete_model->setItem(i, 0, new QStandardItem(bookNumber_q));
+                bookInformationDelete_model->setItem(row, 0, new QStandardItem(bookNumber_q));
 
                 //获取书本借阅时间（只有在借阅时才会有）
                 int borrowState = (allA[i].second)[2].num;
@@ -194,7 +196,7 @@ void MainWindow_Manage::on_deleteButton_clicked()
                     default:
                         break;
                 }
-                bookInformationDelete_model->setItem(i, 6, new QStandardItem(state));
+                bookInformationDelete_model->setItem(row, 6, new QStandardItem(state));
 
                 //去BookB表查找
                 const char *ISBN_s = (allA[i].second)[4].s; //const char*转为string
@@ -207,25 +209,27 @@ void MainWindow_Manage::on_deleteButton_clicked()
                     char* bookName = const_cast<char*>(result1.ve[0].s);  //const char*转char*
                     //QString bookName_q = QString::fromUtf8(bookName.getData());  //中文编码
                     //QString bookNumber_q = QString(QLatin1String(bookNumber));   //char*转QString
-                    bookInformationDelete_model->setItem(i, 1, new QStandardItem(bookName));
+                    bookInformationDelete_model->setItem(row, 1, new QStandardItem(bookName));
 
                     //获取作者名
                     char* bookAuthur = const_cast<char*>(result1.ve[1].s);
                     //QString bookAuthur_q = QString::fromUtf8(bookAuthur.getData());  //中文编码
-                    bookInformationDelete_model->setItem(i, 2, new QStandardItem(bookAuthur));
+                    bookInformationDelete_model->setItem(row, 2, new QStandardItem(bookAuthur));
 
                     //获取出版社
                     char* bookPublish = const_cast<char*>(result1.ve[2].s);
-                    bookInformationDelete_model->setItem(i, 3, new QStandardItem(bookPublish));
+                    bookInformationDelete_model->setItem(row, 3, new QStandardItem(bookPublish));
 
                     //获取出版时间
                     char* publishTime = const_cast<char*>(result1.ve[3].s);
-                    bookInformationDelete_model->setItem(i, 4, new QStandardItem(publishTime));
+                    bookInformationDelete_model->setItem(row, 4, new QStandardItem(publishTime));
 
                     //获取书本价格
                     char* bookPrice = const_cast<char*>(result1.ve[4].s);
-                    bookInformationDelete_model->setItem(i, 5, new QStandardItem(bookPrice));
+                    bookInformationDelete_model->setItem(row, 5, new QStandardItem(bookPrice));
                 }
+
+                row++;  //因为遍历的i和row不一样
             }
 
         }
@@ -302,6 +306,8 @@ void MainWindow_Manage::on_updateButton_clicked()
     BPlusTree<string> BookB;
     BookB.SetTableName(string("BookB"));
     BookB.ReadHead();
+
+    int row = 0; //设置定位的插入行
     if(allA.size())
     {
         for(int i=0; i<allA.size(); i++)
@@ -314,7 +320,7 @@ void MainWindow_Manage::on_updateButton_clicked()
             {
                 //获取书本编号
                 QString bookNumber_q = QString::fromStdString(allA[i].first);
-                bookInformationUpdate_model->setItem(i, 0, new QStandardItem(bookNumber_q));
+                bookInformationUpdate_model->setItem(row, new QStandardItem(bookNumber_q));
 
                 //获取书本借阅状态
                 int borrowState = (allA[i].second)[2].num;
@@ -332,7 +338,7 @@ void MainWindow_Manage::on_updateButton_clicked()
                     default:
                         break;
                 }
-                bookInformationUpdate_model->setItem(i, 6, new QStandardItem(state));
+                bookInformationUpdate_model->setItem(row, 6, new QStandardItem(state));
 
                 //去BookB中查找相应信息
                 const char *ISBN_s = (allA[i].second)[4].s; //const char*转为string
@@ -345,25 +351,27 @@ void MainWindow_Manage::on_updateButton_clicked()
                     char* bookName = const_cast<char*>(result1.ve[0].s);  //const char*转char*
                     //QString bookName_q = QString::fromUtf8(bookName.getData());  //中文编码
                     //QString bookNumber_q = QString(QLatin1String(bookNumber));   //char*转QString
-                    bookInformationUpdate_model->setItem(i, 1, new QStandardItem(bookName));
+                    bookInformationUpdate_model->setItem(row, 1, new QStandardItem(bookName));
 
                     //获取作者名
                     char* bookAuthur = const_cast<char*>(result1.ve[1].s);
                     //QString bookAuthur_q = QString::fromUtf8(bookAuthur.getData());  //中文编码
-                    bookInformationUpdate_model->setItem(i, 2, new QStandardItem(bookAuthur));
+                    bookInformationUpdate_model->setItem(row, 2, new QStandardItem(bookAuthur));
 
                     //获取出版社
                     char* bookPublish = const_cast<char*>(result1.ve[2].s);
-                    bookInformationUpdate_model->setItem(i, 3, new QStandardItem(bookPublish));
+                    bookInformationUpdate_model->setItem(row, 3, new QStandardItem(bookPublish));
 
                     //获取出版时间
                     char* publishTime = const_cast<char*>(result1.ve[3].s);
-                    bookInformationUpdate_model->setItem(i, 4, new QStandardItem(publishTime));
+                    bookInformationUpdate_model->setItem(row, 4, new QStandardItem(publishTime));
 
                     //获取书本价格
                     char* bookPrice = const_cast<char*>(result1.ve[4].s);
-                    bookInformationUpdate_model->setItem(i, 5, new QStandardItem(bookPrice));
+                    bookInformationUpdate_model->setItem(row, 5, new QStandardItem(bookPrice));
                 }
+
+                row++;  //增加row，放进表格行数
             }
 
         }
@@ -683,36 +691,36 @@ void MainWindow_Manage::on_affirmBottonUpdate_clicked()
     //点击确定更新书本信息
     //选中更新书本
     //获取现在表格中现选中的行row和model
-    int row = ui->bookInformationDelate->currentIndex().row();
-    QAbstractItemModel *model = ui->bookInformationDelate->model();
+    int row = ui->bookInformationUpdate->currentIndex().row();
+    QAbstractItemModel *model = ui->bookInformationUpdate->model();
 
     QModelIndex index1 = model->index(row,0); //获得第一列内容
     QVariant data1 = model->data(index1);  //获得data的值
-    QString bookNumber = data1.toString();  //书编号
+    QString bookNumber_q = data1.toString();  //书编号
 
     QModelIndex index2 = model->index(row,1); //获得第二列内容
     QVariant data2 = model->data(index2);  //获得data的值
-    QString bookName = data1.toString();   //书名
+    QString bookName_q = data2.toString();   //书名
 
     QModelIndex index3 = model->index(row,2); //获得第三列内容
     QVariant data3 = model->data(index3);  //获得data的值
-    QString bookAuthur = data1.toString(); //作者
+    QString bookAuthur_q = data3.toString(); //作者
 
     QModelIndex index4 = model->index(row,3); //获得第四列内容
     QVariant data4 = model->data(index4);  //获得data的值
-    QString bookPublish = data1.toString(); //出版社
+    QString bookPublish_q = data4.toString(); //出版社
 
     QModelIndex index5 = model->index(row,4); //获得第五列内容
     QVariant data5 = model->data(index5);  //获得data的值
-    QString publishTime = data1.toString(); //出版时间
+    QString publishTime_q = data5.toString(); //出版时间
 
     QModelIndex index6 = model->index(row,5); //获得第六列内容
     QVariant data6 = model->data(index6);  //获得data的值
-    QString bookPrice = data1.toString();  //书价格
+    QString bookPrice_q = data6.toString();  //书价格
 
     QModelIndex index7 = model->index(row,6); //获得第七列内容
     QVariant data7 = model->data(index7);  //获得data的值
-    QString bookState = data1.toString();  //借阅状态
+    QString bookState_q = data7.toString();  //借阅状态
 
     //打开BookA
     BPlusTree<string> BookA;
@@ -730,26 +738,48 @@ void MainWindow_Manage::on_affirmBottonUpdate_clicked()
     if(result1.Succ)
     {
         //若成功找到
-        //获取所要修改的项
+        //获取所要修改的项和修改的值
         QString updateItem_q = ui->updateOption_CB->currentText();
+        QString updataInput_q = ui->updateTo_Input->text();
+
+        //定义选择栏里面的title
+        QString ISBN_title = "ISBN";
+        QString bookName_title = "书名";
+        QString bookAuthur_title = "作者";
+        QString bookPublish_title = "出版社";
+        QString publishTime_title = "出版时间";
+        QString bookPrice_title = "价格";
+        QString bookState_title = "状态";
+
+        //判断对信息进行更改
         switch (updateItem_q) {
-        case "ISBN":
+        case ISBN_title:
+                    bookNumber_q = updataInput_q;
                     break;
-        case "书名":
+        case bookName_title:
+                    bookName_q = updataInput_q;
                     break;
-        case "作者":
+        case bookAuthur_title:
+                    bookAuthur_q = updateInput_q;
                     break;
-        case "出版社":
+        case bookPublish_title:
+                    bookPublish_q = updateInput_q;
                     break;
-        case "出版日期":
+        case publishTime_title:
+                    publishTime_q = updataInput_q;
                     break;
-        case "价格":
+        case bookPrice_title:
+                    bookPrice_q = updataInput_q;
                     break;
-        case "状态":
+        case bookState_title:
+                    bookState_q = updateInput_q;
                     break;
         default:
-            break;
+                    break;
         }
+
+        //类型转换
+        //result1.ve
 
     }
 }
