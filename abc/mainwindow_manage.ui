@@ -30,7 +30,7 @@
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QLabel" name="nameManage">
@@ -737,10 +737,10 @@
      <widget class="QLabel" name="updateOption">
       <property name="geometry">
        <rect>
-        <x>180</x>
-        <y>376</y>
+        <x>190</x>
+        <y>370</y>
         <width>142</width>
-        <height>21</height>
+        <height>31</height>
        </rect>
       </property>
       <property name="font">
@@ -801,11 +801,6 @@
       <item>
        <property name="text">
         <string>       价格</string>
-       </property>
-      </item>
-      <item>
-       <property name="text">
-        <string>       状态</string>
        </property>
       </item>
      </widget>
@@ -887,8 +882,8 @@
      <widget class="QRadioButton" name="bookNameUpdate_search">
       <property name="geometry">
        <rect>
-        <x>170</x>
-        <y>56</y>
+        <x>240</x>
+        <y>60</y>
         <width>89</width>
         <height>20</height>
        </rect>
@@ -905,8 +900,8 @@
      <widget class="QRadioButton" name="authorUpdate_search">
       <property name="geometry">
        <rect>
-        <x>300</x>
-        <y>56</y>
+        <x>370</x>
+        <y>60</y>
         <width>89</width>
         <height>20</height>
        </rect>
@@ -923,8 +918,8 @@
      <widget class="QRadioButton" name="isbnUpdate_search">
       <property name="geometry">
        <rect>
-        <x>420</x>
-        <y>55</y>
+        <x>490</x>
+        <y>59</y>
         <width>89</width>
         <height>21</height>
        </rect>
@@ -936,24 +931,6 @@
       </property>
       <property name="text">
        <string>ISBN</string>
-      </property>
-     </widget>
-     <widget class="QRadioButton" name="bookNumberUpdate_search">
-      <property name="geometry">
-       <rect>
-        <x>530</x>
-        <y>55</y>
-        <width>89</width>
-        <height>21</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="text">
-       <string>图书编号</string>
       </property>
      </widget>
     </widget>

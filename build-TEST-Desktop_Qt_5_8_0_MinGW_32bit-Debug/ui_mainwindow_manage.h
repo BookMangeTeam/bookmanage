@@ -79,7 +79,6 @@ public:
     QRadioButton *bookNameUpdate_search;
     QRadioButton *authorUpdate_search;
     QRadioButton *isbnUpdate_search;
-    QRadioButton *bookNumberUpdate_search;
     QWidget *page_5;
     QTableView *bookInformationBRManage;
     QPushButton *returnBottonBRManage;
@@ -308,7 +307,7 @@ public:
         affirmBottonUpdate->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;"));
         updateOption = new QLabel(page_4);
         updateOption->setObjectName(QStringLiteral("updateOption"));
-        updateOption->setGeometry(QRect(180, 376, 142, 21));
+        updateOption->setGeometry(QRect(190, 370, 142, 31));
         QFont font7;
         font7.setFamily(QString::fromUtf8("\347\255\211\347\272\277"));
         font7.setPointSize(15);
@@ -340,20 +339,16 @@ public:
         searchButtonUpdate->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;"));
         bookNameUpdate_search = new QRadioButton(page_4);
         bookNameUpdate_search->setObjectName(QStringLiteral("bookNameUpdate_search"));
-        bookNameUpdate_search->setGeometry(QRect(170, 56, 89, 20));
+        bookNameUpdate_search->setGeometry(QRect(240, 60, 89, 20));
         bookNameUpdate_search->setFont(font6);
         authorUpdate_search = new QRadioButton(page_4);
         authorUpdate_search->setObjectName(QStringLiteral("authorUpdate_search"));
-        authorUpdate_search->setGeometry(QRect(300, 56, 89, 20));
+        authorUpdate_search->setGeometry(QRect(370, 60, 89, 20));
         authorUpdate_search->setFont(font6);
         isbnUpdate_search = new QRadioButton(page_4);
         isbnUpdate_search->setObjectName(QStringLiteral("isbnUpdate_search"));
-        isbnUpdate_search->setGeometry(QRect(420, 55, 89, 21));
+        isbnUpdate_search->setGeometry(QRect(490, 59, 89, 21));
         isbnUpdate_search->setFont(font6);
-        bookNumberUpdate_search = new QRadioButton(page_4);
-        bookNumberUpdate_search->setObjectName(QStringLiteral("bookNumberUpdate_search"));
-        bookNumberUpdate_search->setGeometry(QRect(530, 55, 89, 21));
-        bookNumberUpdate_search->setFont(font6);
         stackedWidgetManage->addWidget(page_4);
         page_5 = new QWidget();
         page_5->setObjectName(QStringLiteral("page_5"));
@@ -424,7 +419,7 @@ public:
 
         retranslateUi(MainWindow_Manage);
 
-        stackedWidgetManage->setCurrentIndex(2);
+        stackedWidgetManage->setCurrentIndex(3);
 
 
         QMetaObject::connectSlotsByName(MainWindow_Manage);
@@ -468,14 +463,12 @@ public:
          << QApplication::translate("MainWindow_Manage", "     \345\207\272\347\211\210\347\244\276", Q_NULLPTR)
          << QApplication::translate("MainWindow_Manage", "    \345\207\272\347\211\210\346\227\266\351\227\264", Q_NULLPTR)
          << QApplication::translate("MainWindow_Manage", "       \344\273\267\346\240\274", Q_NULLPTR)
-         << QApplication::translate("MainWindow_Manage", "       \347\212\266\346\200\201", Q_NULLPTR)
         );
         updateTo->setText(QApplication::translate("MainWindow_Manage", "\346\233\264\346\224\271\344\270\272", Q_NULLPTR));
         searchButtonUpdate->setText(QApplication::translate("MainWindow_Manage", "\346\220\234\347\264\242", Q_NULLPTR));
         bookNameUpdate_search->setText(QApplication::translate("MainWindow_Manage", "\344\271\246\345\220\215", Q_NULLPTR));
         authorUpdate_search->setText(QApplication::translate("MainWindow_Manage", "\344\275\234\350\200\205", Q_NULLPTR));
         isbnUpdate_search->setText(QApplication::translate("MainWindow_Manage", "ISBN", Q_NULLPTR));
-        bookNumberUpdate_search->setText(QApplication::translate("MainWindow_Manage", "\345\233\276\344\271\246\347\274\226\345\217\267", Q_NULLPTR));
         returnBottonBRManage->setText(QApplication::translate("MainWindow_Manage", "\350\277\224\345\233\236", Q_NULLPTR));
         deleteButton->setText(QApplication::translate("MainWindow_Manage", "\345\210\240\351\231\244\345\233\276\344\271\246", Q_NULLPTR));
         quitButtonManage->setText(QApplication::translate("MainWindow_Manage", "\351\200\200\345\207\272", Q_NULLPTR));

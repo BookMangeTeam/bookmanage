@@ -21,13 +21,14 @@ B+树存的Key是子树最小值
 需要重新命名，同一个key名对应多个
  */
 using namespace std;
-#define MAXNODE 4
+#define MAXNODE 5
 
 union Undecide{//数据库的存储单元
     char s[100];
     int num;
     long long LL;
     bool is;
+    double dou;
 };
 
 struct Return3{
@@ -158,7 +159,8 @@ Return3 BPlusTree<T1>::Search(T1 Key, string filename){
                 if(TypeList[j] == 0) in >> ttt.s;
                 else if(TypeList[j] == 1) in >> ttt.num;
                 else if(TypeList[j] == 2) in >> ttt.LL;
-                else in >> ttt.is;
+                else if(TypeList[j] == 3) in >> ttt.is;
+                else in >> ttt.dou;
                 //如果当前遍历的这个tempkey是Key，则将这个文件信息保存起来
                 if(tempkey[i] == Key)
                     v.push_back(ttt);
@@ -217,7 +219,7 @@ bool BPlusTree<T1>::Insert(T1 Key, vector<Undecide>v){
 //向filename文件中插入一个Key
 template<typename T1>
 bool BPlusTree<T1>::Insert2(T1 Key, string filename, vector<Undecide>v){
-    // cout << filename << endl;
+    // cout << "222 Now is : " << Key << endl;
     T1 tempkey[MAXNODE];
     string tempfilename[MAXNODE];
     ifstream in;
@@ -304,15 +306,21 @@ bool BPlusTree<T1>::Insert2(T1 Key, string filename, vector<Undecide>v){
                         }
                         else if(TypeList[j] == 2){
                             if(i+flag <= MAXNODE/2)
-                                out << v[i].LL << " ";
+                                out << v[j].LL << " ";
                             else
-                                out2 << v[i].LL << " ";
+                                out2 << v[j].LL << " ";
+                        }
+                        else if(TypeList[j] == 3) {
+                            if(i+flag <= MAXNODE/2)
+                                out << v[j].is << " ";
+                            else
+                                out2 << v[j].is << " ";
                         }
                         else{
                             if(i+flag <= MAXNODE/2)
-                                out << v[i].is << " ";
+                                out << v[j].dou << " ";
                             else
-                                out2 << v[i].is << " ";
+                                out2 << v[j].dou << " ";
                         }
                     }
                 }
@@ -348,12 +356,19 @@ bool BPlusTree<T1>::Insert2(T1 Key, string filename, vector<Undecide>v){
                         else
                             out2 << ttt.LL << " ";
                     }
-                    else{
+                    else if(TypeList[j] == 3){
                         in >> ttt.is;
                         if(i+flag < MAXNODE/2)
                             out << ttt.is<< " ";
                         else
                             out2 << ttt.is << " ";
+                    }
+                    else{
+                        in >> ttt.dou;
+                        if(i+flag < MAXNODE/2)
+                            out << ttt.dou<< " ";
+                        else
+                            out2 << ttt.dou << " ";
                     }
                 }
             }
@@ -385,11 +400,17 @@ bool BPlusTree<T1>::Insert2(T1 Key, string filename, vector<Undecide>v){
                             else
                                 out2 << v[j].LL << " ";
                         }
-                        else{
+                        else if(TypeList[j] == 3){
                             if(KeyNum+flag < MAXNODE/2)
                                 out << v[j].is<< " ";
                             else
                                 out2 << v[j].is << " ";
+                        }
+                        else{
+                            if(KeyNum+flag < MAXNODE/2)
+                                out << v[j].dou<< " ";
+                            else
+                                out2 << v[j].dou << " ";
                         }
                 }
             }
@@ -500,8 +521,11 @@ bool BPlusTree<T1>::Insert2(T1 Key, string filename, vector<Undecide>v){
                         else if(TypeList[j] == 2){
                             out << v[j].LL << " ";
                         }
-                        else{
+                        else if(TypeList[j] == 3){
                             out << v[j].is << " ";
+                        }
+                        else{
+                            out << v[j].dou << " ";
                         }
                     }
                 }
@@ -520,9 +544,13 @@ bool BPlusTree<T1>::Insert2(T1 Key, string filename, vector<Undecide>v){
                         in >> ttt.LL;
                         out << ttt.LL<< " ";
                     }
-                    else{
+                    else if(TypeList[j] == 3){
                         in >> ttt.is;
                         out << ttt.is<< " ";
+                    }
+                    else{
+                        in >> ttt.dou;
+                        out << ttt.dou<< " ";
                     }
                 }
             }
@@ -539,8 +567,11 @@ bool BPlusTree<T1>::Insert2(T1 Key, string filename, vector<Undecide>v){
                         else if(TypeList[i] == 2){
                             out << v[i].LL<< " ";
                         }
-                        else{
+                        else if(TypeList[i] == 3){
                             out << v[i].is<< " ";
+                        }
+                        else{
+                            out << v[i].dou << " ";
                         }
                 }
             }
@@ -617,7 +648,8 @@ bool BPlusTree<T1>::SetSon_sFather(string filename, string newfather){
                 if(TypeList[j] == 0) in >> ttt.s;
                 else if(TypeList[j] == 1) in >> ttt.num;
                 else if(TypeList[j] == 2) in >> ttt.LL;
-                else in >> ttt.is;
+                else if(TypeList[j] == 3) in >> ttt.is;
+                else in >> ttt.dou;
                 v[i].push_back(ttt);
             }
         }
@@ -644,7 +676,8 @@ bool BPlusTree<T1>::SetSon_sFather(string filename, string newfather){
                 if(TypeList[j] == 0) out << v[i][j].s << " ";
                 else if(TypeList[j] == 1) out << v[i][j].num << " " ;
                 else if(TypeList[j] == 2) out << v[i][j].LL << " ";
-                else out << v[i][j].is << " ";
+                else if(TypeList[j] == 3) out << v[i][j].is << " ";
+                else out << v[i][j].dou << " ";
             }
         }
     }
@@ -680,7 +713,8 @@ Return3 BPlusTree<T1>::SearchForInsert(T1 Key, string filename){
                 if(TypeList[j] == 0) in >> ttt.s;
                 else if(TypeList[j] == 1) in >> ttt.num;
                 else if(TypeList[j] == 2) in >> ttt.LL;
-                else in >> ttt.is;
+                else if(TypeList[j] == 3) in >> ttt.is;
+                else in >> ttt.dou;
                 //如果当前遍历的这个tempkey是Key，则将这个文件信息保存起来
                 if(tempkey[i] == Key)
                     v.push_back(ttt);
@@ -752,12 +786,14 @@ bool BPlusTree<T1>::Delete(T1 Key){
     }
     //如果找到了就从最底层文件中循环删除
     Delete2(result.filename, Key);
+    return 1;
 }
 
 //输入文件名和要删除的key
 template<typename T1>
 bool BPlusTree<T1>::Delete2(string filename, T1 Key){
     // if(filename == string("NULL"))return 0;
+    // cout << filename << " "<<Key << endl;
     ifstream in;
     in.open(filename.c_str());//打开当前文件
     int KeyNum = 0;
@@ -773,12 +809,14 @@ bool BPlusTree<T1>::Delete2(string filename, T1 Key){
         for(int i = 0; i < KeyNum; i++){
             in >> tempkey[i];//输入一个key值
             Undecide ttt;
+            // cout << tempkey[i] << endl;
             //输入对应的附加信息
             for(int j = 0; j < TypeList.size(); j++){
                 if(TypeList[j] == 0) in >> ttt.s;
                 else if(TypeList[j] == 1) in >> ttt.num;
                 else if(TypeList[j] == 2) in >> ttt.LL;
-                else in >> ttt.is;
+                else if(TypeList[j] == 3) in >> ttt.is;
+                else in >> ttt.dou;
                 v[i].push_back(ttt);
             }
         }
@@ -788,12 +826,16 @@ bool BPlusTree<T1>::Delete2(string filename, T1 Key){
             //将上一层的tempkey0更改为tempkey1
             ChangePreNameForDel(father,tempkey[0],tempkey[1]);
         }
+
         //不管如何直接从文件中删除这个key
+        // cout << "***" << endl;
+
         ofstream out;
         out.open(filename.c_str());
         out << KeyNum-1 << " ";
         out << IsLeaf << " ";
         out << father << " ";
+
         for(int i = 0; i < KeyNum; i++){
             if(Key == tempkey[i])continue;
             out << tempkey[i] << " ";
@@ -801,10 +843,13 @@ bool BPlusTree<T1>::Delete2(string filename, T1 Key){
                 if(TypeList[j] == 0) out << v[i][j].s << " ";
                 else if(TypeList[j] == 1) out << v[i][j].num << " ";
                 else if(TypeList[j] == 2) out << v[i][j].LL << " ";
-                else out << v[i][j].is << " ";
+                else if(TypeList[j] == 3) out << v[i][j].is << " ";
+                else out << v[i][j].dou << " ";
             }
         }
+
         out.close();
+
     }
     else{//如果删除后符合要求，且是中间节点
         string tempfilename[MAXNODE];
@@ -840,6 +885,7 @@ bool BPlusTree<T1>::Delete2(string filename, T1 Key){
     //从这考虑删除后不满足的情况
 
     if(KeyNum-1 < MAXNODE/2 && father!=string("NULL")){//删除后不满足
+
         Return4<T1> result;
         //首先考虑借点，如果这个点正好是刚刚从父节点中被删除，则应该传递tempkey1
         //否则直接传递tempkey0
@@ -862,6 +908,7 @@ bool BPlusTree<T1>::Delete2(string filename, T1 Key){
                 UnionNodes(father,tempkey[0]);
         }
     }
+    return 1;
 }
 
 //在filename找key的左右兄弟节点进行合并
@@ -911,7 +958,7 @@ Return4<T1> BPlusTree<T1>::UnionNodes(string filename, T1 Key){
         //删除这个文件
         remove(filename.c_str());
         RootName = tempfilename[0];
-        Return4<int> a;
+        Return4<T1> a;
         return a;
     }
 
@@ -973,9 +1020,13 @@ bool BPlusTree<T1>::Union2(string file1, string file2){
                     in1 >> ttt.LL;
                     out << ttt.LL << " ";
                 }
-                else{
+                else if(TypeList[j] == 3) {
                     in1 >> ttt.is;
                     out << ttt.is << " ";
+                }
+                else{
+                    in1 >> ttt.dou;
+                    out << ttt.dou << " ";
                 }
             }
         }
@@ -997,9 +1048,13 @@ bool BPlusTree<T1>::Union2(string file1, string file2){
                     in2 >> ttt.LL;
                     out << ttt.LL << " ";
                 }
-                else{
+                else if(TypeList[j] == 3){
                     in2 >> ttt.is;
                     out << ttt.is << " ";
+                }
+                else{
+                    in2 >> ttt.dou;
+                    out << ttt.dou << " ";
                 }
             }
         }
@@ -1083,7 +1138,8 @@ Return4<T1> BPlusTree<T1>::BorrowNodes(string filename, T1 Key){
                     if(TypeList[j] == 0) in >> ttt.s;
                     else if(TypeList[j] == 1) in >> ttt.num;
                     else if(TypeList[j] == 2) in >> ttt.LL;
-                    else in >> ttt.is;
+                    else if(TypeList[j] == 3) in >> ttt.is;
+                    else in >> ttt.dou;
                 }
             }
             T1 borrowKey;
@@ -1094,7 +1150,8 @@ Return4<T1> BPlusTree<T1>::BorrowNodes(string filename, T1 Key){
                 if(TypeList[j] == 0) in >> tt2.s;
                 else if(TypeList[j] == 1) in >> tt2.num;
                 else if(TypeList[j] == 2) in >> tt2.LL;
-                else in >> tt2.is;
+                else if(TypeList[j] == 3) in >> tt2.is;
+                else in >> tt2.dou;
                 v.push_back(tt2);
             }
             in.close();
@@ -1137,7 +1194,8 @@ Return4<T1> BPlusTree<T1>::BorrowNodes(string filename, T1 Key){
                 if(TypeList[j] == 0) in >> tt2.s;
                 else if(TypeList[j] == 1) in >> tt2.num;
                 else if(TypeList[j] == 2) in >> tt2.LL;
-                else in >> tt2.is;
+                else if(TypeList[j] == 3) in >> tt2.is;
+                else in >> tt2.dou;
                 v.push_back(tt2);
             }
             in.close();
@@ -1168,6 +1226,7 @@ Return4<T1> BPlusTree<T1>::BorrowNodes(string filename, T1 Key){
 
 template<typename T1>
 bool BPlusTree<T1>::ChangePreNameForDel(string filename, T1 original, T1 newkey){
+    if(filename == string("NULL"))return 0;
     ifstream in;
     in.open(filename.c_str());
     int KeyNum = 0;
@@ -1287,7 +1346,8 @@ bool BPlusTree<T1>::Update(T1 Key, vector<Undecide>ve){
             if(TypeList[j] == 0) in >> tt.s;
             else if(TypeList[j] == 1) in >> tt.num;
             else if(TypeList[j] == 2) in >> tt.LL;
-            else in >> tt.is;
+            else if(TypeList[j] == 3) in >> tt.is;
+            else in >> tt.dou;
             v[i].push_back(tt);
         }
     }
@@ -1304,7 +1364,8 @@ bool BPlusTree<T1>::Update(T1 Key, vector<Undecide>ve){
                 if(TypeList[j] == 0) out << ve[j].s << " ";
                 else if(TypeList[j] == 1) out << ve[j].num << " ";
                 else if(TypeList[j] == 2) out << ve[j].LL << " ";
-                else out << ve[j].is << " ";
+                else if(TypeList[j] == 3) out << ve[j].is << " ";
+                else out << ve[j].dou << " ";
             }
             continue;
         }
@@ -1313,7 +1374,8 @@ bool BPlusTree<T1>::Update(T1 Key, vector<Undecide>ve){
             if(TypeList[j] == 0) out << v[i][j].s << " ";
             else if(TypeList[j] == 1) out << v[i][j].num << " ";
             else if(TypeList[j] == 2) out << v[i][j].LL << " ";
-            else out << v[i][j].is << " ";
+            else if(TypeList[j] == 3) out << v[i][j].is << " ";
+            else out << v[i][j].dou << " ";
         }
     }
     out.close();
@@ -1347,7 +1409,8 @@ vector<pair< T1,vector<Undecide> > > BPlusTree<T1>:: AllLeaf(){
                 if(TypeList[j] == 0) in >> tt.s;
                 else if(TypeList[j] == 1) in >> tt.num;
                 else if(TypeList[j] == 2) in >> tt.LL;
-                else in >> tt.is;
+                else if(TypeList[j] == 3) in >> tt.is;
+                else in >> tt.dou;
                 v.push_back(tt);
             }
             all.push_back(make_pair(kk,v));
@@ -1358,7 +1421,7 @@ vector<pair< T1,vector<Undecide> > > BPlusTree<T1>:: AllLeaf(){
 }
 
 //int main1(){
-//	BPlusTree<string> BookA;
+//    BPlusTree<string> BookA;
 //    BookA.BuildTree("BookA");
 //    vector<short>bookav;
 //    //bookav.push_back(0); //书籍编号作为key值string类型（ISBN+后三位）
@@ -1386,54 +1449,86 @@ vector<pair< T1,vector<Undecide> > > BPlusTree<T1>:: AllLeaf(){
 //}
 
 //int main(){
-//	BPlusTree<string> BookA;
+//    BPlusTree<string> BookA;
 //    BookA.BuildTree("BookA");
 //    vector<short>bookav;
 //    //bookav.push_back(0); //书籍编号作为key值string类型（ISBN+后三位）
 //    bookav.push_back(0); //用户名string类型
 //    bookav.push_back(0); //最新借阅时间string类型
 //    bookav.push_back(1); //借阅状态int类型 0:未借/1:正在借阅/2:续借中
-//    bookav.push_back(1); //标志位表示是否被标记为删去bool类型: 0为存在/1为被删去
+//    bookav.push_back(4); //标志位表示是否被标记为删去bool类型: 0为存在/1为被删去
 //    bookav.push_back(0); //ISBN码string类型（作为BookB的映射联系）
 //    BookA.SetTable(bookav);
-//	int num = 200;
-//	for(int i = 0; i < num; i++){
-//		// cout << i << "***" << endl;
-//		vector<Undecide> vv;
-//		Undecide temp;
-//		string ISBNStart = BookA.TransIntToString(10000000);
-//		string Key = ISBNStart+BookA.TransIntToString(i);
+//    int num = 6;
+//    for(int i = 0; i < num; i+=2){
+//        // cout << i << "***" << endl;
+//        vector<Undecide> vv;
+//        Undecide temp;
+//        string ISBNStart = BookA.TransIntToString(10000000);
+//        string Key = ISBNStart+BookA.TransIntToString(i);
 
-//		string string1 = ISBNStart+BookA.TransIntToString(i+1);
-//		strcpy(temp.s,"*****");
-//		vv.push_back(temp);
-//		string string2 = ISBNStart+BookA.TransIntToString(i+2);
-//		strcpy(temp.s,string2.c_str());
-//		vv.push_back(temp);
-//		int int1 = i;
-//		temp.num = int1;
-//		vv.push_back(temp);
-//		int int2 = 0;
-//		temp.num = int2;
-//		vv.push_back(temp);
-//		string string3 = ISBNStart+BookA.TransIntToString(i+3);
-//		strcpy(temp.s,string3.c_str());
-//		vv.push_back(temp);
-//		BookA.Insert(Key,vv);
-//	}
-//	// vector<pair< string,vector<Undecide> > > all;
-//	// all = BookA.AllLeaf();
-//	// for(int i = 0; i < all.size(); i++){
-//	// 	cout << all[i].first << " -  " << (all[i].second)[0].s << endl;
-//	// }
-//	for(int i = 0; i < num; i++){
-//		string ISBNStart = BookA.TransIntToString(10000000);
-//		string Key = ISBNStart+BookA.TransIntToString(i);
-//		Return3	aa = BookA.Search(Key,BookA.GetRootName());
-//		// cout << Key << " " << aa.ve[0].s << " "<< aa.ve[1].s << " "<< aa.ve[2].num << " "<< aa.ve[3].is << " "<< aa.ve[4].s << endl;
-//		cout << Key << " " << aa.ve[0].s << endl;
-//	}
-//	// BookA.SaveHead();
+//        string string1 = ISBNStart+BookA.TransIntToString(i+1);
+//        strcpy(temp.s,"*****");
+//        vv.push_back(temp);
+//        string string2 = ISBNStart+BookA.TransIntToString(i+2);
+//        strcpy(temp.s,string2.c_str());
+//        vv.push_back(temp);
+//        int int1 = i;
+//        temp.num = int1;
+//        vv.push_back(temp);
+//        double double1 = 8.535;
+//        temp.dou = double1;
+//        vv.push_back(temp);
+//        string string3 = ISBNStart+BookA.TransIntToString(i+3);
+//        strcpy(temp.s,string3.c_str());
+//        vv.push_back(temp);
+//        BookA.Insert(Key,vv);
+//    }
+//    for(int i = 5; i >= 0; i-=2){
+//        // cout << i << "***" << endl;
+//        vector<Undecide> vv;
+//        Undecide temp;
+//        string ISBNStart = BookA.TransIntToString(10000000);
+//        string Key = ISBNStart+BookA.TransIntToString(i);
+
+//        string string1 = ISBNStart+BookA.TransIntToString(i+1);
+//        strcpy(temp.s,"*****");
+//        vv.push_back(temp);
+//        string string2 = ISBNStart+BookA.TransIntToString(i+2);
+//        strcpy(temp.s,string2.c_str());
+//        vv.push_back(temp);
+//        int int1 = i;
+//        temp.num = int1;
+//        vv.push_back(temp);
+//        double double1 = 8.535;
+//        temp.dou = double1;
+//        vv.push_back(temp);
+//        string string3 = ISBNStart+BookA.TransIntToString(i+3);
+//        strcpy(temp.s,string3.c_str());
+//        vv.push_back(temp);
+//        BookA.Insert(Key,vv);
+
+//    }
+//    // for(int i = 0; i < 18; i++){
+//    // 	string ISBNStart = BookA.TransIntToString(10000000);
+//    // 	string Key = ISBNStart+BookA.TransIntToString(i);
+//    // 	BookA.Delete(Key);
+//    // }
+//    // vector<pair< string,vector<Undecide> > > all;
+//    // all = BookA.AllLeaf();
+//    // for(int i = 0; i < all.size(); i++){
+//    // 	cout << all[i].first << " -  " << (all[i].second)[0].s << endl;
+//    // }
+
+//    for(int i = 0; i < num; i++){
+//        string ISBNStart = BookA.TransIntToString(10000000);
+//        string Key = ISBNStart+BookA.TransIntToString(i);
+//        Return3	aa = BookA.Search(Key,BookA.GetRootName());
+//        if(aa.Succ == 1)
+//            cout << Key << " " << aa.ve[0].s << " "<< aa.ve[1].s << " "<< aa.ve[2].num << " "<< aa.ve[3].dou << " "<< aa.ve[4].s << endl;
+//        // cout << Key << " " << aa.ve[0].s << endl;
+//    }
+//    // BookA.SaveHead();
 //}
 
 // int main(){

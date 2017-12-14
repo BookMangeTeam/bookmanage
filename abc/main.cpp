@@ -5,10 +5,11 @@
 
 int register_location = 0;
 int manage_jurisdiction = 0;
-int mark = 0;
+int mark = 1;
 int savesign = 1;
 int borrow_key = 0;
 int history_key = 0;
+int money_key = 0;
 QString record_username;
 int main(int argc, char *argv[])
 {
@@ -23,7 +24,7 @@ int main(int argc, char *argv[])
         //userv.push_back(0);	//用户名是string类型
         userv.push_back(0); //密码是string类型
         userv.push_back(0); //院系是string类型
-        userv.push_back(1); //欠费目前类型还没有设置double 用int代替
+        userv.push_back(4); //欠费目前类型还没有设置double
         userv.push_back(1); //同时借书本书，int型
         //userv.push_back(1); //最多续借次数，3次 int
         User.SetTable(userv); //使用testv设置表的属性列
@@ -62,7 +63,7 @@ int main(int argc, char *argv[])
         historyv.push_back(0); //用户索引值string类型
         historyv.push_back(0); //借阅时间string类型
         historyv.push_back(0); //归还时间string类型
-        historyv.push_back(1);//一个用户借的一本书的扣费情况 int类型
+        historyv.push_back(4);//一个用户借的一本书的扣费情况 double类型
         History.SetTable(historyv);
         savesign = History.SaveHead();
         cout<<savesign<<endl;
@@ -78,13 +79,15 @@ int main(int argc, char *argv[])
         bookav.push_back(1); //标志位表示是否被标记为删去bool类型: 0为存在/1为被删去
         bookav.push_back(0); //ISBN码string类型（作为BookB的映射联系）
         BookA.SetTable(bookav);
+
+
 //        vector<Undecide>vvv;
 //               Undecide te1,te2,te3,te4,te5,te6;
 //               strcpy(te1.s,"isbn001");
-//               strcpy(te2.s,"15020031001");A
+//               strcpy(te2.s,"15020031001");
 //               strcpy(te3.s,"2017/1/3");
-//               te4.is = 0;
-//               te5.is = 0;
+//               te4.num = 0;
+//               te5.num = 0;
 //               strcpy(te6.s,"isbn");
 //               vvv.push_back(te2);
 //               vvv.push_back(te3);
@@ -98,8 +101,8 @@ int main(int argc, char *argv[])
 //               strcpy(te13.s,"isbn002");
 //               strcpy(te14.s,"15020031002");
 //               strcpy(te15.s,"2017/1/5");
-//               te16.is = 0;
-//               te17.is = 0;
+//               te16.num = 0;
+//               te17.num = 0;
 //               strcpy(te18.s,"isbn");
 //               vvv.push_back(te14);
 //               vvv.push_back(te15);
@@ -143,6 +146,21 @@ int main(int argc, char *argv[])
         savesign = BookB.SaveHead();
         cout<<savesign<<endl;
 
+
+
+        //Money表
+        BPlusTree<int> Money;
+        Money.BuildTree("Money");
+        vector<short>moneyv;
+        //moneyv.push_back(0); //以int作为key
+        moneyv.push_back(0); //用户string类型
+        moneyv.push_back(0); //缴费时间string类型
+        moneyv.push_back(0); //缴费金额double类
+        moneyv.push_back(1); //状态int类型
+        moneyv.push_back(4); //缴费后总欠费double
+        Money.SetTable(moneyv);
+        savesign = Money.SaveHead();
+        cout<<savesign<<endl;
     }
 
     Login loginWin;

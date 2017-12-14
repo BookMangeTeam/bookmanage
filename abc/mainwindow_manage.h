@@ -42,6 +42,8 @@ private slots:
 
     void on_affirmBottonUpdate_clicked();
 
+    void on_searchButtonUpdate_clicked();
+
 private:
     Ui::MainWindow_Manage *ui;
 };
