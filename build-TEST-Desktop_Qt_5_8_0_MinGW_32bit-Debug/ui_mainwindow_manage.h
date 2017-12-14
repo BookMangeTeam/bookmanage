@@ -457,7 +457,6 @@ public:
         updateOption->setText(QApplication::translate("MainWindow_Manage", "\351\241\271\347\233\256", Q_NULLPTR));
         updateOption_CB->clear();
         updateOption_CB->insertItems(0, QStringList()
-         << QApplication::translate("MainWindow_Manage", "       ISBN", Q_NULLPTR)
          << QApplication::translate("MainWindow_Manage", "       \344\271\246\345\220\215", Q_NULLPTR)
          << QApplication::translate("MainWindow_Manage", "       \344\275\234\350\200\205", Q_NULLPTR)
          << QApplication::translate("MainWindow_Manage", "     \345\207\272\347\211\210\347\244\276", Q_NULLPTR)

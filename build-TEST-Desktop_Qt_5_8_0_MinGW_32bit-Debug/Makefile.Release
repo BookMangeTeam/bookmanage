@@ -978,6 +978,8 @@ release/mainwindow.o: ../abc/mainwindow.cpp ../abc/mainwindow.h \
 		F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QPushButton \
 		F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qpushbutton.h \
 		F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qabstractbutton.h \
+		F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QRadioButton \
+		F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qradiobutton.h \
 		F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStackedWidget \
 		F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qstackedwidget.h \
 		F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QTableView \
@@ -1502,6 +1504,8 @@ release/mainwindow_manage.o: ../abc/mainwindow_manage.cpp ../abc/mainwindow_mana
 		F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QPushButton \
 		F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qpushbutton.h \
 		F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qabstractbutton.h \
+		F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QRadioButton \
+		F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qradiobutton.h \
 		F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QStackedWidget \
 		F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/qstackedwidget.h \
 		F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/include/QtWidgets/QTableView \
@@ -1516,7 +1520,8 @@ release/mainwindow_manage.o: ../abc/mainwindow_manage.cpp ../abc/mainwindow_mana
 		F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QString \
 		F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/QStandardItemModel \
 		F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/include/QtGui/qstandarditemmodel.h \
-		../abc/register.h
+		../abc/register.h \
+		F:/DevelopTools/Qt/Qt5.8.0/5.8/mingw53_32/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\mainwindow_manage.o ..\abc\mainwindow_manage.cpp
 
 release/systemmanage.o: ../abc/systemmanage.cpp ../abc/systemmanage.h \

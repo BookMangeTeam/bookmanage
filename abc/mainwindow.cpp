@@ -11,6 +11,7 @@
 #include <QDateTime>
 #include <QDate>
 #include <QDebug>
+#include <QCryptographichash.h> //md5加密封装类
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -107,7 +108,7 @@ void MainWindow::on_repayButton_clicked()
 
         //设置只能选择一行，不能多行选中
         ui->bookInformationRepay->setSelectionMode(QAbstractItemView::SingleSelection);
-    int i,line = 0;
+    int line = 0;
     ui->stackedWidgetPermary->setCurrentIndex(2);
 
     BPlusTree<int> Borrow;
@@ -127,8 +128,8 @@ void MainWindow::on_repayButton_clicked()
             Return3 result3 = BookA.Search((all[i].second)[0].s,BookA.GetRootName());
             if(result3.Succ)
             {
-                //没还就显示
-                if(result3.ve[2].is == 1)
+                //没还并且最新借阅人为此人就显示
+                if((result3.ve[2].num == 1) && (result3.ve[0].s == record_username))
                 {
                     //all[i].first为借的书的key
                     //(all[i].second)[0].s为书籍编号
@@ -151,10 +152,7 @@ void MainWindow::on_repayButton_clicked()
 
                     if(lastTime.operator <=(current_date_time))
                     {
-                        int days;
                         bookInformationRepay_model->setItem(line,5,new QStandardItem("超期"));
-                        days = lastTime.daysTo(current_date_time);
-                        //根据天数计算钱
                     }
                     else
                     {
@@ -194,6 +192,7 @@ void MainWindow::on_repayButton_clicked()
                     }
                 }
             }
+            line++;
         }
     }
 
@@ -423,7 +422,7 @@ void MainWindow::on_borrowRecordButton_clicked()
             bookInformationBorrowR_model->setItem(line,4,new QStandardItem(returnTime_q));
 
             //扣费
-            QString deduction = QString::number((all[i].second)[4].num,10);
+            QString deduction = QString::number((all[i].second)[4].dou,10,2);
             bookInformationBorrowR_model->setItem(line,5,new QStandardItem(deduction));
             line++;
         }
@@ -445,13 +444,13 @@ void MainWindow::on_moneyBotton_clicked()
     //欠费记录表
     //设置表头
     QStandardItemModel *inDebtInformation_model = new QStandardItemModel();
-    inDebtInformation_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("索引号")));
+    inDebtInformation_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("图书编号")));
     inDebtInformation_model->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("书名")));
     inDebtInformation_model->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("出版社")));
-    inDebtInformation_model->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("还书日期")));
-    inDebtInformation_model->setHorizontalHeaderItem(4, new QStandardItem(QObject::tr("状态")));
-    inDebtInformation_model->setHorizontalHeaderItem(5, new QStandardItem(QObject::tr("扣费")));
-    inDebtInformation_model->setHorizontalHeaderItem(6, new QStandardItem(QObject::tr("余额")));
+    inDebtInformation_model->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("借书日期")));
+    inDebtInformation_model->setHorizontalHeaderItem(4, new QStandardItem(QObject::tr("还书日期")));
+    inDebtInformation_model->setHorizontalHeaderItem(5, new QStandardItem(QObject::tr("超期罚款")));
+    inDebtInformation_model->setHorizontalHeaderItem(6, new QStandardItem(QObject::tr("总欠款")));
 
     //利用setModel()方法将数据模型与QTableView绑定
     ui->inDebtInformation->setModel(inDebtInformation_model);
@@ -492,8 +491,8 @@ void MainWindow::on_moneyBotton_clicked()
     QStandardItemModel *paymentInformation_model = new QStandardItemModel();
     paymentInformation_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("缴费时间")));
     paymentInformation_model->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("缴费金额")));
-    paymentInformation_model->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("余额")));
-    paymentInformation_model->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("状态")));//成功 失败
+    paymentInformation_model->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("状态")));
+    paymentInformation_model->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("总欠款")));//成功 失败
 
 
     //利用setModel()方法将数据模型与QTableView绑定
@@ -525,6 +524,107 @@ void MainWindow::on_moneyBotton_clicked()
     //设置只能选择一行，不能多行选中
     ui->paymentInformation->setSelectionMode(QAbstractItemView::SingleSelection);
 
+    int line1 = 0,line2 = 0;
+    //从History中找出用户
+    BPlusTree<int> History;
+    History.SetTableName(string("History"));
+    History.ReadHead();
+
+    vector<pair< int,vector<Undecide> > > all;
+    all = History.AllLeaf();
+    const char *record_username_s = record_username.toStdString().data();//Qstring转const char*
+    //表1
+    for(int i = 0; i < all.size(); i++)
+    {
+        if((all[i].second)[1].s == record_username)
+        {
+            //(all[i].second)[0].s为图书编号
+            char* bookNumber = const_cast<char*>((all[i].second)[0].s);//const char*转char*
+            QString bookNumber_q = QString(QLatin1String(bookNumber));//char*转QString
+            inDebtInformation_model->setItem(line1,0,new QStandardItem(bookNumber_q));
+            //BookA里查isbn
+            BPlusTree<string> BookA;
+            BookA.SetTableName(string("BookA"));
+            BookA.ReadHead();
+            Return3 result1 = BookA.Search((all[i].second)[0].s,BookA.GetRootName());
+            if(result1.Succ)
+            {
+                //result1.ve[4].s  isbn
+                BPlusTree<string> BookB;
+                BookB.SetTableName(string("BookB"));
+                BookB.ReadHead();
+                Return3 result2 = BookB.Search(result1.ve[4].s,BookB.GetRootName());
+                //书名
+                char* bookName = const_cast<char*>(result2.ve[0].s);//const char*转char*
+                QString bookName_q = QString(QLatin1String(bookName));//char*转QString
+                inDebtInformation_model->setItem(line1,1,new QStandardItem(bookName_q));
+                //作者
+                char* publishHousse = const_cast<char*>(result2.ve[2].s);//const char*转char*
+                QString publishHousse_q = QString(QLatin1String(publishHousse));//char*转QString
+                inDebtInformation_model->setItem(line1,2,new QStandardItem(publishHousse_q));
+            }
+            //借阅时间
+            char* borrowTime = const_cast<char*>((all[i].second)[2].s);//const char*转char*
+            QString borrowTime_q = QString(QLatin1String(borrowTime));//char*转QString
+            inDebtInformation_model->setItem(line1,3,new QStandardItem(borrowTime_q));
+
+            //还书时间
+            char* returnTime = const_cast<char*>((all[i].second)[3].s);//const char*转char*
+            QString returnTime_q = QString(QLatin1String(returnTime));//char*转QString
+            inDebtInformation_model->setItem(line1,4,new QStandardItem(returnTime_q));
+
+            //超期罚款
+            QString deduction = QString::number((all[i].second)[4].dou,10,2);
+            inDebtInformation_model->setItem(line1,5,new QStandardItem(deduction));
+
+            //总欠费
+            BPlusTree<string> User;
+            User.SetTableName(string("User"));
+            User.ReadHead();
+            Return3 result3 = User.Search(record_username_s,User.GetRootName());
+            if(result3.Succ)
+            {
+                QString arrears_q = QString::number(result3.ve[2].dou, 10,2);
+                inDebtInformation_model->setItem(line1,6,new QStandardItem(arrears_q));
+            }
+            line1++;
+        }
+    }
+    //表2
+    BPlusTree<int> Money;
+    Money.SetTableName(string("Money"));
+    Money.ReadHead();
+    vector<pair< int,vector<Undecide> > > alls;
+    alls = Money.AllLeaf();
+    for(int i = 0; i < alls.size(); i++)
+    {
+        if((alls[i].second)[0].s == record_username)
+        {
+            //缴费时间
+            char* payTime = const_cast<char*>((alls[i].second)[1].s);//const char*转char*
+            QString payTime_q = QString(QLatin1String(payTime));//char*转QString
+            paymentInformation_model->setItem(line2,1,new QStandardItem(payTime_q));
+
+            //缴费金额
+            //char* payMoney = const_cast<char*>((alls[i].second)[2].dou);//const char*转char*
+            QString payMoney_q = QString::number((alls[i].second)[2].dou,10,2);//char*转QString
+            paymentInformation_model->setItem(line2,2,new QStandardItem(payMoney_q));
+
+            //状态
+            if(((alls[i].second)[3].num) == 1)
+            {
+                paymentInformation_model->setItem(line2,3,new QStandardItem("成功"));
+            }
+            else
+            {
+                paymentInformation_model->setItem(line2,3,new QStandardItem("失败"));
+            }
+            //缴费后总欠费
+            QString laterArrears = QString::number((alls[i].second)[4].dou, 10,2);
+            paymentInformation_model->setItem(line2,4,new QStandardItem(laterArrears));
+            line2++;
+        }
+    }
 
 
 
@@ -645,7 +745,7 @@ void MainWindow::on_searchButtonBorrow_clicked()
                             QString publishHouse_q = QString(QLatin1String(publishHouse));//char*转QString
                             bookInformationborrow_model->setItem(line,3,new QStandardItem(publishHouse_q));
 
-                            if((all[i].second)[2].is == 0)
+                            if((all[i].second)[2].num == 0)
                             {
                                 bookInformationborrow_model->setItem(line,4,new QStandardItem("可借"));
                             }
@@ -679,9 +779,11 @@ void MainWindow::on_affirmBottonBorrow_clicked()
     Return3 result1 = BookA.Search(data_s,BookA.GetRootName());
     if(result1.Succ)
     {
-        if(result1.ve[2].is == 0)
+        if(result1.ve[2].num == 0)
         {
-
+            vector<pair< int,vector<Undecide> > > all;
+            all = Borrow.AllLeaf();
+            int k = all.size();
             //导入信息到borrow表
             vector<Undecide>borrowv;
             Undecide te1,te2,te3;
@@ -695,18 +797,19 @@ void MainWindow::on_affirmBottonBorrow_clicked()
             borrowv.push_back(te1);
             borrowv.push_back(te2);
             borrowv.push_back(te3);
-            Borrow.Insert(borrow_key,borrowv);
+            Borrow.Insert(k,borrowv);
             Borrow.SaveHead();//一定要记得保存！
+
 
             QMessageBox::information(this, "提示", "借书成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
-            vector<Undecide>bookav;//将BookA中的是否可借的值改为false
+            vector<Undecide>bookav;//将BookA中的是否可借的值改为false,更新最新借阅时间、人
             Undecide te4,te5,te6,te7,te8,te9;
             strcpy(te4.s,data_s);
-            strcpy(te5.s,result1.ve[0].s);
-            strcpy(te6.s,result1.ve[1].s);
-            te7.is = 1;
-            te8.is = result1.ve[3].is;
+            strcpy(te5.s,record_username_s);
+            strcpy(te6.s,current_date_s);
+            te7.num = 1;
+            te8.num = result1.ve[3].num;
             strcpy(te9.s,result1.ve[4].s);
             bookav.push_back(te5);
             bookav.push_back(te6);
@@ -759,8 +862,8 @@ void MainWindow::on_affirmBottonRepay_clicked()
         strcpy(te6.s,bookNumber_s);
         strcpy(te7.s,result1.ve[0].s);
         strcpy(te8.s,result1.ve[1].s);
-        te9.is = 0;
-        te10.is = result1.ve[3].is;
+        te9.num = 0;
+        te10.num = result1.ve[3].num;
         strcpy(te11.s,result1.ve[4].s);
         Bookav.push_back(te7);
         Bookav.push_back(te8);
@@ -770,10 +873,13 @@ void MainWindow::on_affirmBottonRepay_clicked()
         BookA.Update(bookNumber_s,Bookav);
         BookA.SaveHead();
 
+        vector<pair< int,vector<Undecide> > > all;
+        all = History.AllLeaf();
+        int k = all.size();
         Return3 result2 = BookA.Search(bookNumber_s,BookA.GetRootName());
         if(result2.Succ)
         {
-            if(result2.ve[2].is == 0)
+            if(result2.ve[2].num == 0)
             {
                 //更新到History表
                 strcpy(te1.s,bookNumber_s);
@@ -813,18 +919,18 @@ void MainWindow::on_affirmBottonRepay_clicked()
                 int days = lastTime_scqq.daysTo(current_date_time);
                 if(days <= 0)
                 {
-                    te5.num = 0;
+                    te5.dou = 0;
                 }
                 else
                 {
-                    te5.num = days * 0.2;
+                    te5.dou = days * 0.2;
                 }
                 historyv.push_back(te1);
                 historyv.push_back(te2);
                 historyv.push_back(te3);
                 historyv.push_back(te4);
                 historyv.push_back(te5);
-                History.Insert(history_key,historyv);
+                History.Insert(k,historyv);
                 History.SaveHead();//一定要记得保存！
 
                 //从borrow表删除
@@ -888,5 +994,93 @@ void MainWindow::on_affirmBottonRenew_clicked()
     {
         cout << ".......";
         QMessageBox::information(this, "提示", "该书不可续借！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    }
+}
+
+
+
+void MainWindow::on_affirmButtonMoney_clicked()
+{
+    QString password_input;
+    password_input = ui->passwordMoneyInput->text();
+    std::string md5_password;
+    QByteArray bb;
+    const char *password_s = password_input.toStdString().data();
+    bb = QCryptographicHash::hash ( password_input.toLatin1(), QCryptographicHash::Md5 );
+    md5_password.append(bb.toHex());
+
+    BPlusTree<string> User;
+    User.SetTableName(string("User"));;
+    User.ReadHead();  //读取文件
+
+    const char *record_username_s = record_username.toStdString().data();
+    Return3 result1 = User.Search(record_username_s,User.GetRootName());
+    if(result1.Succ)
+    {
+        if(md5_password == result1.ve[0].s)
+        {
+            BPlusTree<int> Money;
+            Money.SetTableName(string("Money"));;
+            Money.ReadHead();
+
+            double totalArrears = result1.ve[2].dou;
+            if(result1.ve[2].dou == 0)
+                QMessageBox::information(this, "提示", "该用户无欠费！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+            else
+            {
+                //密码正确，更新user表
+                vector<Undecide>userv;
+                Undecide te1, te2, te3, te4,te5;
+                strcpy(te1.s,record_username_s);
+                strcpy(te2.s,result1.ve[0].s);
+                strcpy(te3.s,result1.ve[1].s);
+                te4.dou = 0;
+                te5.num = result1.ve[3].num;
+                userv.push_back(te2);
+                userv.push_back(te3);
+                userv.push_back(te4);
+                userv.push_back(te5);
+                User.Update(record_username_s,userv);
+                User.SaveHead();//一定要记得保存！
+
+                vector<pair< int,vector<Undecide> > > all;
+                all = Money.AllLeaf();
+                int k = all.size();
+                if(result1.ve[2].dou == 0)
+                {
+                    QMessageBox::information(this, "提示", "缴费成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                    //写入Money表
+
+                    vector<Undecide>moneyv;
+                    Undecide te6,te7,te8,te9,te10,te11;
+                    te6.num = money_key;
+
+                    strcpy(te7.s,record_username_s);
+
+                    QDateTime current_date_time = QDateTime::currentDateTime();
+                    QString current_date = current_date_time.toString("yyyy/MM/dd");
+                    const char *current_date_s = current_date.toStdString().data();
+                    strcpy(te8.s,current_date_s);
+
+                    te9.dou = totalArrears;
+                    //状态
+                    te10.num = 1;
+                    te11.dou = 0;
+                    moneyv.push_back(te7);
+                    moneyv.push_back(te8);
+                    moneyv.push_back(te9);
+                    moneyv.push_back(te10);
+                    moneyv.push_back(te11);
+                    Money.Insert(k,moneyv);
+                    Money.SaveHead();//一定要记得保存！
+                }
+            }
+        }
+
+        else
+        {
+            QMessageBox::critical(this, "critical", "密码错误!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+        }
+
     }
 }

@@ -23,6 +23,8 @@ extern int history_key;
 extern QString record_username;
 //记录正在登陆的用户的用户名
 
+extern int money_key;
+
 
 
 

@@ -8,6 +8,7 @@
 #include <register.h>
 #include <qstring.h>
 #include<iostream>
+#include<QDebug>
 #include <QStandardItemModel> //用于存储定制数据的通用模型
 
 
@@ -395,6 +396,9 @@ void MainWindow_Manage::on_affirmBottonAdd_clicked()
                 bookav.push_back(te2);
                 bookav.push_back(te3);
                 bookav.push_back(te4);
+                string s(te4.s);
+                QString ss = QString::fromStdString(s);
+                //cout<<te4.s<<" ";
                 bookav.push_back(te5);
                 bookav.push_back(te6);
                 BookA.Insert(bookISBN_fin, bookav);
@@ -557,140 +561,113 @@ void MainWindow_Manage::on_btn_manageSystem_clicked()
 
 void MainWindow_Manage::on_affirmBottonUpdate_clicked()
 {
-//    //点击确定更新书本信息
-//    //选中更新书本
-//    //获取现在表格中现选中的行row和model
-//    int row = ui->bookInformationUpdate->currentIndex().row();
-//    QAbstractItemModel *model = ui->bookInformationUpdate->model();
+    //点击确定更新书本信息
+    //选中更新书本
+    //获取现在表格中现选中的行row和model
+    int row = ui->bookInformationUpdate->currentIndex().row();
+    QAbstractItemModel *model = ui->bookInformationUpdate->model();
 
-//    QModelIndex index1 = model->index(row,0); //获得第一列内容
-//    QVariant data1 = model->data(index1);  //获得data的值
-//    QString bookNumber_q = data1.toString();  //ISBN
+    QModelIndex index1 = model->index(row,0); //获得第一列内容
+    QVariant data1 = model->data(index1);  //获得data的值
+    QString bookNumber_q = data1.toString();  //ISBN
 
-//    QModelIndex index2 = model->index(row,1); //获得第二列内容
-//    QVariant data2 = model->data(index2);  //获得data的值
-//    QString bookName_q = data2.toString();   //书名
+    //打开BookA
+    BPlusTree<string> BookA;
+    BookA.SetTableName(string("BookA"));
+    BookA.ReadHead();
 
-//    QModelIndex index3 = model->index(row,2); //获得第三列内容
-//    QVariant data3 = model->data(index3);  //获得data的值
-//    QString bookAuthor_q = data3.toString(); //作者
+    //打开BookB
+    BPlusTree<string> BookB;
+    BookB.SetTableName(string("BookB"));
+    BookB.ReadHead();
 
-//    QModelIndex index4 = model->index(row,3); //获得第四列内容
-//    QVariant data4 = model->data(index4);  //获得data的值
-//    QString bookPublish_q = data4.toString(); //出版社
+    //根据ISBN去搜索BookB
+    string bookNumber_fin = bookNumber_q.toStdString();
+    Return3 result1 = BookB.Search(bookNumber_fin, BookB.GetRootName());
+    if(result1.Succ)
+    {
+        //若成功找到
+        //获取所要修改的项和修改的值
+        int itemIndex = ui->updateOption_CB->currentIndex();
+        QString updateInfo_q = ui->updateTo_Input->text();
+        //获取搜索内容项
+        QString searchContent = ui->searchLineEditUpdate->text();
+        string ISBN = searchContent.toStdString();
+        //修改内容项的类型转换
+        string updateInfo_s = updateInfo_q.toStdString();
+        const char* updateInfo_char = updateInfo_s.data(); //类型转换
+        //判断对信息进行更改
+        switch (itemIndex) {
+            case 0:{
+                    //更改书名
+                    strcpy(result1.ve[0].s, updateInfo_char);
+                    BookB.Update(ISBN, result1.ve);
+                    //将表格信息更新
+                    //定位到搜索到的行设置index
+                    QModelIndex index = model->index(0,1);
+                    QVariant value(updateInfo_q);
+                    model->setData(index, value, Qt::EditRole);
+                    QMessageBox::critical(this, "提示", "更改书名成功!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                    break;
+            }
+            case 1: {
+                    //更改作者
+                    strcpy(result1.ve[1].s, updateInfo_char);
+                    qDebug()<<tr(updateInfo_char);
+                    BookB.Update(ISBN, result1.ve);
+                    //将表格信息更新
+                    //定位到搜索到的行设置index
+                    QModelIndex index2 = model->index(0,2);
+                    QVariant value2(updateInfo_q);
+                    model->setData(index2, value2, Qt::EditRole);
+                    QMessageBox::critical(this, "提示", "更改作者成功!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                    break;
+            }
+            case 2:{
+                    //更改出版社
+                    strcpy(result1.ve[2].s, updateInfo_char);
+                    BookB.Update(ISBN, result1.ve);
+                    //将表格信息更新
+                    //定位到搜索到的行设置index
+                    QModelIndex index3 = model->index(0,3);
+                    QVariant value3(updateInfo_q);
+                    model->setData(index3, value3, Qt::EditRole);
+                    QMessageBox::critical(this, "提示", "更改出版社成功!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                    break;
+            }
+            case 3: {
+                    //更改出版时间
+                    strcpy(result1.ve[3].s, updateInfo_char);
+                    BookB.Update(ISBN, result1.ve);
+                    //将表格信息更新
+                    //定位到搜索到的行设置index
+                    QModelIndex index4 = model->index(0,4);
+                    QVariant value4(updateInfo_q);
+                    model->setData(index4, value4, Qt::EditRole);
+                    QMessageBox::critical(this, "提示", "更改出版时间成功!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                    break;
+            }
+            case 4:{
+                    //更改价格
+                    strcpy(result1.ve[4].s, updateInfo_char);
+                    BookB.Update(ISBN, result1.ve);
+                    //将表格信息更新
+                    //定位到搜索到的行设置index
+                    QModelIndex index5 = model->index(0,5);
+                    QVariant value5(updateInfo_q);
+                    model->setData(index5, value5, Qt::EditRole);
+                    QMessageBox::critical(this, "提示", "更改价格成功!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                    break;
+            }
 
-//    QModelIndex index5 = model->index(row,4); //获得第五列内容
-//    QVariant data5 = model->data(index5);  //获得data的值
-//    QString publishTime_q = data5.toString(); //出版时间
+            default:
+                    break;
+        }
 
-//    QModelIndex index6 = model->index(row,5); //获得第六列内容
-//    QVariant data6 = model->data(index6);  //获得data的值
-//    QString bookPrice_q = data6.toString();  //书价格
-
-//    //打开BookA
-//    BPlusTree<string> BookA;
-//    BookA.SetTableName(string("BookA"));
-//    BookA.ReadHead();
-
-//    //打开BookB
-//    BPlusTree<string> BookB;
-//    BookB.SetTableName(string("BookB"));
-//    BookB.ReadHead();
-
-//    //根据ISBN去搜索BookB
-//    string bookNumber_fin = bookNumber_q.toStdString();
-//    Return3 result1 = BookB.Search(bookNumber_fin, BookB.GetRootName());
-//    if(result1.Succ)
-//    {
-//        //若成功找到
-//        //获取所要修改的项和修改的值
-//        int index = ui->updateOption_CB->currentIndex();
-//        QString updateInfo_q = ui->updateTo_Input->text();
-//        //获取搜索内容项
-//        QString searchContent = ui->searchLineEditUpdate->text();
-//        //修改内容项的类型转换
-//        string updateInfo_s = updateInfo_q->toStdString();
-//        //判断对信息进行更改
-//        switch (index) {
-//        case 0:
-//                //更改ISBN
-//                //先根据当前ISBN寻找BookA对应的书
-//                vector<pair< string,vector<Undecide> > > allA;
-//                int countN = 0;
-//                const char* ISBN = searchContent->toStdString()->data();
-//                string newISBN = updateInfo_s;
-
-//                allA = BookA.AllLeaf();
-//                for(int i=0; i<allA.size(); i++)
-//                {
-//                    if((allA[i].second)[4].s == ISBN)  //包括标注为已删除的
-//                    {
-//                        //设定新的ISBN加后三位图书编码
-//                        //将countN转化为string类型
-//                        stringstream ss;
-//                        string str;
-//                        string add;
-//                        ss<<countN;
-//                        ss>>str;
-//                        int len = str.length();
-//                        switch(len)
-//                        {
-//                            case 1: add = "00";
-//                                    add.append(str);
-//                                    newISBN.append(add);
-//                                    break;
-//                            case 2: add = "0";
-//                                    add.append(str);
-//                                    newISBN.append(add);
-//                                    break;
-//                            case 3: newISBN.append(str);
-//                                    break;
-//                            default:
-//                                    break;
-//                        }
-//                        if(len)
-//                        {
-//                            //更新BookA信息实现
-//                            (allA[i].second)[4].s = updateInfo_s;
-//                            BookA.Update(newISBN, all[i].second);
-
-//                        }
-//                        countN = countN + 1;
-//                    }
-
-//                }
-//                //再更改BookB中的ISBN(若更改可以更改key值得话)
-//                BookB.Update(updateInfo_s, result1.ve);
-//                break;
-
-//        case 1:
-//                //更改书名
-//                const char* updateInfo_char = updateInfo_s->data(); //类型转换
-//                searchContent
-//                result1.ve[0] = updateInfo_char;
-//                BookB.Update(searchContent)
-//                break;
-//        case 2:
-//                bookAuthur_q = updateInput_q;
-//                break;
-//        case 3:
-//                bookPublish_q = updateInput_q;
-//                break;
-//        case 4:
-//                publishTime_q = updataInput_q;
-//                break;
-//        case 5:
-//                bookPrice_q = updataInput_q;
-//                break;
-
-//        default:
-//                break;
-//        }
-
-//        //类型转换
+        //类型转换
 
 
-//    }
+    }
 }
 
 void MainWindow_Manage::on_searchButtonUpdate_clicked()
@@ -699,7 +676,7 @@ void MainWindow_Manage::on_searchButtonUpdate_clicked()
     //创建信息表
     //设置表头
     QStandardItemModel *bookInformationUpdate_model = new QStandardItemModel();
-    bookInformationUpdate_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("书籍编号")));
+    bookInformationUpdate_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("ISBN")));
     bookInformationUpdate_model->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("书名")));
     bookInformationUpdate_model->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("作者")));
     bookInformationUpdate_model->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("出版社")));
@@ -725,7 +702,7 @@ void MainWindow_Manage::on_searchButtonUpdate_clicked()
     ui->bookInformationUpdate->setColumnWidth(2,140);
     ui->bookInformationUpdate->setColumnWidth(3,140);
     ui->bookInformationUpdate->setColumnWidth(4,140);
-    ui->bookInformationUpdate->setColumnWidth(5,80);
+    ui->bookInformationUpdate->setColumnWidth(5,100);
     //ui->bookInformationUpdate->setColumnWidth(6,80);
 
     //设置选中时为整行选中
@@ -746,75 +723,151 @@ void MainWindow_Manage::on_searchButtonUpdate_clicked()
 
     //获取搜索框中的信息
     QString searchContent = ui->searchLineEditUpdate->text();
-//    if(searchContent != "")
-//    {
-//        if(ui->bookNameUpdate_search->isChecked() == true)
-//        {
-//            //选中书名选择方式
+    if(searchContent != "")
+    {
+        if(ui->bookNameUpdate_search->isChecked() == true)
+        {
+            //选中书名选择方式
+            const char* bookName_char = searchContent.toStdString().data();  //类型转换
+            //读取BookB
+            BPlusTree<string> BookB;
+            BookB.SetTableName(string("BookB"));
+            BookB.ReadHead();
+            //全部遍历搜索BookB
+            vector<pair< string,vector<Undecide> > > allB;
+            allB = BookB.AllLeaf();
+            for(int i=0; i<allB.size(); i++)
+            {
+                if(strcmp((allB[i].second)[0].s, bookName_char) == 0)
+                {
+                    //如果查找成功，显示查找结果到表格中
+                    //插入ISBN
+                    string ISBN_s = allB[i].first;
+                    QString ISBN_q = QString::fromStdString(ISBN_s);
+                    bookInformationUpdate_model->setItem(0, 0, new QStandardItem(ISBN_q));   //QString类型
+                    //插入书名
+                    char* bookName = const_cast<char*>((allB[i].second)[0].s);
+                    bookInformationUpdate_model->setItem(0, 1, new QStandardItem(bookName));
+                    //插入作者
+                    char* bookAuthor = const_cast<char*>((allB[i].second)[1].s);
+                    bookInformationUpdate_model->setItem(0, 2, new QStandardItem(bookAuthor));
+                    //插入出版社
+                    char* bookPublish = const_cast<char*>((allB[i].second)[2].s);
+                    bookInformationUpdate_model->setItem(0, 3, new QStandardItem(bookPublish));
+                    //插入出版时间
+                    char* publishTime = const_cast<char*>((allB[i].second)[3].s);
+                    bookInformationUpdate_model->setItem(0, 4, new QStandardItem(publishTime));
+                    //插入价格
+                    char* bookPrice = const_cast<char*>((allB[i].second)[4].s);
+                    bookInformationUpdate_model->setItem(0, 5, new QStandardItem(bookPrice));
+                }
 
-//        }
+            }
 
-//        else if(ui->authorUpdate_search->isChecked() == true)
-//        {
-//            //选中作者选择方式
+        }
 
-//        }
+        else if(ui->authorUpdate_search->isChecked() == true)
+        {
+            //选中作者选择方式
+            const char* bookAuthor_char = searchContent.toStdString().data();  //类型转换
+            //读取BookB
+            BPlusTree<string> BookB;
+            BookB.SetTableName(string("BookB"));
+            BookB.ReadHead();
+            //全部遍历搜索BookB
+            vector<pair< string,vector<Undecide> > > allB;
+            allB = BookB.AllLeaf();
+            for(int i=0; i<allB.size(); i++)
+            {
+                if(strcmp((allB[i].second)[1].s, bookAuthor_char) == 0)
+                {
+                    //如果查找成功，显示查找结果到表格中
+                    //插入ISBN
+                    string ISBN_s = allB[i].first;
+                    QString ISBN_q = QString::fromStdString(ISBN_s);
+                    bookInformationUpdate_model->setItem(0, 0, new QStandardItem(ISBN_q));   //QString类型
+                    //插入书名
+                    char* bookName = const_cast<char*>((allB[i].second)[0].s);
+                    bookInformationUpdate_model->setItem(0, 1, new QStandardItem(bookName));
+                    //插入作者
+                    char* bookAuthor = const_cast<char*>((allB[i].second)[1].s);
+                    bookInformationUpdate_model->setItem(0, 2, new QStandardItem(bookAuthor));
+                    //插入出版社
+                    char* bookPublish = const_cast<char*>((allB[i].second)[2].s);
+                    bookInformationUpdate_model->setItem(0, 3, new QStandardItem(bookPublish));
+                    //插入出版时间
+                    char* publishTime = const_cast<char*>((allB[i].second)[3].s);
+                    bookInformationUpdate_model->setItem(0, 4, new QStandardItem(publishTime));
+                    //插入价格
+                    char* bookPrice = const_cast<char*>((allB[i].second)[4].s);
+                    bookInformationUpdate_model->setItem(0, 5, new QStandardItem(bookPrice));
+                }
 
-//        else if(ui->isbnUpdate_search->isChecked() == true)
-//        {
-//            //选中ISBN选择方式
-//            //根据ISBN去BookB寻找书
-//            BPlusTree<string> BookB;
-//            BookB.SetTableName(string("BookB"));
-//            BookB.ReadHead();
-
-//            string ISBN_fin = searchContent.toStdString();  //类型转换
-//            Return3 result1 = BookB.Search(ISBN_fin, BookB.GetRootName());
-
-//            if(result1.Succ)
-//            {
-//                //如果查找成功，显示查找结果到表格中
-//                //插入ISBN
-//                bookInformationUpdate_model->setItem(0, 0, new QStandardItem(ISBN_fin));   //试一下string类型可不可以
-//                //插入书名
-//                char* bookName = const_cast<char*>(result1.ve[0].s);
-//                bookInformationUpdate_model->setItem(0, 1, new QStandardItem(bookName));
-//                //插入作者
-//                char* bookAuthor = const_cast<char*>(result1.ve[1].s);
-//                bookInformationUpdate_model->setItem(0, 2, new QStandardItem(bookAuthor));
-//                //插入出版社
-//                char* bookPublish = const_cast<char*>(result1.ve[2].s);
-//                bookInformationUpdate_model->setItem(0, 3, new QStandardItem(bookPublish));
-//                //插入出版时间
-//                char* publishTime = const_cast<char*>(result1.ve[3].s);
-//                bookInformationUpdate_model->setItem(0, 4, new QStandardItem(publishTime));
-//                //插入价格
-//                char* bookPrice = const_cast<char*>(result1.ve[4].s);
-//                bookInformationUpdate_model->setItem(0, 5, new QStandardItem(bookPrice));
-
-
-
-//            }
-//            else
-//            {
-//                //查找失败
-//                QMessageBox::critical(this, "critical", "查找失败!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-//            }
-
-//        }
-
-//        else
-//        {
-//            //需要选择查找类型
-//            QMessageBox::critical(this, "critical", "需要选择查找类型!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-//        }
-//    }
-//    else
-//    {
-//        //提示搜索输入不可以为空
-//        QMessageBox::critical(this, "critical", "输入修改的内容不能为空!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-//    }
+            }
 
 
+        }
+
+        else if(ui->isbnUpdate_search->isChecked() == true)
+        {
+            //选中ISBN选择方式
+            //根据ISBN去BookB寻找书
+            BPlusTree<string> BookB;
+            BookB.SetTableName(string("BookB"));
+            BookB.ReadHead();
+
+            string ISBN_fin = searchContent.toStdString();  //类型转换
+            Return3 result1 = BookB.Search(ISBN_fin, BookB.GetRootName());
+
+            if(result1.Succ)
+            {
+                //如果查找成功，显示查找结果到表格中
+                //插入ISBN
+                bookInformationUpdate_model->setItem(0, 0, new QStandardItem(searchContent));   //QString类型
+                //插入书名
+                char* bookName = const_cast<char*>(result1.ve[0].s);
+                bookInformationUpdate_model->setItem(0, 1, new QStandardItem(bookName));
+                //插入作者
+                char* bookAuthor = const_cast<char*>(result1.ve[1].s);
+                bookInformationUpdate_model->setItem(0, 2, new QStandardItem(bookAuthor));
+                //插入出版社
+                char* bookPublish = const_cast<char*>(result1.ve[2].s);
+                bookInformationUpdate_model->setItem(0, 3, new QStandardItem(bookPublish));
+                //插入出版时间
+                char* publishTime = const_cast<char*>(result1.ve[3].s);
+                bookInformationUpdate_model->setItem(0, 4, new QStandardItem(publishTime));
+                //插入价格
+                char* bookPrice = const_cast<char*>(result1.ve[4].s);
+                bookInformationUpdate_model->setItem(0, 5, new QStandardItem(bookPrice));
+
+
+
+            }
+            else
+            {
+                //查找失败
+                QMessageBox::critical(this, "critical", "查找失败!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+            }
+
+        }
+
+        else
+        {
+            //需要选择查找类型
+            QMessageBox::critical(this, "critical", "需要选择查找类型!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+        }
+    }
+    else
+    {
+        //提示搜索输入不可以为空
+        QMessageBox::critical(this, "critical", "输入修改的内容不能为空!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    }
+
+
+
+}
+
+void MainWindow_Manage::on_searchButtonDelate_clicked()
+{
 
 }

@@ -30,7 +30,7 @@
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>3</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QLabel" name="nameManage">
@@ -773,11 +773,6 @@
       <property name="styleSheet">
        <string notr="true">border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;</string>
       </property>
-      <item>
-       <property name="text">
-        <string>       ISBN</string>
-       </property>
-      </item>
       <item>
        <property name="text">
         <string>       书名</string>

@@ -48,6 +48,8 @@ private slots:
 
     void on_affirmBottonRenew_clicked();
 
+    void on_affirmButtonMoney_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

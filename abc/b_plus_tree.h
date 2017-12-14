@@ -1379,6 +1379,7 @@ bool BPlusTree<T1>::Update(T1 Key, vector<Undecide>ve){
         }
     }
     out.close();
+    return 1;
 }
 
 template<typename T1>
