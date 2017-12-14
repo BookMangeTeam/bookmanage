@@ -320,7 +320,7 @@ void MainWindow_Manage::on_updateButton_clicked()
             {
                 //获取书本编号
                 QString bookNumber_q = QString::fromStdString(allA[i].first);
-                bookInformationUpdate_model->setItem(row, new QStandardItem(bookNumber_q));
+                bookInformationUpdate_model->setItem(row, 0, new QStandardItem(bookNumber_q));
 
                 //获取书本借阅状态
                 int borrowState = (allA[i].second)[2].num;
@@ -790,4 +790,57 @@ void MainWindow_Manage::on_affirmBottonUpdate_clicked()
 void MainWindow_Manage::on_searchButtonUpdate_clicked()
 {
     //点击更新的搜索按钮
+    //获取搜索框中的信息
+    QString searchContent = ui->searchLineEditUpdate->text();
+    if(searchContent != "")
+    {
+        if(ui->bookNameUpdate_search->isChecked() == true)
+        {
+            //选中书名选择方式
+            
+        }
+        
+        else if(ui->authorUpdate_search->isChecked() == true)
+        {
+            //选中作者选择方式
+            
+        }
+        
+        else if(ui->isbnUpdate_search->isChecked() == true)
+        {
+            //选中ISBN选择方式
+            //根据ISBN去BookB寻找书
+            BPlusTree<string> BookB;
+            BookB.SetTableName(string("BookB"));
+            BookB.ReadHead();
+          
+            string ISBN_fin = searchContent.toStdString();  //类型转换
+            Return3 result1 = BookB.Search(ISBN_fin, BookB.GetRootName());
+            
+            if(result1.Succ)
+            {
+                //如果查找成功，显示查找结果到表格中
+                QAbstractItemModel *model = ui->bookInformationUpdate->model();
+                model->setItemData()
+                
+            }
+            else
+            {
+                //查找失败
+            }
+                
+        }
+        
+        else
+        {
+            //需要选择查找类型
+        }
+    }
+    else
+    {
+        //提示搜索输入不可以为空
+    }
+    
+    
+    
 }
