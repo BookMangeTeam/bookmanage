@@ -47,32 +47,39 @@ SOURCES       = ..\abc\main.cpp \
 		..\abc\mainwindow.cpp \
 		..\abc\login.cpp \
 		..\abc\register.cpp \
-		..\abc\mainwindow_manage.cpp release\qrc_picture.cpp \
+		..\abc\mainwindow_manage.cpp \
+		..\abc\systemmanage.cpp release\qrc_picture.cpp \
 		release\moc_mainwindow.cpp \
 		release\moc_login.cpp \
 		release\moc_register.cpp \
-		release\moc_mainwindow_manage.cpp
+		release\moc_mainwindow_manage.cpp \
+		release\moc_systemmanage.cpp
 OBJECTS       = release/main.o \
 		release/mainwindow.o \
 		release/login.o \
 		release/register.o \
 		release/mainwindow_manage.o \
+		release/systemmanage.o \
 		release/qrc_picture.o \
 		release/moc_mainwindow.o \
 		release/moc_login.o \
 		release/moc_register.o \
-		release/moc_mainwindow_manage.o
+		release/moc_mainwindow_manage.o \
+		release/moc_systemmanage.o
 
 DIST          =  ..\abc\mainwindow.h \
 		..\abc\login.h \
 		..\abc\register.h \
 		..\abc\mainwindow_manage.h \
 		..\abc\global_variable.h \
-		..\abc\b_plus_tree.h ..\abc\main.cpp \
+		..\abc\b_plus_tree.h \
+		..\abc\initial.h \
+		..\abc\systemmanage.h ..\abc\main.cpp \
 		..\abc\mainwindow.cpp \
 		..\abc\login.cpp \
 		..\abc\register.cpp \
-		..\abc\mainwindow_manage.cpp
+		..\abc\mainwindow_manage.cpp \
+		..\abc\systemmanage.cpp
 QMAKE_TARGET  = TEST
 DESTDIR        = release\ #avoid trailing-slash linebreak
 TARGET         = TEST.exe
@@ -83,7 +90,7 @@ DESTDIR_TARGET = release\TEST.exe
 first: all
 all: Makefile.Release  $(DESTDIR_TARGET)
 
-$(DESTDIR_TARGET): ui_mainwindow.h ui_login.h ui_register.h ui_mainwindow_manage.h $(OBJECTS) 
+$(DESTDIR_TARGET): ui_mainwindow.h ui_login.h ui_register.h ui_mainwindow_manage.h ui_systemmanage.h $(OBJECTS) 
 	$(LINKER) $(LFLAGS) -o $(DESTDIR_TARGET) object_script.TEST.Release  $(LIBS)
 
 qmake: FORCE
@@ -95,7 +102,7 @@ dist:
 	$(ZIP) TEST.zip $(SOURCES) $(DIST) ..\abc\TEST.pro ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\spec_pre.prf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\qdevice.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\device_config.prf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\common\angle.conf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\qconfig.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_3dcore.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_3dcore_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_3dextras.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_3dextras_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_3dinput.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_3dinput_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_3dlogic.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_3dlogic_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_3dquick.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_3dquick_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_3dquickextras.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_3dquickextras_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_3dquickinput.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_3dquickinput_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_3dquickrender.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_3dquickrender_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_3drender.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_3drender_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_axbase.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_axbase_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_axcontainer.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_axcontainer_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_axserver.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_axserver_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_bluetooth.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_bluetooth_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_bootstrap_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_clucene_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_concurrent.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_concurrent_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_core.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_core_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_dbus.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_dbus_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_designer.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_designer_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_designercomponents_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_gamepad.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_gamepad_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_gui.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_gui_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_help.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_help_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_location.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_location_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_multimedia.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_multimedia_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_multimediawidgets.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_multimediawidgets_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_network.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_network_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_nfc.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_nfc_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_opengl.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_opengl_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_openglextensions.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_openglextensions_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_packetprotocol_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_platformsupport_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_positioning.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_positioning_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_printsupport.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_printsupport_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_purchasing.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_purchasing_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_qml.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_qml_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_qmldebug_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_qmldevtools_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_qmltest.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_qmltest_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_qtmultimediaquicktools_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_quick.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_quick_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_quickcontrols2.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_quickcontrols2_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_quickparticles_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_quicktemplates2_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_quickwidgets.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_quickwidgets_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_script.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_script_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_scripttools.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_scripttools_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_scxml.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_scxml_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_sensors.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_sensors_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_serialbus.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_serialbus_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_serialport.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_serialport_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_sql.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_sql_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_svg.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_svg_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_testlib.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_testlib_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_uiplugin.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_uitools.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_uitools_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_webchannel.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_webchannel_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_websockets.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_websockets_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_widgets.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_widgets_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_winextras.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_winextras_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_xml.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_xml_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_xmlpatterns.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\modules\qt_lib_xmlpatterns_private.pri ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\qt_functions.prf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\qt_config.prf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\win32\qt_config.prf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\win32-g++\qmake.conf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\spec_post.prf .qmake.stash ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\exclusive_builds.prf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\default_pre.prf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\win32\default_pre.prf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\resolve_config.prf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\exclusive_builds_post.prf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\default_post.prf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\build_pass.prf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\qml_debug.prf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\win32\rtti.prf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\precompile_header.prf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\warn_on.prf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\qt.prf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\resources.prf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\moc.prf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\win32\opengl.prf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\uic.prf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\file_copies.prf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\win32\windows.prf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\testcase_targets.prf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\exceptions.prf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\yacc.prf ..\..\..\Software\QTcc\5.7\mingw53_32\mkspecs\features\lex.prf ..\abc\TEST.pro ..\abc\picture.qrc ..\..\..\Software\QTcc\5.7\mingw53_32\lib\qtmain.prl ..\..\..\Software\QTcc\5.7\mingw53_32\lib\Qt5Widgets.prl ..\..\..\Software\QTcc\5.7\mingw53_32\lib\Qt5Gui.prl ..\..\..\Software\QTcc\5.7\mingw53_32\lib\Qt5Core.prl  NO_PCH_SOURCES RESOURCES HEADERS SOURCES OBJECTIVE_SOURCES FORMS YACCSOURCES YACCSOURCES LEXSOURCES 
 
 clean: compiler_clean 
-	-$(DEL_FILE) release\main.o release\mainwindow.o release\login.o release\register.o release\mainwindow_manage.o release\qrc_picture.o release\moc_mainwindow.o release\moc_login.o release\moc_register.o release\moc_mainwindow_manage.o
+	-$(DEL_FILE) release\main.o release\mainwindow.o release\login.o release\register.o release\mainwindow_manage.o release\systemmanage.o release\qrc_picture.o release\moc_mainwindow.o release\moc_login.o release\moc_register.o release\moc_mainwindow_manage.o release\moc_systemmanage.o
 
 distclean: clean 
 	-$(DEL_FILE) .qmake.stash
@@ -124,9 +131,9 @@ release/qrc_picture.cpp: ../abc/picture.qrc \
 		../abc/1.jpg
 	E:\Software\QTcc\5.7\mingw53_32\bin\rcc.exe -name picture ..\abc\picture.qrc -o release\qrc_picture.cpp
 
-compiler_moc_header_make_all: release/moc_mainwindow.cpp release/moc_login.cpp release/moc_register.cpp release/moc_mainwindow_manage.cpp
+compiler_moc_header_make_all: release/moc_mainwindow.cpp release/moc_login.cpp release/moc_register.cpp release/moc_mainwindow_manage.cpp release/moc_systemmanage.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) release\moc_mainwindow.cpp release\moc_login.cpp release\moc_register.cpp release\moc_mainwindow_manage.cpp
+	-$(DEL_FILE) release\moc_mainwindow.cpp release\moc_login.cpp release\moc_register.cpp release\moc_mainwindow_manage.cpp release\moc_systemmanage.cpp
 release/moc_mainwindow.cpp: ../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/QMainWindow \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qmainwindow.h \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qwidget.h \
@@ -537,11 +544,112 @@ release/moc_mainwindow_manage.cpp: ../../../Software/QTcc/5.7/mingw53_32/include
 		../../../Software/QTcc/5.7/mingw53_32/bin/moc.exe
 	E:\Software\QTcc\5.7\mingw53_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IE:/Software/QTcc/5.7/mingw53_32/mkspecs/win32-g++ -IE:/SC/UML/abc -IE:/Software/QTcc/5.7/mingw53_32/include -IE:/Software/QTcc/5.7/mingw53_32/include/QtWidgets -IE:/Software/QTcc/5.7/mingw53_32/include/QtGui -IE:/Software/QTcc/5.7/mingw53_32/include/QtANGLE -IE:/Software/QTcc/5.7/mingw53_32/include/QtCore -I. -IE:/Software/QTcc/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include -IE:/Software/QTcc/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include-fixed -IE:/Software/QTcc/Tools/mingw530_32/i686-w64-mingw32/include -IE:/Software/QTcc/Tools/mingw530_32/i686-w64-mingw32/include/c++ -IE:/Software/QTcc/Tools/mingw530_32/i686-w64-mingw32/include/c++/i686-w64-mingw32 -IE:/Software/QTcc/Tools/mingw530_32/i686-w64-mingw32/include/c++/backward ..\abc\mainwindow_manage.h -o release\moc_mainwindow_manage.cpp
 
+release/moc_systemmanage.cpp: ../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/QWidget \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qwidget.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qwindowdefs.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qglobal.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qconfig.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qfeatures.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qsystemdetection.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qprocessordetection.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qcompilerdetection.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qtypeinfo.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qtypetraits.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qisenum.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qsysinfo.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qlogging.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qflags.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qatomic.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qbasicatomic.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qatomic_bootstrap.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qgenericatomic.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qatomic_cxx11.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qatomic_msvc.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qglobalstatic.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qmutex.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qnumeric.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qversiontagging.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qobjectdefs.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qnamespace.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qobjectdefs_impl.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qwindowdefs_win.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qobject.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qstring.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qchar.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qbytearray.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qrefcount.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qarraydata.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qstringbuilder.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qlist.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qalgorithms.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qiterator.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qhashfunctions.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qpair.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qbytearraylist.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qstringlist.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qregexp.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qstringmatcher.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qcoreevent.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qscopedpointer.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qmetatype.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qvarlengtharray.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qcontainerfwd.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qobject_impl.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qmargins.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qpaintdevice.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qrect.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qsize.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qpoint.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qpalette.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qcolor.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qrgb.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qrgba64.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qbrush.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qvector.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qmatrix.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qpolygon.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qregion.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qdatastream.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qiodevice.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qline.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qtransform.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qpainterpath.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qimage.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qpixelformat.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qpixmap.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qsharedpointer.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qshareddata.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qhash.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qsharedpointer_impl.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qfont.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qfontmetrics.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qfontinfo.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qsizepolicy.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qcursor.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qkeysequence.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qevent.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qvariant.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qmap.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qdebug.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qtextstream.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qlocale.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qset.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qcontiguouscache.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qurl.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qurlquery.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qfile.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qfiledevice.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qvector2d.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qtouchdevice.h \
+		../abc/systemmanage.h \
+		../../../Software/QTcc/5.7/mingw53_32/bin/moc.exe
+	E:\Software\QTcc\5.7\mingw53_32\bin\moc.exe $(DEFINES) -D__GNUC__ -DWIN32 -IE:/Software/QTcc/5.7/mingw53_32/mkspecs/win32-g++ -IE:/SC/UML/abc -IE:/Software/QTcc/5.7/mingw53_32/include -IE:/Software/QTcc/5.7/mingw53_32/include/QtWidgets -IE:/Software/QTcc/5.7/mingw53_32/include/QtGui -IE:/Software/QTcc/5.7/mingw53_32/include/QtANGLE -IE:/Software/QTcc/5.7/mingw53_32/include/QtCore -I. -IE:/Software/QTcc/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include -IE:/Software/QTcc/Tools/mingw530_32/lib/gcc/i686-w64-mingw32/5.3.0/include-fixed -IE:/Software/QTcc/Tools/mingw530_32/i686-w64-mingw32/include -IE:/Software/QTcc/Tools/mingw530_32/i686-w64-mingw32/include/c++ -IE:/Software/QTcc/Tools/mingw530_32/i686-w64-mingw32/include/c++/i686-w64-mingw32 -IE:/Software/QTcc/Tools/mingw530_32/i686-w64-mingw32/include/c++/backward ..\abc\systemmanage.h -o release\moc_systemmanage.cpp
+
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_mainwindow.h ui_login.h ui_register.h ui_mainwindow_manage.h
+compiler_uic_make_all: ui_mainwindow.h ui_login.h ui_register.h ui_mainwindow_manage.h ui_systemmanage.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_mainwindow.h ui_login.h ui_register.h ui_mainwindow_manage.h
+	-$(DEL_FILE) ui_mainwindow.h ui_login.h ui_register.h ui_mainwindow_manage.h ui_systemmanage.h
 ui_mainwindow.h: ../abc/mainwindow.ui \
 		../../../Software/QTcc/5.7/mingw53_32/bin/uic.exe
 	E:\Software\QTcc\5.7\mingw53_32\bin\uic.exe ..\abc\mainwindow.ui -o ui_mainwindow.h
@@ -557,6 +665,10 @@ ui_register.h: ../abc/register.ui \
 ui_mainwindow_manage.h: ../abc/mainwindow_manage.ui \
 		../../../Software/QTcc/5.7/mingw53_32/bin/uic.exe
 	E:\Software\QTcc\5.7\mingw53_32\bin\uic.exe ..\abc\mainwindow_manage.ui -o ui_mainwindow_manage.h
+
+ui_systemmanage.h: ../abc/systemmanage.ui \
+		../../../Software/QTcc/5.7/mingw53_32/bin/uic.exe
+	E:\Software\QTcc\5.7\mingw53_32\bin\uic.exe ..\abc\systemmanage.ui -o ui_systemmanage.h
 
 compiler_yacc_decl_make_all:
 compiler_yacc_decl_clean:
@@ -679,7 +791,8 @@ release/main.o: ../abc/main.cpp ../abc/mainwindow.h \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qeventloop.h \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qdesktopwidget.h \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qguiapplication.h \
-		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qinputmethod.h
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qinputmethod.h \
+		../abc/b_plus_tree.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\main.o ..\abc\main.cpp
 
 release/mainwindow.o: ../abc/mainwindow.cpp ../abc/mainwindow.h \
@@ -839,7 +952,14 @@ release/mainwindow.o: ../abc/mainwindow.cpp ../abc/mainwindow.h \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qstandarditemmodel.h \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/QMessageBox \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qmessagebox.h \
-		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qdialog.h
+		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qdialog.h \
+		../abc/b_plus_tree.h \
+		../abc/global_variable.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/QString \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/QDateTime \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qdatetime.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/QDate \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\mainwindow.o ..\abc\mainwindow.cpp
 
 release/login.o: ../abc/login.cpp ../abc/login.h \
@@ -993,10 +1113,13 @@ release/login.o: ../abc/login.cpp ../abc/login.h \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qmainwindow.h \
 		../abc/mainwindow_manage.h \
 		ui_mainwindow_manage.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/QComboBox \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qcombobox.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/QDateEdit \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qdatetimeedit.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qdatetime.h \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/QStackedWidget \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qstackedwidget.h \
-		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/QStatusBar \
-		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qstatusbar.h \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/QTableView \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qtableview.h \
 		ui_mainwindow.h \
@@ -1009,7 +1132,11 @@ release/login.o: ../abc/login.cpp ../abc/login.h \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qmessagebox.h \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qdialog.h \
 		../abc/global_variable.h \
-		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/QCryptographichash.h
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/QString \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/QStandardItemModel \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qstandarditemmodel.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/QCryptographichash.h \
+		../abc/b_plus_tree.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\login.o ..\abc\login.cpp
 
 release/register.o: ../abc/register.cpp ../abc/register.h \
@@ -1167,8 +1294,13 @@ release/register.o: ../abc/register.cpp ../abc/register.h \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qmessagebox.h \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qdialog.h \
 		../abc/global_variable.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/QString \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/QStandardItemModel \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qstandarditemmodel.h \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/Qstring \
-		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/QCryptographichash.h
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/QCryptographichash.h \
+		../abc/b_plus_tree.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/QByteArray
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\register.o ..\abc\register.cpp
 
 release/mainwindow_manage.o: ../abc/mainwindow_manage.cpp ../abc/mainwindow_manage.h \
@@ -1286,14 +1418,8 @@ release/mainwindow_manage.o: ../abc/mainwindow_manage.cpp ../abc/mainwindow_mana
 		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qinputmethod.h \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/QButtonGroup \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qbuttongroup.h \
-		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/QFrame \
-		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qframe.h \
-		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/QHeaderView \
-		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qheaderview.h \
-		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qabstractitemview.h \
-		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qabstractscrollarea.h \
-		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qabstractitemmodel.h \
-		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qitemselectionmodel.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/QComboBox \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qcombobox.h \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qabstractitemdelegate.h \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qstyleoption.h \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qabstractspinbox.h \
@@ -1304,6 +1430,17 @@ release/mainwindow_manage.o: ../abc/mainwindow_manage.cpp ../abc/mainwindow_mana
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qstyle.h \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qtabbar.h \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qrubberband.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qframe.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qabstractitemmodel.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/QDateEdit \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qdatetimeedit.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qdatetime.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/QFrame \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/QHeaderView \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qheaderview.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qabstractitemview.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qabstractscrollarea.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qitemselectionmodel.h \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/QLabel \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qlabel.h \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/QLineEdit \
@@ -1317,16 +1454,126 @@ release/mainwindow_manage.o: ../abc/mainwindow_manage.cpp ../abc/mainwindow_mana
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qabstractbutton.h \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/QStackedWidget \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qstackedwidget.h \
-		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/QStatusBar \
-		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qstatusbar.h \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/QTableView \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qtableview.h \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/QWidget \
+		../abc/b_plus_tree.h \
+		../abc/systemmanage.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/QMessageBox \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qmessagebox.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qdialog.h \
 		../abc/global_variable.h \
-		../abc/register.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/QString \
 		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/QStandardItemModel \
-		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qstandarditemmodel.h
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qstandarditemmodel.h \
+		../abc/register.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\mainwindow_manage.o ..\abc\mainwindow_manage.cpp
+
+release/systemmanage.o: ../abc/systemmanage.cpp ../abc/systemmanage.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/QWidget \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qwidget.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qwindowdefs.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qglobal.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qconfig.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qfeatures.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qsystemdetection.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qprocessordetection.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qcompilerdetection.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qtypeinfo.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qtypetraits.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qisenum.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qsysinfo.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qlogging.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qflags.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qatomic.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qbasicatomic.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qatomic_bootstrap.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qgenericatomic.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qatomic_cxx11.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qatomic_msvc.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qglobalstatic.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qmutex.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qnumeric.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qversiontagging.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qobjectdefs.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qnamespace.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qobjectdefs_impl.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qwindowdefs_win.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qobject.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qstring.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qchar.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qbytearray.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qrefcount.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qarraydata.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qstringbuilder.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qlist.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qalgorithms.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qiterator.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qhashfunctions.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qpair.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qbytearraylist.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qstringlist.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qregexp.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qstringmatcher.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qcoreevent.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qscopedpointer.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qmetatype.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qvarlengtharray.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qcontainerfwd.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qobject_impl.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qmargins.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qpaintdevice.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qrect.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qsize.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qpoint.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qpalette.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qcolor.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qrgb.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qrgba64.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qbrush.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qvector.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qmatrix.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qpolygon.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qregion.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qdatastream.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qiodevice.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qline.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qtransform.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qpainterpath.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qimage.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qpixelformat.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qpixmap.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qsharedpointer.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qshareddata.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qhash.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qsharedpointer_impl.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qfont.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qfontmetrics.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qfontinfo.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qsizepolicy.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qcursor.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qkeysequence.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qevent.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qvariant.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qmap.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qdebug.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qtextstream.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qlocale.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qset.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qcontiguouscache.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qurl.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qurlquery.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qfile.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtCore/qfiledevice.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qvector2d.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qtouchdevice.h \
+		ui_systemmanage.h \
+		../abc/mainwindow_manage.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/QMainWindow \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qmainwindow.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtWidgets/qtabwidget.h \
+		../../../Software/QTcc/5.7/mingw53_32/include/QtGui/qicon.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\systemmanage.o ..\abc\systemmanage.cpp
 
 release/qrc_picture.o: release/qrc_picture.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\qrc_picture.o release\qrc_picture.cpp
@@ -1342,6 +1589,9 @@ release/moc_register.o: release/moc_register.cpp
 
 release/moc_mainwindow_manage.o: release/moc_mainwindow_manage.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_mainwindow_manage.o release\moc_mainwindow_manage.cpp
+
+release/moc_systemmanage.o: release/moc_systemmanage.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\moc_systemmanage.o release\moc_systemmanage.cpp
 
 ####### Install
 

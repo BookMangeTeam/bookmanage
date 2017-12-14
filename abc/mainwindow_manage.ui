@@ -30,7 +30,7 @@
      <string notr="true"/>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>2</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QLabel" name="nameManage">
@@ -559,7 +559,7 @@
       <property name="geometry">
        <rect>
         <x>170</x>
-        <y>30</y>
+        <y>10</y>
         <width>451</width>
         <height>31</height>
        </rect>
@@ -572,7 +572,7 @@
       <property name="geometry">
        <rect>
         <x>680</x>
-        <y>30</y>
+        <y>10</y>
         <width>71</width>
         <height>31</height>
        </rect>
@@ -591,6 +591,78 @@
       </property>
       <property name="text">
        <string>搜索</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="bookNameDelete_search">
+      <property name="geometry">
+       <rect>
+        <x>170</x>
+        <y>55</y>
+        <width>89</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>书名</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="authorDelete_search">
+      <property name="geometry">
+       <rect>
+        <x>300</x>
+        <y>55</y>
+        <width>89</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>作者</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="isbnDelete_search">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>55</y>
+        <width>89</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>ISBN</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="bookNumberDelete_search">
+      <property name="geometry">
+       <rect>
+        <x>530</x>
+        <y>55</y>
+        <width>89</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>图书编号</string>
       </property>
      </widget>
     </widget>
@@ -776,7 +848,7 @@
       <property name="geometry">
        <rect>
         <x>170</x>
-        <y>30</y>
+        <y>10</y>
         <width>451</width>
         <height>31</height>
        </rect>
@@ -789,7 +861,7 @@
       <property name="geometry">
        <rect>
         <x>680</x>
-        <y>30</y>
+        <y>10</y>
         <width>71</width>
         <height>31</height>
        </rect>
@@ -810,6 +882,78 @@
       </property>
       <property name="text">
        <string>搜索</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="bookNameUpdate_search">
+      <property name="geometry">
+       <rect>
+        <x>170</x>
+        <y>56</y>
+        <width>89</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>书名</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="authorUpdate_search">
+      <property name="geometry">
+       <rect>
+        <x>300</x>
+        <y>56</y>
+        <width>89</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>作者</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="isbnUpdate_search">
+      <property name="geometry">
+       <rect>
+        <x>420</x>
+        <y>55</y>
+        <width>89</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>ISBN</string>
+      </property>
+     </widget>
+     <widget class="QRadioButton" name="bookNumberUpdate_search">
+      <property name="geometry">
+       <rect>
+        <x>530</x>
+        <y>55</y>
+        <width>89</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>图书编号</string>
       </property>
      </widget>
     </widget>

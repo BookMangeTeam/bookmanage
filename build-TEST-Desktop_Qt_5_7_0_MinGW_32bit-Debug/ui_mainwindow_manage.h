@@ -81,6 +81,7 @@ public:
     QPushButton *borrowRecordButtonManage;
     QPushButton *addButton;
     QPushButton *btn_SignupManager;
+    QPushButton *btn_manageSystem;
 
     void setupUi(QMainWindow *MainWindow_Manage)
     {
@@ -150,16 +151,16 @@ public:
         add_ISBN->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;"));
         isbn = new QLabel(page_2);
         isbn->setObjectName(QStringLiteral("isbn"));
-        isbn->setGeometry(QRect(200, 10, 91, 31));
+        isbn->setGeometry(QRect(210, 10, 91, 31));
         QFont font4;
         font4.setFamily(QString::fromUtf8("\347\255\211\347\272\277"));
-        font4.setPointSize(15);
+        font4.setPointSize(14);
         isbn->setFont(font4);
         isbn->setStyleSheet(QStringLiteral(""));
         isbn->setAlignment(Qt::AlignCenter);
         bookName = new QLabel(page_2);
         bookName->setObjectName(QStringLiteral("bookName"));
-        bookName->setGeometry(QRect(195, 76, 91, 21));
+        bookName->setGeometry(QRect(220, 70, 71, 31));
         bookName->setFont(font4);
         bookName->setAlignment(Qt::AlignCenter);
         add_bookName = new QLineEdit(page_2);
@@ -169,7 +170,7 @@ public:
         add_bookName->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;"));
         author = new QLabel(page_2);
         author->setObjectName(QStringLiteral("author"));
-        author->setGeometry(QRect(206, 137, 71, 21));
+        author->setGeometry(QRect(220, 130, 71, 31));
         author->setFont(font4);
         author->setAlignment(Qt::AlignCenter);
         add_author = new QLineEdit(page_2);
@@ -179,12 +180,12 @@ public:
         add_author->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;"));
         publish = new QLabel(page_2);
         publish->setObjectName(QStringLiteral("publish"));
-        publish->setGeometry(QRect(205, 195, 71, 21));
+        publish->setGeometry(QRect(220, 190, 81, 31));
         publish->setFont(font4);
         publish->setAlignment(Qt::AlignCenter);
         price = new QLabel(page_2);
         price->setObjectName(QStringLiteral("price"));
-        price->setGeometry(QRect(212, 316, 54, 21));
+        price->setGeometry(QRect(230, 310, 61, 31));
         price->setFont(font4);
         price->setAlignment(Qt::AlignCenter);
         add_price = new QLineEdit(page_2);
@@ -194,7 +195,7 @@ public:
         add_price->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;"));
         amount = new QLabel(page_2);
         amount->setObjectName(QStringLiteral("amount"));
-        amount->setGeometry(QRect(212, 377, 54, 21));
+        amount->setGeometry(QRect(230, 370, 61, 31));
         amount->setFont(font4);
         amount->setAlignment(Qt::AlignCenter);
         add_amount = new QLineEdit(page_2);
@@ -204,20 +205,20 @@ public:
         add_amount->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;"));
         status = new QLabel(page_2);
         status->setObjectName(QStringLiteral("status"));
-        status->setGeometry(QRect(210, 436, 54, 21));
+        status->setGeometry(QRect(230, 430, 61, 31));
         status->setFont(font4);
         status->setAlignment(Qt::AlignCenter);
         add_status = new QComboBox(page_2);
         add_status->setObjectName(QStringLiteral("add_status"));
-        add_status->setGeometry(QRect(370, 430, 111, 31));
+        add_status->setGeometry(QRect(370, 430, 271, 31));
         QFont font5;
         font5.setFamily(QString::fromUtf8("\347\255\211\347\272\277"));
         font5.setPointSize(12);
         add_status->setFont(font5);
-        add_status->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;"));
+        add_status->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;text-align:center"));
         publishTime = new QLabel(page_2);
         publishTime->setObjectName(QStringLiteral("publishTime"));
-        publishTime->setGeometry(QRect(200, 257, 81, 21));
+        publishTime->setGeometry(QRect(210, 250, 101, 31));
         publishTime->setFont(font4);
         publishTime->setAlignment(Qt::AlignCenter);
         add_publish = new QLineEdit(page_2);
@@ -256,10 +257,7 @@ public:
         searchButtonDelate = new QPushButton(page_3);
         searchButtonDelate->setObjectName(QStringLiteral("searchButtonDelate"));
         searchButtonDelate->setGeometry(QRect(680, 30, 71, 31));
-        QFont font6;
-        font6.setFamily(QString::fromUtf8("\347\255\211\347\272\277"));
-        font6.setPointSize(14);
-        searchButtonDelate->setFont(font6);
+        searchButtonDelate->setFont(font4);
         searchButtonDelate->setCursor(QCursor(Qt::PointingHandCursor));
         searchButtonDelate->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;"));
         stackedWidgetManage->addWidget(page_3);
@@ -267,7 +265,7 @@ public:
         page_4->setObjectName(QStringLiteral("page_4"));
         bookInformationUpdate = new QTableView(page_4);
         bookInformationUpdate->setObjectName(QStringLiteral("bookInformationUpdate"));
-        bookInformationUpdate->setGeometry(QRect(0, 90, 851, 251));
+        bookInformationUpdate->setGeometry(QRect(0, 90, 841, 251));
         bookInformationUpdate->setStyleSheet(QStringLiteral(""));
         returnButtonUpdate = new QPushButton(page_4);
         returnButtonUpdate->setObjectName(QStringLiteral("returnButtonUpdate"));
@@ -284,7 +282,10 @@ public:
         updateOption = new QLabel(page_4);
         updateOption->setObjectName(QStringLiteral("updateOption"));
         updateOption->setGeometry(QRect(180, 376, 142, 21));
-        updateOption->setFont(font4);
+        QFont font6;
+        font6.setFamily(QString::fromUtf8("\347\255\211\347\272\277"));
+        font6.setPointSize(15);
+        updateOption->setFont(font6);
         updateOption->setAlignment(Qt::AlignCenter);
         updateOption_CB = new QComboBox(page_4);
         updateOption_CB->setObjectName(QStringLiteral("updateOption_CB"));
@@ -296,7 +297,7 @@ public:
         updateTo = new QLabel(page_4);
         updateTo->setObjectName(QStringLiteral("updateTo"));
         updateTo->setGeometry(QRect(220, 435, 71, 21));
-        updateTo->setFont(font4);
+        updateTo->setFont(font6);
         updateTo->setAlignment(Qt::AlignCenter);
         updateTo_Input = new QLineEdit(page_4);
         updateTo_Input->setObjectName(QStringLiteral("updateTo_Input"));
@@ -368,15 +369,21 @@ public:
         addButton->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;"));
         btn_SignupManager = new QPushButton(centralwidget);
         btn_SignupManager->setObjectName(QStringLiteral("btn_SignupManager"));
-        btn_SignupManager->setGeometry(QRect(940, 390, 93, 28));
+        btn_SignupManager->setGeometry(QRect(940, 470, 93, 31));
         btn_SignupManager->setFont(font5);
         btn_SignupManager->setCursor(QCursor(Qt::PointingHandCursor));
         btn_SignupManager->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;"));
+        btn_manageSystem = new QPushButton(centralwidget);
+        btn_manageSystem->setObjectName(QStringLiteral("btn_manageSystem"));
+        btn_manageSystem->setGeometry(QRect(940, 390, 93, 31));
+        btn_manageSystem->setFont(font5);
+        btn_manageSystem->setCursor(QCursor(Qt::PointingHandCursor));
+        btn_manageSystem->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;"));
         MainWindow_Manage->setCentralWidget(centralwidget);
 
         retranslateUi(MainWindow_Manage);
 
-        stackedWidgetManage->setCurrentIndex(2);
+        stackedWidgetManage->setCurrentIndex(3);
 
 
         QMetaObject::connectSlotsByName(MainWindow_Manage);
@@ -416,7 +423,6 @@ public:
          << QApplication::translate("MainWindow_Manage", "     \345\207\272\347\211\210\347\244\276", 0)
          << QApplication::translate("MainWindow_Manage", "    \345\207\272\347\211\210\346\227\266\351\227\264", 0)
          << QApplication::translate("MainWindow_Manage", "       \344\273\267\346\240\274", 0)
-         << QApplication::translate("MainWindow_Manage", "       \346\225\260\351\207\217", 0)
          << QApplication::translate("MainWindow_Manage", "       \347\212\266\346\200\201", 0)
         );
         updateTo->setText(QApplication::translate("MainWindow_Manage", "\346\233\264\346\224\271\344\270\272", 0));
@@ -428,6 +434,7 @@ public:
         borrowRecordButtonManage->setText(QApplication::translate("MainWindow_Manage", "\345\200\237\351\230\205\350\256\260\345\275\225", 0));
         addButton->setText(QApplication::translate("MainWindow_Manage", "\345\242\236\345\212\240\345\233\276\344\271\246", 0));
         btn_SignupManager->setText(QApplication::translate("MainWindow_Manage", "\346\263\250\345\206\214", 0));
+        btn_manageSystem->setText(QApplication::translate("MainWindow_Manage", "\347\263\273\347\273\237\346\223\215\344\275\234", 0));
     } // retranslateUi
 
 };
