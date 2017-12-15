@@ -5,7 +5,7 @@
 
 int register_location = 0;
 int manage_jurisdiction = 0;
-int mark = 1;
+int mark = 0;
 int savesign = 1;
 int borrow_key = 0;
 int history_key = 0;
@@ -50,6 +50,9 @@ int main(int argc, char *argv[])
         borrowv.push_back(0); //图书编号ISBN加三位string类型
         borrowv.push_back(0); //用户索引（用户表用户名）string类型
         borrowv.push_back(0); //借阅时间string类型
+        borrowv.push_back(0);//最后还书时间string
+        borrowv.push_back(1); //状态 1删除,0正在借,int
+        borrowv.push_back(1);//是否可以续借int 1：可以
         Borrow.SetTable(borrowv);
         savesign = Borrow.SaveHead();
         cout<<savesign<<endl;
@@ -81,35 +84,35 @@ int main(int argc, char *argv[])
         BookA.SetTable(bookav);
 
 
-//        vector<Undecide>vvv;
-//               Undecide te1,te2,te3,te4,te5,te6;
-//               strcpy(te1.s,"isbn001");
-//               strcpy(te2.s,"15020031001");
-//               strcpy(te3.s,"2017/1/3");
-//               te4.num = 0;
-//               te5.num = 0;
-//               strcpy(te6.s,"isbn");
-//               vvv.push_back(te2);
-//               vvv.push_back(te3);
-//               vvv.push_back(te4);
-//               vvv.push_back(te5);
-//               vvv.push_back(te6);
-//               BookA.Insert(te1.s,vvv);
+        vector<Undecide>vvv;
+               Undecide te1,te2,te3,te4,te5,te6;
+               strcpy(te1.s,"isbn001");
+               strcpy(te2.s,"15020031001");
+               strcpy(te3.s,"2017/1/3");
+               te4.num = 0;
+               te5.num = 0;
+               strcpy(te6.s,"isbn");
+               vvv.push_back(te2);
+               vvv.push_back(te3);
+               vvv.push_back(te4);
+               vvv.push_back(te5);
+               vvv.push_back(te6);
+               BookA.Insert(te1.s,vvv);
 
 
-//               Undecide te13,te14,te15,te16,te17,te18;
-//               strcpy(te13.s,"isbn002");
-//               strcpy(te14.s,"15020031002");
-//               strcpy(te15.s,"2017/1/5");
-//               te16.num = 0;
-//               te17.num = 0;
-//               strcpy(te18.s,"isbn");
-//               vvv.push_back(te14);
-//               vvv.push_back(te15);
-//               vvv.push_back(te16);
-//               vvv.push_back(te17);
-//               vvv.push_back(te18);
-//               BookA.Insert(te13.s,vvv);
+               Undecide te13,te14,te15,te16,te17,te18;
+               strcpy(te13.s,"isbn002");
+               strcpy(te14.s,"15020031002");
+               strcpy(te15.s,"2017/1/5");
+               te16.num = 0;
+               te17.num = 0;
+               strcpy(te18.s,"isbn");
+               vvv.push_back(te14);
+               vvv.push_back(te15);
+               vvv.push_back(te16);
+               vvv.push_back(te17);
+               vvv.push_back(te18);
+               BookA.Insert(te13.s,vvv);
 
         savesign = BookA.SaveHead();
         cout<<savesign<<endl;
@@ -126,20 +129,20 @@ int main(int argc, char *argv[])
         bookbv.push_back(0); //价格暂时string（后面会用double代替）
         BookB.SetTable(bookbv);
 
-//        vector<Undecide>vv;
-//                Undecide te7,te8,te9,te10,te11,te12;
-//                strcpy(te7.s,"isbn");
-//                strcpy(te8.s,"caozuoxitong");
-//                strcpy(te9.s,"shenchao");
-//                strcpy(te10.s,"haida");
-//                strcpy(te11.s,"2017/12/12");
-//                strcpy(te12.s,"50");
-//                vv.push_back(te8);
-//                vv.push_back(te9);
-//                vv.push_back(te10);
-//                vv.push_back(te11);
-//                vv.push_back(te12);
-//                BookB.Insert(te7.s,vv);
+        vector<Undecide>vv;
+                Undecide te7,te8,te9,te10,te11,te12;
+                strcpy(te7.s,"isbn");
+                strcpy(te8.s,"caozuoxitong");
+                strcpy(te9.s,"shenchao");
+                strcpy(te10.s,"haida");
+                strcpy(te11.s,"2017/12/12");
+                strcpy(te12.s,"50");
+                vv.push_back(te8);
+                vv.push_back(te9);
+                vv.push_back(te10);
+                vv.push_back(te11);
+                vv.push_back(te12);
+                BookB.Insert(te7.s,vv);
 
 
 
@@ -168,5 +171,4 @@ int main(int argc, char *argv[])
 
     return a.exec();
 }
-
 
