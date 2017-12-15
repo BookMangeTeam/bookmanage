@@ -7,9 +7,11 @@
 #include<string>
 #include<vector>
 #include<sstream>
+#include<typeinfo>
 #define OK 1
 #define NO 0
 #define ERROR -1
+#define CAP 150
 /*
 B+树存的Key是子树最小值
  */
@@ -21,7 +23,7 @@ B+树存的Key是子树最小值
 需要重新命名，同一个key名对应多个
  */
 using namespace std;
-#define MAXNODE 5
+#define MAXNODE 50
 
 union Undecide{//数据库的存储单元
     char s[100];
@@ -60,6 +62,51 @@ struct  Return4{
 };
 
 template<typename T1>
+void BiRead(T1 &a, ifstream &in){
+    if(typeid(T1).name() == typeid(string).name()){
+        // cout << 1 << "/*/*/*/*/*/*" << endl;
+        char temps[CAP];
+        in.read(temps,sizeof(char)*CAP);
+        stringstream ss;
+        ss << temps;
+        ss >> a;
+    }
+    else if(typeid(T1).name() == typeid(char*).name() || typeid(T1).name()==string("A100_c")){
+        // cout << 2 << "/*/*/*/*/*/*" << endl;
+        char temps[CAP];
+        in.read(temps,sizeof(char)*CAP);
+        stringstream ss;
+        ss << temps;
+        ss >> a;
+    }
+    else
+        in.read((char*)&a,sizeof(a)*1);
+    // cout << a << "    --" << typeid(a).name() <<endl;
+    return;
+}
+
+template<typename T1>
+void BiWrite(T1 a, ofstream &out){
+    if(typeid(T1).name() == typeid(string).name()){
+        string b;
+        b = a;
+        out.write(b.c_str(),sizeof(char)*CAP);
+        // cout << 1 << "/*/*/*/*/*" << endl;
+    }
+    else if(typeid(T1).name() == typeid(char*).name() || typeid(T1).name()==string("A100_c")){
+        stringstream ss;
+        char temps[CAP];
+        ss << a;
+        ss >> temps;
+        out.write(temps,sizeof(char)*CAP);
+        // cout << 2 << " /*/*/*/*/*/" << endl;
+    }
+    else
+        out.write((char*)&a,sizeof(a));
+    // cout << a << "    ++" << typeid(a).name() <<endl;
+}
+
+template<typename T1>
 class BPlusTree{
 public:
     void BuildTree(string Table);//建立一棵只有一个空的根节点的树
@@ -84,6 +131,7 @@ public:
     bool Update(T1 Key, vector<Undecide>ve);
     bool SetTableName(string s);
     vector<pair< T1,vector<Undecide> > > AllLeaf();
+    Return3 Bianli();
 private:
     //储存表的结构，每个位置对应一个数字
     vector<short> TypeList;  //0->string  1->int  2->longlong  3->bool
@@ -126,44 +174,71 @@ void BPlusTree<T1>::BuildTree(string Table){
     TableName = Table;
     RootName = TableName+TransIntToString(NodeNum)+string(".dat");
     NodeNum++;
-    ofstream out;
-    out.open(RootName.c_str()); //转换成c语言的字符串格式
-    out << 0 << " ";//根节点中有0个Key
-    out << 1 << " ";//根节点类型为叶子节点
-    out << "NULL" << " ";//根节点没有父亲节点
+    ofstream out(RootName.c_str(),ios::binary);
+    BiWrite(int(0),out);
+    BiWrite(bool(1),out);
+    BiWrite(string("NULL"),out);
     out.close();
+    // FILE *in;
+    // in = fopen(RootName.c_str(),"rb");
+    // int a;
+    // bool b;
+    // char temps[CAP];
+    // BiRead(a,in);
+    // BiRead(b,in);
+    // BiRead(temps,in);
+    // cout << a << b<< temps << endl;
+    // fclose(in);
+    // ofstream out;
+    // out.open(RootName.c_str()); //转换成c语言的字符串格式
+    // out << 0 << " ";//根节点中有0个Key
+    // out << 1 << " ";//根节点类型为叶子节点
+    // out << "NULL" << " ";//根节点没有父亲节点
+    // out.close();
 }
 
 //B+树搜索过程，输入要搜索的Key和现在搜索到的文件名称
 template<typename T1>
 Return3 BPlusTree<T1>::Search(T1 Key, string filename){
-    // cout << Key << endl;
+    // cout << filename <<" " << Key << endl;
     //tempkey用来保存当前文件中的key值
     T1 tempkey[MAXNODE];
     string tempfilename[MAXNODE];
-    ifstream in;
-    in.open(filename.c_str());//打开当前文件
+    for(int i = 0; i < MAXNODE; i++)
+        tempfilename[i].reserve(CAP);
+    // ifstream in;
+    // in.open(filename.c_str());//打开当前文件
+    // int KeyNum;
+    // bool IsLeaf;
+    // string father;
+    // in >> KeyNum;//输入key值个数
+    // in >> IsLeaf;//输入是否是叶子节点
+    // in >> father;//输入该文件的父节点文件
+    ifstream in(filename.c_str(),ios::binary);
     int KeyNum = 0;
-    in >> KeyNum;//输入key值个数
+    BiRead(KeyNum,in);
     bool IsLeaf = 0;
-    in >> IsLeaf;//输入是否是叶子节点
+    BiRead(IsLeaf,in);
     string father;
-    in >> father;//输入该文件的父节点文件
+    BiRead(father,in);
     if(IsLeaf == true){//如果该文件节点是叶子节点
         vector<Undecide>v;//用来储存key的附加信息
         for(int i = 0; i < KeyNum; i++){
-            in >> tempkey[i];//输入一个key值
+            // in >> tempkey[i];//输入一个key值
+            BiRead(tempkey[i],in);
             Undecide ttt;
             //输入对应的附加信息
             for(int j = 0; j < TypeList.size(); j++){
-                if(TypeList[j] == 0) in >> ttt.s;
-                else if(TypeList[j] == 1) in >> ttt.num;
-                else if(TypeList[j] == 2) in >> ttt.LL;
-                else if(TypeList[j] == 3) in >> ttt.is;
-                else in >> ttt.dou;
+                if(TypeList[j] == 0) BiRead(ttt.s,in);
+                else if(TypeList[j] == 1) BiRead(ttt.num,in);
+                else if(TypeList[j] == 2) BiRead(ttt.LL,in);
+                else if(TypeList[j] == 3) BiRead(ttt.is,in);
+                else BiRead(ttt.dou,in);
                 //如果当前遍历的这个tempkey是Key，则将这个文件信息保存起来
                 if(tempkey[i] == Key)
                     v.push_back(ttt);
+                // if(j ==0)cout << ttt.s << endl;
+                // else cout << ttt.num << endl;
             }
         }
         //如果有过对tempkey的保存
@@ -181,8 +256,10 @@ Return3 BPlusTree<T1>::Search(T1 Key, string filename){
     else{//如果这个节点是中间节点
         //遍历输入该文件节点所存储的key和对应的文件名
         for(int i = 0; i < KeyNum; i++){
-            in >> tempkey[i];
-            in >> tempfilename[i];
+            // in >> tempkey[i];
+            // in >> tempfilename[i];
+            BiRead(tempkey[i],in);
+            BiRead(tempfilename[i],in);
         }
         int next_no;
 
@@ -202,6 +279,7 @@ Return3 BPlusTree<T1>::Search(T1 Key, string filename){
         return Search(Key,tempfilename[next_no]);
     }
     in.close();
+
 }
 
 //B+树的插入过程，首先使用Search函数对Key进行搜索
@@ -209,6 +287,7 @@ Return3 BPlusTree<T1>::Search(T1 Key, string filename){
 //如果B+树中不存在这个Key，则调用Insert2函数进行插入操作
 template<typename T1>
 bool BPlusTree<T1>::Insert(T1 Key, vector<Undecide>v){
+    // cout << "ininininini" << endl;
     Return3 temp = SearchForInsert(Key, RootName);
     if(temp.Succ == true){
         return false;
@@ -219,33 +298,49 @@ bool BPlusTree<T1>::Insert(T1 Key, vector<Undecide>v){
 //向filename文件中插入一个Key
 template<typename T1>
 bool BPlusTree<T1>::Insert2(T1 Key, string filename, vector<Undecide>v){
-    // cout << "222 Now is : " << Key << endl;
+    // cout << "插入的key为" << Key << endl;
     T1 tempkey[MAXNODE];
     string tempfilename[MAXNODE];
-    ifstream in;
-    in.open(filename.c_str());
+    for(int i = 0; i < MAXNODE; i++)
+        tempfilename[i].reserve(CAP);
+    ifstream in(filename.c_str(),ios::binary);
+    // in = fopen(filename.c_str(),"rb");
+    // if(in == NULL)cout << "/*/*/*/*/" << endl;
+    // cout << "!!!!!!" << filename << endl;
+    // ifstream in;
+    // in.open(filename.c_str());
     int KeyNum = 0;
-    in >> KeyNum;
+    // in >> KeyNum;
+    BiRead(KeyNum,in);
     bool IsLeaf = 0;
-    in >> IsLeaf;
+    // in >> IsLeaf;
+    BiRead(IsLeaf,in);
     string father;
-    in >> father;
+    // in >> father;
+    BiRead(father,in);
+    // cout << KeyNum << " " << IsLeaf << " " << father << endl;
     int ISROOT = 0;
-    // cout << KeyNum << endl;
+    // cout << Key << endl;
     if(KeyNum+1 > MAXNODE){//如果超界
-        // cout << "232：超界" << endl;
         if(filename == RootName){
             ISROOT = 1;
             string newfathername = TableName+TransIntToString(NodeNum)+string(".dat");
             NodeNum++;
             father = newfathername;
             RootName = newfathername;
-            ofstream outroot;
-
-            outroot.open(newfathername.c_str());
-            outroot << 0 << " ";//根节点中有0个Key
-            outroot << 0 << " ";//根节点类型为中间节点
-            outroot << "NULL" << " ";//根节点没有父亲节点
+            // ofstream outroot;
+            // outroot.open(newfathername.c_str());
+            // outroot << 0 << " ";//根节点中有0个Key
+            // outroot << 0 << " ";//根节点类型为中间节点
+            // outroot << "NULL" << " ";//根节点没有父亲节点
+            // outroot.close();
+            ofstream outroot(newfathername.c_str(),ios::binary);
+            // FILE *outroot;
+            // outroot = fopen(newfathername.c_str(),"wb");
+            BiWrite(int(0),outroot);
+            BiWrite(bool(0),outroot);
+            BiWrite(string("NULL"),outroot);
+            // fclose(outroot);
             outroot.close();
         }
         /*
@@ -260,22 +355,31 @@ bool BPlusTree<T1>::Insert2(T1 Key, string filename, vector<Undecide>v){
         string newname = TableName+TransIntToString(NodeNum)+string(".dat");
         NodeNum++;
         string temp_string = string("temp");
-        ofstream out((temp_string+filename).c_str());
-        ofstream out2(newname.c_str());
+        ofstream out((temp_string+filename).c_str(),ios::binary);
+        ofstream out2(newname.c_str(),ios::binary);
+        // ofstream out((temp_string+filename).c_str());
+        // ofstream out2(newname.c_str());
         //首先将两个新文件的文件头写入
-        out << (MAXNODE/2) << " ";
-        out << IsLeaf << " ";
-        out << father << " ";
-        out2 << KeyNum+1-(MAXNODE/2) << " ";
-        out2 << IsLeaf << " ";
-        out2 << father << " ";
+        // out << (MAXNODE/2) << " ";
+        // out << IsLeaf << " ";
+        // out << father << " ";
+        // out2 << KeyNum+1-(MAXNODE/2) << " ";
+        // out2 << IsLeaf << " ";
+        // out2 << father << " ";
+        BiWrite((MAXNODE/2),out);
+        BiWrite(IsLeaf,out);
+        BiWrite(father,out);
+        BiWrite((KeyNum+1-(MAXNODE/2)),out2);
+        BiWrite(IsLeaf,out2);
+        BiWrite(father,out2);
         int second_flag = 0;//用此变量记录第二个文件中的第一个key
         T1 second_filename;
         if(IsLeaf == true){ //超界且为叶子节点
             int flag = 0;//用来判断有没有插入
             //遍历所有的tempkey
             for(int i = 0; i < KeyNum; i++){
-                in >> tempkey[i];
+                // in >> tempkey[i];
+                BiRead(tempkey[i],in);
                 //如果找到了应该插入的位置
                 if(tempkey[i] > Key && flag==0){
                     flag = 1;
@@ -287,40 +391,50 @@ bool BPlusTree<T1>::Insert2(T1 Key, string filename, vector<Undecide>v){
                         second_filename = Key;//第二个文件的key
                     }
                     if(i+flag <= MAXNODE/2)
-                        out << Key << " ";
+                        // out << Key << " ";
+                        BiWrite(Key,out);
                     else
-                        out2 << Key << " ";
+                        BiWrite(Key,out2);
+                        // out2 << Key << " ";
                     //遍历应该插入的数据的所有项，v是传入的vector
                     for(int j = 0; j < TypeList.size(); j++){
                         if(TypeList[j] == 0){
                             if(i+flag <= MAXNODE/2)
-                                out << v[j].s << " ";
+                                // out << v[j].s << " ";
+                                BiWrite(v[j].s,out);
                             else
-                                out2 << v[j].s << " ";
+                                // out2 << v[j].s << " ";
+                                BiWrite(v[j].s,out2);
                         }
                         else if(TypeList[j] == 1){
                             if(i+flag <= MAXNODE/2)
-                                out << v[j].num << " ";
+                                // out << v[j].num << " ";
+                                BiWrite(v[j].num,out);
                             else
-                                out2 << v[j].num << " ";
+                                BiWrite(v[j].num,out2);
+                                // out2 << v[j].num << " ";
                         }
                         else if(TypeList[j] == 2){
                             if(i+flag <= MAXNODE/2)
-                                out << v[j].LL << " ";
+                                // out << v[i].LL << " ";
+                                BiWrite(v[j].LL,out);
                             else
-                                out2 << v[j].LL << " ";
+                                BiWrite(v[j].LL,out2);
+                                // out2 << v[i].LL << " ";
                         }
-                        else if(TypeList[j] == 3) {
+                        else if(TypeList[j] == 3){
                             if(i+flag <= MAXNODE/2)
-                                out << v[j].is << " ";
+                                // out << v[i].is << " ";
+                                BiWrite(v[j].is,out);
                             else
-                                out2 << v[j].is << " ";
+                                BiWrite(v[j].is,out2);
+                                // out2 << v[i].is << " ";
                         }
                         else{
                             if(i+flag <= MAXNODE/2)
-                                out << v[j].dou << " ";
+                                BiWrite(v[j].dou,out);
                             else
-                                out2 << v[j].dou << " ";
+                                BiWrite(v[j].dou,out2);
                         }
                     }
                 }
@@ -331,44 +445,49 @@ bool BPlusTree<T1>::Insert2(T1 Key, string filename, vector<Undecide>v){
                     second_filename = tempkey[i];
                 }
                 if(i+flag < MAXNODE/2)
-                    out << tempkey[i] << " ";
+                    BiWrite(tempkey[i],out);
+                    // out << tempkey[i] << " ";
                 else
-                    out2 << tempkey[i] << " ";
+                    BiWrite(tempkey[i],out2);
+                    // out2 << tempkey[i] << " ";
                 for(int j = 0; j < TypeList.size(); j++){
                     if(TypeList[j] == 0){
-                        in >> ttt.s;
+                        // in >> ttt.s;
+                        BiRead(ttt.s,in);
                         if(i+flag < MAXNODE/2)
-                            out << ttt.s<< " ";
+                            // out << ttt.s<< " ";
+                            BiWrite(ttt.s,out);
                         else
-                            out2 << ttt.s << " ";
+                            BiWrite(ttt.s,out2);
+                            // out2 << ttt.s << " ";
                     }
                     else if(TypeList[j] == 1){
-                        in >> ttt.num;
+                        BiRead(ttt.num,in);
                         if(i+flag < MAXNODE/2)
-                            out << ttt.num<< " ";
+                            BiWrite(ttt.num,out);
                         else
-                            out2 << ttt.num << " ";
+                            BiWrite(ttt.num,out2);
                     }
                     else if(TypeList[j] == 2){
-                        in >> ttt.LL;
+                        BiRead(ttt.LL,in);
                         if(i+flag < MAXNODE/2)
-                            out << ttt.LL<< " ";
+                            BiWrite(ttt.LL,out);
                         else
-                            out2 << ttt.LL << " ";
+                            BiWrite(ttt.LL,out2);
                     }
                     else if(TypeList[j] == 3){
-                        in >> ttt.is;
+                        BiRead(ttt.is,in);
                         if(i+flag < MAXNODE/2)
-                            out << ttt.is<< " ";
+                            BiWrite(ttt.is,out);
                         else
-                            out2 << ttt.is << " ";
+                            BiWrite(ttt.is,out2);
                     }
                     else{
-                        in >> ttt.dou;
+                        BiRead(ttt.dou,in);
                         if(i+flag < MAXNODE/2)
-                            out << ttt.dou<< " ";
+                            BiWrite(ttt.dou,out);
                         else
-                            out2 << ttt.dou << " ";
+                            BiWrite(ttt.dou,out2);
                     }
                 }
             }
@@ -380,45 +499,51 @@ bool BPlusTree<T1>::Insert2(T1 Key, string filename, vector<Undecide>v){
                     second_flag = 1;
                     second_filename = tempkey[KeyNum-1];
                 }
-                out2 << Key << " ";
+                // out2 << Key << " ";
+                BiWrite(Key,out2);
                 for(int j = 0; j < TypeList.size(); j++){
                         if(TypeList[j] == 0){
                             if(KeyNum+flag < MAXNODE/2)
-                                out << v[j].s << " ";
+                                BiWrite(v[j].s,out);
+                                // out << v[j].s << " ";
                             else
-                                out2 << v[j].s << " ";
+                                BiWrite(v[j].s,out2);
+                                // out2 << v[j].s << " ";
                         }
                         else if(TypeList[j] == 1){
                             if(KeyNum+flag < MAXNODE/2)
-                                out << v[j].num<< " ";
+                                BiWrite(v[j].num,out);
                             else
-                                out2 << v[j].num << " ";
+                                BiWrite(v[j].num,out2);
                         }
                         else if(TypeList[j] == 2){
                             if(KeyNum+flag < MAXNODE/2)
-                                out << v[j].LL<< " ";
+                                BiWrite(v[j].LL,out);
                             else
-                                out2 << v[j].LL << " ";
+                                BiWrite(v[j].LL,out2);
                         }
                         else if(TypeList[j] == 3){
                             if(KeyNum+flag < MAXNODE/2)
-                                out << v[j].is<< " ";
+                                BiWrite(v[j].is,out);
                             else
-                                out2 << v[j].is << " ";
+                                BiWrite(v[j].is,out2);
                         }
                         else{
                             if(KeyNum+flag < MAXNODE/2)
-                                out << v[j].dou<< " ";
+                                BiWrite(v[j].dou,out);
                             else
-                                out2 << v[j].dou << " ";
+                                BiWrite(v[j].dou,out2);
                         }
                 }
             }
         }
         else{ //超界，为中间节点
+            // cout << " ***" << endl;
             int flag = 0;//有没有插入
             for(int i = 0; i < KeyNum; i++){
-                in >> tempkey[i];
+                // in >> tempkey[i];
+                BiRead(tempkey[i],in);
+                // cout << tempkey[i] << endl;
                 if(tempkey[i] > Key && flag ==0){
                     //插入
                     flag = 1;
@@ -429,13 +554,17 @@ bool BPlusTree<T1>::Insert2(T1 Key, string filename, vector<Undecide>v){
                     //插入一个filename，这个filename存在vector参数的0位
                     //插入到第一个文件中
                     if(i+flag <= MAXNODE/2){
-                        out << Key << " ";
-                        out << v[0].s << " ";
+                        // out << Key << " ";
+                        // out << v[0].s << " ";
+                        BiWrite(Key,out);
+                        BiWrite(v[0].s,out);
                     }
                     //插入到第二个文件中
                     else{
-                        out2 << Key << " ";
-                        out2 << v[0].s << " ";
+                        // out2 << Key << " ";
+                        // out2 << v[0].s << " ";
+                        BiWrite(Key,out2);
+                        BiWrite(v[0].s,out2);
                         SetSon_sFather(v[0].s,newname);
                     }
                 }
@@ -446,14 +575,20 @@ bool BPlusTree<T1>::Insert2(T1 Key, string filename, vector<Undecide>v){
                 }
                 //正常输出到两个文件中
                 string ttt;
-                in >> ttt;
+                BiRead(ttt,in);
+                // in >> ttt;
                 if(i+flag < MAXNODE/2){
-                    out << tempkey[i] << " ";
-                    out << ttt << " ";
+                    // out << tempkey[i] << " ";
+                    // out << ttt << " ";
+                    BiWrite(tempkey[i],out);
+                    BiWrite(ttt,out);
                 }
                 else{
-                    out2 << tempkey[i] << " ";
-                    out2 << ttt << " ";
+                    // out2 << tempkey[i] << " ";
+                    // out2 << ttt << " ";
+                    BiWrite(tempkey[i],out2);
+                    BiWrite(ttt,out2);
+                    // cout << ttt << " " << newname << endl;
                     SetSon_sFather(ttt,newname);
                 }
             }
@@ -466,112 +601,158 @@ bool BPlusTree<T1>::Insert2(T1 Key, string filename, vector<Undecide>v){
                 }
 
                 if(KeyNum+flag < MAXNODE/2){
-                        out << Key << " ";
-                        out << v[0].s << " ";
-                    }
+                        BiWrite(Key,out);
+                        BiWrite(v[0].s,out);
+                        // out << Key << " ";
+                        // out << v[0].s << " ";
+                }
                 else{
-                        out2 << Key << " ";
-                        out2 << v[0].s << " ";
+                        // out2 << Key << " ";
+                        // out2 << v[0].s << " ";
+                        BiWrite(Key,out2);
+                        BiWrite(v[0].s,out2);
+                        // cout << v[0].s << " " << newname << endl;
                         SetSon_sFather(v[0].s,newname);
                 }
             }
         }
         out.close();
         out2.close();
+        // fclose(out);
+        // fclose(out2);
         //删除和重命名文件
         vector<Undecide> vvv;
         Undecide ttt;
         strcpy(ttt.s,newname.c_str());
         vvv.push_back(ttt);
         in.close();
+        // fclose(in);
         remove(filename.c_str());
         rename((temp_string+filename).c_str(),filename.c_str());
         if(ISROOT==1){
+            // cout << "false" << endl;
+            // cout<<"root 分裂"<< endl;
             IsLeaf = 0;
             vector<Undecide> vvv2;
             Undecide ttt2;
             strcpy(ttt2.s,filename.c_str());
             vvv2.push_back(ttt2);
+            // cout << min(Key,tempkey[0]) << " " << father << endl;
             Insert2(min(Key,tempkey[0]),father,vvv2);
         }
+        // cout << second_filename << " " << father << endl;
         Insert2(second_filename,father,vvv);
     }
     else{//如果没超界
         string temp_string = string("temp");//用此string实现删除原文件并重命名
-        ofstream out((temp_string+filename).c_str());
+        // FILE * out;
+        // out = fopen((temp_string+filename).c_str(),"wb");
+        ofstream out((temp_string+filename).c_str(),ios::binary);
         //先输出文件头信息
-        out << KeyNum+1 << " ";
-        out << IsLeaf << " ";
-        out << father << " ";
+        // out << KeyNum+1 << " ";
+        // out << IsLeaf << " ";
+        // out << father << " ";
+        BiWrite(KeyNum+1,out);
+        BiWrite(IsLeaf,out);
+        BiWrite(father,out);
         if(IsLeaf == true){ //没有超界且为叶子节点
             int flag = 0;//有没有插入
+            // cout << Key << endl;
             for(int i = 0; i < KeyNum; i++){
-                in >> tempkey[i];
+                // in >> tempkey[i];
+                BiRead(tempkey[i],in);
                 if(tempkey[i] > Key && flag==0){
                     //插入
                     flag = 1;
-                    out << Key << " ";
+                    BiWrite(Key,out);
+                    // out << Key << " ";
                     for(int j = 0; j < TypeList.size(); j++){
                         if(TypeList[j] == 0){
-                            out << v[j].s << " ";
+                            // out << v[j].s << " ";
+                            BiWrite(v[j].s,out);
                         }
                         else if(TypeList[j] == 1){
-                            out << v[j].num << " ";
+                            // out << v[j].num << " ";
+                            BiWrite(v[j].num,out);
                         }
                         else if(TypeList[j] == 2){
-                            out << v[j].LL << " ";
+                            // out << v[j].LL << " ";
+                            BiWrite(v[j].LL,out);
                         }
                         else if(TypeList[j] == 3){
-                            out << v[j].is << " ";
+                            // out << v[j].is << " ";
+                            BiWrite(v[j].is,out);
                         }
                         else{
-                            out << v[j].dou << " ";
+                            BiWrite(v[j].dou,out);
                         }
                     }
                 }
                 Undecide ttt;
-                out << tempkey[i] << " ";
+                // out << tempkey[i] << " ";
+                BiWrite(tempkey[i],out);
                 for(int j = 0; j < TypeList.size(); j++){
                     if(TypeList[j] == 0){
-                        in >> ttt.s;
-                        out << ttt.s<< " ";
+                        // in >> ttt.s;
+                        // out << ttt.s<< " ";
+                        BiRead(ttt.s,in);
+                        BiWrite(ttt.s,out);
                     }
                     else if(TypeList[j] == 1){
-                        in >> ttt.num;
-                        out << ttt.num<< " ";
+                        // in >> ttt.num;
+                        // out << ttt.num<< " ";
+                        BiRead(ttt.num,in);
+                        BiWrite(ttt.num,out);
                     }
                     else if(TypeList[j] == 2){
-                        in >> ttt.LL;
-                        out << ttt.LL<< " ";
+                        // in >> ttt.LL;
+                        // out << ttt.LL<< " ";
+                        BiRead(ttt.LL,in);
+                        BiWrite(ttt.LL,out);
                     }
                     else if(TypeList[j] == 3){
-                        in >> ttt.is;
-                        out << ttt.is<< " ";
+                        // in >> ttt.is;
+                        // out << ttt.is<< " ";
+                        BiRead(ttt.is,in);
+                        BiWrite(ttt.is,out);
                     }
                     else{
-                        in >> ttt.dou;
-                        out << ttt.dou<< " ";
+                        BiRead(ttt.dou,in);
+                        BiWrite(ttt.dou,out);
                     }
                 }
             }
             if(flag == 0){
                 flag = 1;
-                out << Key << " ";
+                // out << Key << " ";
+                // cout << Key << "**" << endl;
+                BiWrite(Key,out);
+                // cout << Key << "--" << endl;
                 for(int i = 0; i < TypeList.size(); i++){
                         if(TypeList[i] == 0){
-                            out << v[i].s << " ";
+                            // out << v[i].s << " ";
+                            // cout << typeid(v[i].s).name() << "*****************************" << endl;
+                            BiWrite(v[i].s,out);
+                            // cout << v[i].s<< endl;
                         }
                         else if(TypeList[i] == 1){
-                            out << v[i].num<< " ";
+                            // out << v[i].num<< " ";
+                            BiWrite(v[i].num,out);
+                            // cout << v[i].num << endl;
                         }
                         else if(TypeList[i] == 2){
-                            out << v[i].LL<< " ";
+                            // out << v[i].LL<< " ";
+                            BiWrite(v[i].LL,out);
+                            // cout << v[i].LL << endl;
                         }
                         else if(TypeList[i] == 3){
-                            out << v[i].is<< " ";
+                            // out << v[i].is<< " ";
+                            BiWrite(v[i].is,out);
+                            // cout << v[i].is << endl;
                         }
                         else{
-                            out << v[i].dou << " ";
+                            BiWrite(v[i].dou,out);
+                            // cout << v[i].dou << endl;
                         }
                 }
             }
@@ -579,26 +760,36 @@ bool BPlusTree<T1>::Insert2(T1 Key, string filename, vector<Undecide>v){
         else{ //没有超界，为中间节点
             int flag = 0;//有没有插入
             for(int i = 0; i < KeyNum; i++){
-                in >> tempkey[i];
+                // in >> tempkey[i];
+                BiRead(tempkey[i],in);
                 if(tempkey[i] > Key && flag==0){
                     //插入
                     flag = 1;
-                    out << Key << " ";
-                    out << v[0].s << " ";
+                    // out << Key << " ";
+                    // out << v[0].s << " ";
+                    BiWrite(Key,out);
+                    BiWrite(v[0].s,out);
                 }
                 string ttt;
-                in >> ttt;
-                out << tempkey[i] << " ";
-                out << ttt << " ";
+                BiRead(ttt,in);
+                // in >> ttt;
+                BiWrite(tempkey[i],out);
+                BiWrite(ttt,out);
+                // out << tempkey[i] << " ";
+                // out << ttt << " ";
             }
             if(flag == 0){
                 flag = 1;
-                out << Key << " ";
-                out << v[0].s << " ";
+                BiWrite(Key,out);
+                BiWrite(v[0].s,out);
+                // out << Key << " ";
+                // out << v[0].s << " ";
             }
         }
         out.close();
         in.close();
+        // fclose(out);
+        // fclose(in);
         remove(filename.c_str());
         rename((temp_string+filename).c_str(),filename.c_str());
     }
@@ -606,21 +797,29 @@ bool BPlusTree<T1>::Insert2(T1 Key, string filename, vector<Undecide>v){
 
 template<typename T1>
 void BPlusTree<T1>::SetSonAll(string filename, string newfather){
+    //cout << filename << " set All son " << newfather << endl;
     ifstream in;
-    in.open(filename.c_str());
+    in.open(filename.c_str(),ios::binary);
+    // FILE * in;
+    // in = fopen(filename.c_str(),"rb");
     int KeyNum;
-    in >> KeyNum;
+    // in >> KeyNum;
+    BiRead(KeyNum,in);
     bool IsLeaf;
-    in >> IsLeaf;
+    // in >> IsLeaf;
+    BiRead(IsLeaf,in);
     string father;
-    in >> father;
+    // in >> father;
+    BiRead(father,in);
     if(IsLeaf == true)
         return;
     T1 tempk;
     string tempf;
     for(int i = 0; i < KeyNum; i++){
-        in >> tempk;
-        in >> tempf;
+        // in >> tempk;
+        // in >> tempf;
+        BiRead(tempk,in);
+        BiRead(tempf,in);
         SetSon_sFather(tempf,newfather);
     }
     return;
@@ -628,65 +827,86 @@ void BPlusTree<T1>::SetSonAll(string filename, string newfather){
 
 template<typename T1>
 bool BPlusTree<T1>::SetSon_sFather(string filename, string newfather){
+    //cout << "set single son " << filename << " " << newfather << endl;
     T1 tempkey[MAXNODE];
     string tempfilename[MAXNODE];
+    for(int i = 0; i < MAXNODE; i++)
+        tempfilename[i].reserve(CAP);
     vector<Undecide> v[MAXNODE];
     ifstream in;
-    in.open(filename.c_str());//打开当前文件
+    in.open(filename.c_str(),ios::binary);//打开当前文件
+    // FILE *in;
+    // in = fopen(filename.c_str(),"rb");
     int KeyNum = 0;
-    in >> KeyNum;//输入key值个数
+    // in >> KeyNum;//输入key值个数
+    BiRead(KeyNum,in);
     bool IsLeaf = 0;
-    in >> IsLeaf;//输入是否是叶子节点
+    // in >> IsLeaf;//输入是否是叶子节点
+    BiRead(IsLeaf,in);
     string father;
-    in >> father;//输入该文件的父节点文件
+    // in >> father;//输入该文件的父节点文件
+    BiRead(father,in);
     if(IsLeaf == true){//如果该文件节点是叶子节点
         for(int i = 0; i < KeyNum; i++){
-            in >> tempkey[i];//输入一个key值
+            // in >> tempkey[i];//输入一个key值
+            BiRead(tempkey[i],in);
             //输入对应的附加信息
             Undecide ttt;
             for(int j = 0; j < TypeList.size(); j++){
-                if(TypeList[j] == 0) in >> ttt.s;
-                else if(TypeList[j] == 1) in >> ttt.num;
-                else if(TypeList[j] == 2) in >> ttt.LL;
-                else if(TypeList[j] == 3) in >> ttt.is;
-                else in >> ttt.dou;
+                if(TypeList[j] == 0) BiRead(ttt.s,in);
+                else if(TypeList[j] == 1) BiRead(ttt.num,in);
+                else if(TypeList[j] == 2) BiRead(ttt.LL,in);
+                else if(TypeList[j] == 3) BiRead(ttt.is,in);
+                else BiRead(ttt.dou,in);
                 v[i].push_back(ttt);
             }
         }
     }
     else{
+        // cout << "开始" << endl;
         //如果这个节点是中间节点
         //遍历输入该文件节点所存储的key和对应的文件名
         for(int i = 0; i < KeyNum; i++){
-            in >> tempkey[i];
-            in >> tempfilename[i];
+            // in >> tempkey[i];
+            // in >> tempfilename[i];
+            BiRead(tempkey[i],in);
+            BiRead(tempfilename[i],in);
         }
     }
     in.close();
+    // fclose(in);
     ofstream out;
-    out.open(filename.c_str());
-    out << KeyNum << " ";
-    out << IsLeaf << " ";
-    out << newfather << " ";
+    out.open(filename.c_str(),ios::binary);
+    // FILE *out;
+    // out = fopen(filename.c_str(),"wb");
+    BiWrite(KeyNum,out);
+    BiWrite(IsLeaf,out);
+    BiWrite(newfather,out);
+    // out << KeyNum << " ";
+    // out << IsLeaf << " ";
+    // out << newfather << " ";
     if(IsLeaf == true){
         for(int i = 0; i < KeyNum; i++){
-            out << tempkey[i] << " ";//输入一个key值
+            // out << tempkey[i] << " ";//输入一个key值
+            BiWrite(tempkey[i],out);
             //输入对应的附加信息
             for(int j = 0; j < TypeList.size(); j++){
-                if(TypeList[j] == 0) out << v[i][j].s << " ";
-                else if(TypeList[j] == 1) out << v[i][j].num << " " ;
-                else if(TypeList[j] == 2) out << v[i][j].LL << " ";
-                else if(TypeList[j] == 3) out << v[i][j].is << " ";
-                else out << v[i][j].dou << " ";
+                if(TypeList[j] == 0) BiWrite(v[i][j].s,out);
+                else if(TypeList[j] == 1) BiWrite(v[i][j].num,out);
+                else if(TypeList[j] == 2) BiWrite(v[i][j].LL,out);
+                else if(TypeList[j] == 3) BiWrite(v[i][j].is,out);
+                else BiWrite(v[i][j].dou,out);
             }
         }
     }
     else{
         for(int i = 0; i < KeyNum; i++){
-            out << tempkey[i] << " ";
-            out << tempfilename[i]<<" ";
+            BiWrite(tempkey[i],out);
+            BiWrite(tempfilename[i],out);
         }
     }
+    // fclose(out);
+    out.close();
 }
 
 //由上向下查找，判断是否需要为文件改key
@@ -695,26 +915,34 @@ Return3 BPlusTree<T1>::SearchForInsert(T1 Key, string filename){
     //tempkey用来保存当前文件中的key值
     T1 tempkey[MAXNODE];
     string tempfilename[MAXNODE];
+    // FILE * in;
+    // in = fopen(filename.c_str(),"rb");
     ifstream in;
-    in.open(filename.c_str());//打开当前文件
+    in.open(filename.c_str(),ios::binary);//打开当前文件
     int KeyNum = 0;
-    in >> KeyNum;//输入key值个数
+    // in >> KeyNum;//输入key值个数
+    BiRead(KeyNum,in);
     bool IsLeaf = 0;
-    in >> IsLeaf;//输入是否是叶子节点
+    BiRead(IsLeaf,in);
+    // in >> IsLeaf;//输入是否是叶子节点
+    // cout << "Key=" << Key << " IsLeaf = " << IsLeaf << endl;
     string father;
-    in >> father;//输入该文件的父节点文件
+    // in >> father;//输入该文件的父节点文件
+    BiRead(father,in);
+    // cout << KeyNum << " " << IsLeaf << " " << father << endl;
     if(IsLeaf == true){//如果该文件节点是叶子节点
         vector<Undecide>v;//用来储存key的附加信息
         for(int i = 0; i < KeyNum; i++){
-            in >> tempkey[i];//输入一个key值
+            // in >> tempkey[i];//输入一个key值
+            BiRead(tempkey[i],in);
             Undecide ttt;
             //输入对应的附加信息
             for(int j = 0; j < TypeList.size(); j++){
-                if(TypeList[j] == 0) in >> ttt.s;
-                else if(TypeList[j] == 1) in >> ttt.num;
-                else if(TypeList[j] == 2) in >> ttt.LL;
-                else if(TypeList[j] == 3) in >> ttt.is;
-                else in >> ttt.dou;
+                if(TypeList[j] == 0) BiRead(ttt.s,in);
+                else if(TypeList[j] == 1) BiRead(ttt.num,in);
+                else if(TypeList[j] == 2) BiRead(ttt.LL,in);
+                else if(TypeList[j] == 3) BiRead(ttt.is,in);
+                else BiRead(ttt.dou,in);
                 //如果当前遍历的这个tempkey是Key，则将这个文件信息保存起来
                 if(tempkey[i] == Key)
                     v.push_back(ttt);
@@ -733,11 +961,14 @@ Return3 BPlusTree<T1>::SearchForInsert(T1 Key, string filename){
         }
     }
     else{
+        // cout << "开始" << endl;
         //如果这个节点是中间节点
         //遍历输入该文件节点所存储的key和对应的文件名
         for(int i = 0; i < KeyNum; i++){
-            in >> tempkey[i];
-            in >> tempfilename[i];
+            // in >> tempkey[i];
+            BiRead(tempkey[i],in);
+            // in >> tempfilename[i];
+            BiRead(tempfilename[i],in);
         }
         int next_no;
         //寻找下一个需要寻找的文件
@@ -748,31 +979,43 @@ Return3 BPlusTree<T1>::SearchForInsert(T1 Key, string filename){
                 break;
         }
         //如果这个key比tempkey[keynum-1]还大，则应该在最后一个key中
-        // cout<<Key << "/*" << tempkey[KeyNum-1] << endl;
-        // cout << Key-tempkey[KeyNum-1] << endl;
-        if(Key >= tempkey[KeyNum-1]){
+        if(Key >= tempkey[KeyNum-1])
             next_no = KeyNum-1;
-            // cout << "in" << endl;
-        }
-        // cout << next_no << endl;
         if(Key < tempkey[0]){
+            // cout << "更改key" << endl;
             next_no = 0;
             in.close();
+            // fclose(in);
             remove(filename.c_str());
+            // FILE * out;
+            // out = fopen(filename.c_str(),"wb");
             ofstream out;
-            out.open(filename.c_str());
-            out << KeyNum << " ";
-            out << IsLeaf << " ";
-            out << father << " ";
-            out << Key << " " << tempfilename[0] << " ";
-            for(int i = 1; i < KeyNum; i++)
-                out << tempkey[i] << " " << tempfilename[i] <<  " ";
+            out.open(filename.c_str(),ios::binary);
+            BiWrite(KeyNum,out);
+            BiWrite(IsLeaf,out);
+            BiWrite(father,out);
+            BiWrite(Key,out);
+            BiWrite(tempfilename[0],out);
+            // out << KeyNum << " ";
+            // out << IsLeaf << " ";
+            // out << father << " ";
+            // out << Key << " " << tempfilename[0] << " ";
+            // for(int i = 1; i < KeyNum; i++)
+            // 	out << tempkey[i] << " " << tempfilename[i] <<  " ";
+            for(int i = 1; i < KeyNum; i++){
+                BiWrite(tempkey[i],out);
+                BiWrite(tempfilename[i],out);
+            }
+            // fclose(out);
             out.close();
         }
+        // cout << next_no << endl;
+        // cout<< "进入" << tempfilename[next_no] << endl;
         //递归搜索下一个应搜索的文件
         return SearchForInsert(Key,tempfilename[next_no]);
     }
     in.close();
+    // fclose(in);
 }
 
 //删除一个节点，首先输入这个节点的key
@@ -786,92 +1029,107 @@ bool BPlusTree<T1>::Delete(T1 Key){
     }
     //如果找到了就从最底层文件中循环删除
     Delete2(result.filename, Key);
-    return 1;
 }
 
 //输入文件名和要删除的key
 template<typename T1>
 bool BPlusTree<T1>::Delete2(string filename, T1 Key){
-    // if(filename == string("NULL"))return 0;
-    // cout << filename << " "<<Key << endl;
     ifstream in;
-    in.open(filename.c_str());//打开当前文件
+    in.open(filename.c_str(),ios::binary);//打开当前文件
+    // FILE *in;
+    // in = fopen(filename.c_str(),"rb");
     int KeyNum = 0;
-    in >> KeyNum;//输入key值个数
+    // in >> KeyNum;//输入key值个数
+    BiRead(KeyNum,in);
     bool IsLeaf = 0;
-    in >> IsLeaf;//输入是否是叶子节点
+    // in >> IsLeaf;//输入是否是叶子节点
+    BiRead(IsLeaf,in);
     string father;
-    in >> father;
+    BiRead(father,in);
+    // in >> father;
     T1 tempkey[MAXNODE];
     //不管是否满足，直接删除
     if(IsLeaf == true){//如果删除后符合要求，且为叶节点
         vector<Undecide>v[MAXNODE];//用来储存key的附加信息
         for(int i = 0; i < KeyNum; i++){
-            in >> tempkey[i];//输入一个key值
+            // in >> tempkey[i];//输入一个key值
+            BiRead(tempkey[i],in);
             Undecide ttt;
-            // cout << tempkey[i] << endl;
             //输入对应的附加信息
             for(int j = 0; j < TypeList.size(); j++){
-                if(TypeList[j] == 0) in >> ttt.s;
-                else if(TypeList[j] == 1) in >> ttt.num;
-                else if(TypeList[j] == 2) in >> ttt.LL;
-                else if(TypeList[j] == 3) in >> ttt.is;
-                else in >> ttt.dou;
+                if(TypeList[j] == 0) BiRead(ttt.s,in);
+                else if(TypeList[j] == 1) BiRead(ttt.num,in);
+                else if(TypeList[j] == 2) BiRead(ttt.LL,in);
+                else if(TypeList[j] == 3) BiRead(ttt.is,in);
+                else BiRead(ttt.dou,in);
                 v[i].push_back(ttt);
             }
         }
         in.close();
+        // fclose(in);
         //如果删除的是father节点的key，那么需要循环更改
         if(tempkey[0] == Key){
             //将上一层的tempkey0更改为tempkey1
             ChangePreNameForDel(father,tempkey[0],tempkey[1]);
         }
-
         //不管如何直接从文件中删除这个key
-        // cout << "***" << endl;
-
+        // out << KeyNum-1 << " ";
+        // out << IsLeaf << " ";
+        // out << father << " ";
         ofstream out;
-        out.open(filename.c_str());
-        out << KeyNum-1 << " ";
-        out << IsLeaf << " ";
-        out << father << " ";
-
+        out.open(filename.c_str(),ios::binary);
+        // FILE *out;
+        // out = fopen(filename.c_str(),"wb");
+        BiWrite(KeyNum-1,out);
+        BiWrite(IsLeaf,out);
+        BiWrite(father,out);
         for(int i = 0; i < KeyNum; i++){
             if(Key == tempkey[i])continue;
-            out << tempkey[i] << " ";
+            // out << tempkey[i] << " ";
+            BiWrite(tempkey[i],out);
             for(int j = 0; j < TypeList.size(); j++){
-                if(TypeList[j] == 0) out << v[i][j].s << " ";
-                else if(TypeList[j] == 1) out << v[i][j].num << " ";
-                else if(TypeList[j] == 2) out << v[i][j].LL << " ";
-                else if(TypeList[j] == 3) out << v[i][j].is << " ";
-                else out << v[i][j].dou << " ";
+                if(TypeList[j] == 0) BiWrite(v[i][j].s,out);
+                else if(TypeList[j] == 1) BiWrite(v[i][j].num,out);
+                else if(TypeList[j] == 2) BiWrite(v[i][j].LL,out);
+                else if(TypeList[j] == 3) BiWrite(v[i][j].is,out);
+                else BiWrite(v[i][j].dou,out);
             }
         }
-
+        // fclose(out);
         out.close();
-
     }
     else{//如果删除后符合要求，且是中间节点
         string tempfilename[MAXNODE];
         for(int i = 0; i < KeyNum; i++){
-            in >> tempkey[i];
-            in >> tempfilename[i];
+            // in >> tempkey[i];
+            // in >> tempfilename[i];
+            BiRead(tempkey[i],in);
+            BiRead(tempfilename[i],in);
         }
         in.close();
+        // fclose(in);
         if(tempkey[0] == Key){
             ChangePreNameForDel(father,tempkey[0],tempkey[1]);
         }
+        // out << KeyNum-1 << " ";
+        // out << IsLeaf << " ";
+        // out << father << " ";
         ofstream out;
-        out.open(filename.c_str());
-        out << KeyNum-1 << " ";
-        out << IsLeaf << " ";
-        out << father << " ";
+        out.open(filename.c_str(),ios::binary);
+        // FILE *out;
+        // out = fopen(filename.c_str(),"wb");
+        BiWrite(KeyNum-1,out);
+        BiWrite(IsLeaf,out);
+        BiWrite(father,out);
         for(int i = 0; i < KeyNum; i++){
             if(Key == tempkey[i])continue;
-            out << tempkey[i] << " ";
-            out << tempfilename[i] << " ";
+            // out << tempkey[i] << " ";
+            // out << tempfilename[i] << " ";
+            BiWrite(tempkey[i],out);
+            BiWrite(tempfilename[i],out);
         }
         out.close();
+        // fclose(out);
         //如果这个节点是根节点，且只有一个子节点，则根节点重置
         if(KeyNum-1 == 1 && father == string("NULL")){
             SetSonAll(filename,string("NULL"));
@@ -882,18 +1140,22 @@ bool BPlusTree<T1>::Delete2(string filename, T1 Key){
             remove(filename.c_str());
         }
     }
+    // cout << "start2" << endl;
     //从这考虑删除后不满足的情况
-
+//	cout << "single Delete succuessful" << endl;
     if(KeyNum-1 < MAXNODE/2 && father!=string("NULL")){//删除后不满足
-
+//		cout << "unsatisfy" << endl;
         Return4<T1> result;
         //首先考虑借点，如果这个点正好是刚刚从父节点中被删除，则应该传递tempkey1
         //否则直接传递tempkey0
+        // cout << result.Succ << endl;
         if(tempkey[0] == Key)
             result = BorrowNodes(father,tempkey[1]);
         else
             result = BorrowNodes(father,tempkey[0]);
+//		cout << "Borrow success? "<< result.Succ << endl;
         //如果借点成功，那么此时的文件中插入借到的点
+        // cout << result.Succ << " - " << result.filename << " - " << result.Key << endl;
         if(result.Succ == true){
             Insert2(result.Key,filename,result.ve);
             if(tempkey[0]==Key && result.Key<tempkey[1])
@@ -907,30 +1169,43 @@ bool BPlusTree<T1>::Delete2(string filename, T1 Key){
             else
                 UnionNodes(father,tempkey[0]);
         }
+//		cout << "454545" << endl;
     }
-    return 1;
 }
 
 //在filename找key的左右兄弟节点进行合并
 template<typename T1>
 Return4<T1> BPlusTree<T1>::UnionNodes(string filename, T1 Key){
 
+//	cout << "Union nodes from " << filename << "  Near " << Key << endl;
+    // int KeyNum;
+    // in >> KeyNum;
+    // int IsLeaf;
+    // in >> IsLeaf;
+    // string father;
+    // in >> father;
     ifstream in;
-    in.open(filename.c_str());
-    int KeyNum;
-    in >> KeyNum;
-    int IsLeaf;
-    in >> IsLeaf;
+    in.open(filename.c_str(),ios::binary);
+    // FILE *in;
+    // in = fopen(filename.c_str(),"rb");
+    int KeyNum = 0;
+    BiRead(KeyNum,in);
+    bool IsLeaf = 0;
+    BiRead(IsLeaf,in);
     string father;
-    in >> father;
+    BiRead(father,in);
+
     T1 tempkey[MAXNODE];
     string tempfilename[MAXNODE];
     //这个文件一定是中间节点
     for(int i = 0; i < KeyNum; i++){
-        in >> tempkey[i];
-        in >> tempfilename[i];
+        // in >> tempkey[i];
+        // in >> tempfilename[i];
+        BiRead(tempkey[i],in);
+        BiRead(tempfilename[i],in);
     }
     in.close();
+    // fclose(in);
     T1 PreKey, NextKey;
     string Pre = string("NULL");
     string Next = string("NULL");
@@ -950,6 +1225,7 @@ Return4<T1> BPlusTree<T1>::UnionNodes(string filename, T1 Key){
         }
     }
 
+    // cout << "union nodes Pre= " << Pre << "Next = " << Next << endl;
     //这个地方需要注意，如果这个文件是根文件，而且只有这一个节点，则需要将根节点删除，
     //并且将他的唯一子节点设为根节点
     if(filename==RootName && Pre==string("NULL") && Next==string("NULL")){
@@ -958,7 +1234,7 @@ Return4<T1> BPlusTree<T1>::UnionNodes(string filename, T1 Key){
         //删除这个文件
         remove(filename.c_str());
         RootName = tempfilename[0];
-        Return4<T1> a;
+        Return4<int> a;
         return a;
     }
 
@@ -980,81 +1256,125 @@ Return4<T1> BPlusTree<T1>::UnionNodes(string filename, T1 Key){
 
 template<typename T1>
 bool BPlusTree<T1>::Union2(string file1, string file2){
+    // cout << "Union two file :" << file1 << " and " << file2 << endl;
+    // int KeyNum1;
+    // int KeyNum2;
+    // int IsLeaf;
+    // string father;
+    // in1 >> KeyNum1;
+    // in2 >> KeyNum2;
+    // in1 >> IsLeaf;
+    // in2 >> IsLeaf;
+    // in1 >> father;
+    // in2 >> father;
+
     ifstream in1;
     ifstream in2;
-    in1.open(file1.c_str());
-    in2.open(file2.c_str());
-    int KeyNum1;
-    int KeyNum2;
-    int IsLeaf;
+    in1.open(file1.c_str(),ios::binary);
+    in2.open(file2.c_str(),ios::binary);
+    // FILE *in1;
+    // in1 = fopen(file1.c_str(),"rb");
+    int KeyNum1 = 0;
+    BiRead(KeyNum1,in1);
+    bool IsLeaf = 0;
+    BiRead(IsLeaf,in1);
     string father;
-    in1 >> KeyNum1;
-    in2 >> KeyNum2;
-    in1 >> IsLeaf;
-    in2 >> IsLeaf;
-    in1 >> father;
-    in2 >> father;
+    BiRead(father,in1);
+
+
+    // FILE *in2;
+    // in2 = fopen(file2.c_str(),"rb");
+    int KeyNum2 = 0;
+    BiRead(KeyNum2,in2);
+    BiRead(IsLeaf,in2);
+    BiRead(father,in2);
+
+    // cout << KeyNum1 << " " << KeyNum2 << " " << IsLeaf << " " << father << endl;
     T1 tempkey[MAXNODE];
     string	temp_string = string("temp");
     if(IsLeaf == true){
+        // FILE * out = fopen((temp_string+file1).c_str(),"wb");
         ofstream out;
-        out.open((temp_string+file1).c_str());
-        out << KeyNum1+KeyNum2 << " ";
-        out << IsLeaf << " ";
-        out << father << " ";
+        out.open((temp_string+file1).c_str(),ios::binary);
+        BiWrite(KeyNum1+KeyNum2,out);
+        BiWrite(IsLeaf,out);
+        BiWrite(father,out);
+        // out << KeyNum1+KeyNum2 << " ";
+        // out << IsLeaf << " ";
+        // out << father << " ";
         for(int i = 0; i < KeyNum1; i++){
-            in1 >> tempkey[i];//输入一个key值
-            out << tempkey[i] << " ";
+            // in1 >> tempkey[i];//输入一个key值
+            // out << tempkey[i] << " ";
+            BiRead(tempkey[i],in1);
+            BiWrite(tempkey[i],out);
             Undecide ttt;
             //输入对应的附加信息
             for(int j = 0; j < TypeList.size(); j++){
                 if(TypeList[j] == 0) {
-                    in1 >> ttt.s;
-                    out << ttt.s << " ";
+                    // in1 >> ttt.s;
+                    // out << ttt.s << " ";
+                    BiRead(ttt.s,in1);
+                    BiWrite(ttt.s,out);
                 }
                 else if(TypeList[j] == 1){
-                    in1 >> ttt.num;
-                    out << ttt.num << " ";
+                    // in1 >> ttt.num;
+                    // out << ttt.num << " ";
+                    BiRead(ttt.num,in1);
+                    BiWrite(ttt.num,out);
                 }
                 else if(TypeList[j] == 2) {
-                    in1 >> ttt.LL;
-                    out << ttt.LL << " ";
+                    // in1 >> ttt.LL;
+                    // out << ttt.LL << " ";
+                    BiRead(ttt.LL,in1);
+                    BiWrite(ttt.LL,out);
                 }
-                else if(TypeList[j] == 3) {
-                    in1 >> ttt.is;
-                    out << ttt.is << " ";
+                else if(TypeList[j] == 3){
+                    // in1 >> ttt.is;
+                    // out << ttt.is << " ";
+                    BiRead(ttt.is,in1);
+                    BiWrite(ttt.is,out);
                 }
                 else{
-                    in1 >> ttt.dou;
-                    out << ttt.dou << " ";
+                    BiRead(ttt.dou,in1);
+                    BiWrite(ttt.dou,out);
                 }
             }
         }
         for(int i = 0; i < KeyNum2; i++){
-            in2 >> tempkey[i];//输入一个key值
-            out << tempkey[i] << " ";
+            // in2 >> tempkey[i];//输入一个key值
+            // out << tempkey[i] << " ";
+            BiRead(tempkey[i],in2);
+            BiWrite(tempkey[i],out);
             Undecide ttt;
             //输入对应的附加信息
             for(int j = 0; j < TypeList.size(); j++){
                 if(TypeList[j] == 0) {
-                    in2 >> ttt.s;
-                    out << ttt.s << " ";
+                    // in2 >> ttt.s;
+                    // out << ttt.s << " ";
+                    BiRead(ttt.s,in2);
+                    BiWrite(ttt.s,out);
                 }
                 else if(TypeList[j] == 1){
-                    in2 >> ttt.num;
-                    out << ttt.num << " ";
+                    // in2 >> ttt.num;
+                    // out << ttt.num << " ";
+                    BiRead(ttt.num,in2);
+                    BiWrite(ttt.num,out);
                 }
                 else if(TypeList[j] == 2) {
-                    in2 >> ttt.LL;
-                    out << ttt.LL << " ";
+                    // in2 >> ttt.LL;
+                    // out << ttt.LL << " ";
+                    BiRead(ttt.LL,in2);
+                    BiWrite(ttt.LL,out);
                 }
                 else if(TypeList[j] == 3){
-                    in2 >> ttt.is;
-                    out << ttt.is << " ";
+                    // in2 >> ttt.is;
+                    // out << ttt.is << " ";
+                    BiRead(ttt.is,in2);
+                    BiWrite(ttt.is,out);
                 }
                 else{
-                    in2 >> ttt.dou;
-                    out << ttt.dou << " ";
+                    BiRead(ttt.dou,in2);
+                    BiWrite(ttt.dou,out);
                 }
             }
         }
@@ -1064,26 +1384,43 @@ bool BPlusTree<T1>::Union2(string file1, string file2){
         in1.close();
         in2.close();
         out.close();
+        // fclose(in1);
+        // fclose(in2);
+        // fclose(out);
+        // cout << "end..............." << endl;
     }
     else{
+        // FILE *out = fopen((temp_string+file1).c_str(),"wb");
         ofstream out;
-        out.open((temp_string+file1).c_str());
-        out << KeyNum1+KeyNum2 << " ";
-        out << IsLeaf << " ";
-        out << father << " ";
+        out.open((temp_string+file1).c_str(),ios::binary);
+        BiWrite(KeyNum1+KeyNum2,out);
+        BiWrite(IsLeaf,out);
+        BiWrite(father,out);
+        // out << KeyNum1+KeyNum2 << " ";
+        // out << IsLeaf << " ";
+        // out << father << " ";
         string tempfilename[MAXNODE];
         for(int i = 0; i < KeyNum1; i++){
-            in1 >> tempkey[i];
-            in1 >> tempfilename[i];
-            out << tempkey[i] << " ";
-            out << tempfilename[i] << " ";
+            // in1 >> tempkey[i];
+            // in1 >> tempfilename[i];
+            // out << tempkey[i] << " ";
+            // out << tempfilename[i] << " ";
+            BiRead(tempkey[i],in1);
+            BiRead(tempfilename[i],in1);
+            BiWrite(tempkey[i],out);
+            BiWrite(tempfilename[i],out);
         }
         for(int i = 0; i < KeyNum2; i++){
-            in2 >> tempkey[i];
-            in2 >> tempfilename[i];
-            out << tempkey[i] << " ";
-            out << tempfilename[i] << " ";
+            // in2 >> tempkey[i];
+            // in2 >> tempfilename[i];
+            // out << tempkey[i] << " ";
+            // out << tempfilename[i] << " ";
+            BiRead(tempkey[i],in2);
+            BiRead(tempfilename[i],in2);
+            BiWrite(tempkey[i],out);
+            BiWrite(tempfilename[i],out);
         }
+        // cout << "Setson " << file2 << " to " << file1 << endl;
         SetSonAll(file2,file1);
         remove(file1.c_str());
         remove(file2.c_str());
@@ -1091,31 +1428,48 @@ bool BPlusTree<T1>::Union2(string file1, string file2){
         in1.close();
         in2.close();
         out.close();
+        // fclose(in1);
+        // fclose(in2);
+        // fclose(out);
     }
     // exit(0);
+    // cout << "454545454" << endl;
 }
 
 //从filename文件中的key节点的兄弟节点中借一个节点给filename
 template<typename T1>
 Return4<T1> BPlusTree<T1>::BorrowNodes(string filename, T1 Key){
+//	cout << "Borrow from " << filename << " near " << Key << endl;
+    // int KeyNum;
+    // in >> KeyNum;
+    // int IsLeaf;
+    // in >> IsLeaf;
+    // string father;
+    // in >> father;
     ifstream in;
-    in.open(filename.c_str());
-    int KeyNum;
-    in >> KeyNum;
-    int IsLeaf;
-    in >> IsLeaf;
+    in.open(filename.c_str(),ios::binary);
+    // FILE *in;
+    // in = fopen(filename.c_str(),"rb");
+    int KeyNum = 0;
+    BiRead(KeyNum,in);
+    bool IsLeaf = 0;
+    BiRead(IsLeaf,in);
     string father;
-    in >> father;
+    BiRead(father,in);
+
     T1 tempkey[MAXNODE];
     string tempfilename[MAXNODE];
     string forfile;
     for(int i = 0; i < KeyNum; i++){
-        in >> tempkey[i];
-        in >> tempfilename[i];
-        tempkey[i] = Key;
-        forfile = tempfilename[i];
+        // in >> tempkey[i];
+        // in >> tempfilename[i];
+        BiRead(tempkey[i],in);
+        BiRead(tempfilename[i],in);
+        if(tempkey[i] == Key)
+            forfile = tempfilename[i];
     }
     in.close();
+    // fclose(in);
     string Pre = string("NULL");
     string Next = string("NULL");
     for(int i = 0; i < KeyNum; i++){
@@ -1124,37 +1478,46 @@ Return4<T1> BPlusTree<T1>::BorrowNodes(string filename, T1 Key){
             if(i+1 < KeyNum) Next = tempfilename[i+1];
         }
     }
+    // cout << "Left:" << Pre << " Right" << Next << endl;
     if(Pre != string("NULL")){//从左兄弟节点借最右边的点
-        in.open(Pre.c_str());
-        in >> KeyNum;
-        in >> IsLeaf;
-        in >> father;
+        // in >> KeyNum;
+        // in >> IsLeaf;
+        // in >> father;
+        in.open(Pre.c_str(),ios::binary);
+        // FILE *in = fopen(Pre.c_str(),"rb");
+        BiRead(KeyNum,in);
+        BiRead(IsLeaf,in);
+        BiRead(father,in);
+        // cout << KeyNum << IsLeaf << father << endl;
         if(KeyNum-1>=MAXNODE/2 && IsLeaf == true){
             for(int i = 0; i < KeyNum-1; i++){
-                in >> tempkey[i];//输入一个key值
+                // in >> tempkey[i];//输入一个key值
+                BiRead(tempkey[i],in);
                 Undecide ttt;
                 //输入对应的附加信息
                 for(int j = 0; j < TypeList.size(); j++){
-                    if(TypeList[j] == 0) in >> ttt.s;
-                    else if(TypeList[j] == 1) in >> ttt.num;
-                    else if(TypeList[j] == 2) in >> ttt.LL;
-                    else if(TypeList[j] == 3) in >> ttt.is;
-                    else in >> ttt.dou;
+                    if(TypeList[j] == 0) BiRead(ttt.s,in);
+                    else if(TypeList[j] == 1) BiRead(ttt.num,in);
+                    else if(TypeList[j] == 2) BiRead(ttt.LL,in);
+                    else if(TypeList[j] == 3) BiRead(ttt.is,in);
+                    else BiRead(ttt.dou,in);
                 }
             }
             T1 borrowKey;
-            in >> borrowKey;
+            // in >> borrowKey;
+            BiRead(borrowKey,in);
             vector<Undecide>v;
             Undecide tt2;
             for(int j = 0; j < TypeList.size(); j++){
-                if(TypeList[j] == 0) in >> tt2.s;
-                else if(TypeList[j] == 1) in >> tt2.num;
-                else if(TypeList[j] == 2) in >> tt2.LL;
-                else if(TypeList[j] == 3) in >> tt2.is;
-                else in >> tt2.dou;
+                if(TypeList[j] == 0) BiRead(tt2.s,in);
+                else if(TypeList[j] == 1) BiRead(tt2.num,in);
+                else if(TypeList[j] == 2) BiRead(tt2.LL,in);
+                else if(TypeList[j] == 3) BiRead(tt2.is,in);
+                else BiRead(tt2.dou,in);
                 v.push_back(tt2);
             }
             in.close();
+            // fclose(in);
             Delete2(Pre,borrowKey);
             return Return4<T1>(true,borrowKey,Pre,v);
         }
@@ -1162,14 +1525,19 @@ Return4<T1> BPlusTree<T1>::BorrowNodes(string filename, T1 Key){
             T1 tempkey[MAXNODE];
             string tempfilename[MAXNODE];
             for(int i = 0; i < KeyNum-1; i++){
-                in >> tempkey[i];
-                in >> tempfilename[i];
+                // in >> tempkey[i];
+                // in >> tempfilename[i];
+                BiRead(tempkey[i],in);
+                BiRead(tempfilename[i],in);
             }
             T1 borrowKey;
             string borrowfile;
-            in >> borrowKey;
-            in >> borrowfile;
+            // in >> borrowKey;
+            // in >> borrowfile;
+            BiRead(borrowKey,in);
+            BiRead(borrowfile,in);
             in.close();
+            // fclose(in);
             vector<Undecide>v;
             Undecide tt2;
             strcpy(tt2.s,Pre.c_str());
@@ -1180,34 +1548,44 @@ Return4<T1> BPlusTree<T1>::BorrowNodes(string filename, T1 Key){
         }
     }
     if(Next != string("NULL")){
-        in.open(Next.c_str());
-        in >> KeyNum;
-        in >> IsLeaf;
-        in >> father;
-
+        // in >> KeyNum;
+        // in >> IsLeaf;
+        // in >> father;
+        in.open(Next.c_str(),ios::binary);
+        // FILE *in = fopen(Next.c_str(),"rb");
+        BiRead(KeyNum,in);
+        BiRead(IsLeaf,in);
+        BiRead(father,in);
+        // cout << KeyNum << " " << IsLeaf << endl;
         if(KeyNum-1>=MAXNODE/2 && IsLeaf==true){
             T1 borrowKey;
-            in >> borrowKey;
+            // in >> borrowKey;
+            BiRead(borrowKey,in);
             vector<Undecide>v;
             Undecide tt2;
             for(int j = 0; j < TypeList.size(); j++){
-                if(TypeList[j] == 0) in >> tt2.s;
-                else if(TypeList[j] == 1) in >> tt2.num;
-                else if(TypeList[j] == 2) in >> tt2.LL;
-                else if(TypeList[j] == 3) in >> tt2.is;
-                else in >> tt2.dou;
+                if(TypeList[j] == 0) BiRead(tt2.s,in);
+                else if(TypeList[j] == 1) BiRead(tt2.num,in);
+                else if(TypeList[j] == 2) BiRead(tt2.LL,in);
+                else if(TypeList[j] == 3) BiRead(tt2.is,in);
+                else BiRead(tt2.dou,in);
                 v.push_back(tt2);
             }
             in.close();
+            // fclose(in);
+            // cout << Next << "***" << endl;
             Delete2(Next,borrowKey);
             return Return4<T1>(true,borrowKey,Next,v);
         }
         if(KeyNum-1>=MAXNODE/2 && IsLeaf==false){
             T1 borrowKey;
             string borrowfile;
-            in >> borrowKey;
-            in >> borrowfile;
+            // in >> borrowKey;
+            // in >> borrowfile;
+            BiRead(borrowKey,in);
+            BiRead(borrowfile,in);
             in.close();
+            // fclose(in);
             Undecide t;
             strcpy(t.s,borrowfile.c_str());
             vector<Undecide>v;
@@ -1226,27 +1604,44 @@ Return4<T1> BPlusTree<T1>::BorrowNodes(string filename, T1 Key){
 
 template<typename T1>
 bool BPlusTree<T1>::ChangePreNameForDel(string filename, T1 original, T1 newkey){
-    if(filename == string("NULL"))return 0;
+    // int KeyNum = 0;
+    // in >> KeyNum;//输入key值个数
+    // bool IsLeaf = 0;
+    // in >> IsLeaf;//输入是否是叶子节点
+    // string father;
+    // in >> father;//输入该文件的父节点文件
+
     ifstream in;
-    in.open(filename.c_str());
+    in.open(filename.c_str(),ios::binary);
+    // FILE *in;
+    // in = fopen(filename.c_str(),"rb");
     int KeyNum = 0;
-    in >> KeyNum;//输入key值个数
+    BiRead(KeyNum,in);
     bool IsLeaf = 0;
-    in >> IsLeaf;//输入是否是叶子节点
+    BiRead(IsLeaf,in);
     string father;
-    in >> father;//输入该文件的父节点文件
+    BiRead(father,in);
+
     T1 tempkey[MAXNODE];
     string tempfilename[MAXNODE];
     for(int i = 0; i < KeyNum; i++){
-        in >> tempkey[i];
-        in >> tempfilename[i];
+        // in >> tempkey[i];
+        // in >> tempfilename[i];
+        BiRead(tempkey[i],in);
+        BiRead(tempfilename[i],in);
     }
     in.close();
+    // fclose(in);
+
     ofstream out;
-    out.open(filename.c_str());
-    out << KeyNum << " ";
-    out << IsLeaf << " ";
-    out << father << " ";
+    out.open(filename.c_str(),ios::binary);
+    // out << KeyNum << " ";
+    // out << IsLeaf << " ";
+    // out << father << " ";
+    // FILE *out = fopen(filename.c_str(),"wb");
+    BiWrite(KeyNum,out);
+    BiWrite(IsLeaf,out);
+    BiWrite(father,out);
     // if(father == string("NULL") || IsLeaf==true)
     // 	return 0;
     if(tempkey[0] == original && father != string("NULL")){
@@ -1254,10 +1649,18 @@ bool BPlusTree<T1>::ChangePreNameForDel(string filename, T1 original, T1 newkey)
     }
     for(int i = 0; i < KeyNum; i++){
         if(tempkey[i] != original){
-            out << tempkey[i] << " " << tempfilename[i] <<  " ";
+            // out << tempkey[i] << " " << tempfilename[i] <<  " ";
+            BiWrite(tempkey[i],out);
+            BiWrite(tempfilename[i],out);
         }
-        else out << newkey << " " << tempfilename[i] << " ";
+        else{
+            // out << newkey << " " << tempfilename[i] << " ";
+            BiWrite(newkey,out);
+            BiWrite(tempfilename[i],out);
+        }
     }
+    // fclose(out);
+    out.close();
     return 0;
 }
 
@@ -1265,8 +1668,9 @@ template<typename T1>
 bool BPlusTree<T1>::SaveHead(){
     string Previous = string("Head");
     string Add = string(".dat");
-    FILE * fp;
-    fp = fopen((Previous+TableName+Add).c_str(),"wb");
+    // FILE * fp;
+    // fp = fopen((Previous+TableName+Add).c_str(),"wb");
+    ofstream out((Previous+TableName+Add).c_str(),ios::binary);
     struct Temp{
         int num;
         int k;
@@ -1282,7 +1686,7 @@ bool BPlusTree<T1>::SaveHead(){
     }
     strcpy(aa.s1,RootName.c_str());
     strcpy(aa.s2,TableName.c_str());
-    fwrite(&aa,sizeof(aa),1,fp);
+    out.write((char*)&aa,sizeof(aa)*1);
     // int k;
     // k = TypeList.size();
     // fwrite(&k,sizeof(k),1,fp);
@@ -1296,15 +1700,17 @@ bool BPlusTree<T1>::SaveHead(){
     // k = TableName.capacity()+1;
     // fwrite(&k,sizeof(k),1,fp);
     // fwrite(TableName.c_str(),sizeof(char)*k,1,fp);
-    fclose(fp);
+    // fclose(fp);
+    out.close();
 }
 
 template<typename T1>
 bool BPlusTree<T1>::ReadHead(){
     string Previous = string("Head");
     string Add = string(".dat");
-    FILE * fp;
-    fp = fopen((Previous+TableName+Add).c_str(),"rb");
+    ifstream in((Previous+TableName+Add).c_str(),ios::binary);
+    // FILE * fp;
+    // fp = fopen((Previous+TableName+Add).c_str(),"rb");
     struct Temp{
         int num;
         int k;
@@ -1313,13 +1719,14 @@ bool BPlusTree<T1>::ReadHead(){
         char s2[500];
     };
     Temp aa;
-    fread(&aa,sizeof(aa),1,fp);
+    in.read((char*)&aa,sizeof(aa)*1);
     NodeNum = aa.num;
     for(int i = 0; i < aa.k; i++)
         TypeList.push_back(aa.List[i]);
     RootName.assign(aa.s1);
     TableName.assign(aa.s2);
-    fclose(fp);
+    // fclose(fp);
+    in.close();
 }
 
 template<typename T1>
@@ -1329,57 +1736,76 @@ bool BPlusTree<T1>::Update(T1 Key, vector<Undecide>ve){
     if(result.Succ == 0)
         return 0;
     filename = result.filename;
+    // int KeyNum;
+    // in >> KeyNum;
+    // bool IsLeaf;
+    // in >> IsLeaf;
+    // string father;
+    // in >> father;
+
     ifstream in;
-    in.open(filename.c_str());
-    int KeyNum;
-    in >> KeyNum;
-    bool IsLeaf;
-    in >> IsLeaf;
+    in.open(filename.c_str(),ios::binary);
+    // FILE *in;
+    // in = fopen(filename.c_str(),"rb");
+    int KeyNum = 0;
+    BiRead(KeyNum,in);
+    bool IsLeaf = 0;
+    BiRead(IsLeaf,in);
     string father;
-    in >> father;
+    BiRead(father,in);
+
     T1 tempkey[MAXNODE];
     vector<Undecide>v[MAXNODE];
     for(int i = 0; i < KeyNum; i++){
-        in >> tempkey[i];
+        // in >> tempkey[i];
+        BiRead(tempkey[i],in);
         Undecide tt;
         for(int j = 0; j < TypeList.size(); j++){
-            if(TypeList[j] == 0) in >> tt.s;
-            else if(TypeList[j] == 1) in >> tt.num;
-            else if(TypeList[j] == 2) in >> tt.LL;
-            else if(TypeList[j] == 3) in >> tt.is;
-            else in >> tt.dou;
+            if(TypeList[j] == 0) BiRead(tt.s,in);
+            else if(TypeList[j] == 1) BiRead(tt.num,in);
+            else if(TypeList[j] == 2) BiRead(tt.LL,in);
+            else if(TypeList[j] == 3) BiRead(tt.is,in);
+            else BiRead(tt.dou,in);
             v[i].push_back(tt);
         }
     }
     in.close();
+    // fclose(in);
     ofstream out;
-    out.open(filename.c_str());
-    out << KeyNum << " ";
-    out << IsLeaf << " ";
-    out << father << " ";
+    out.open(filename.c_str(),ios::binary);
+    // out << KeyNum << " ";
+    // out << IsLeaf << " ";
+    // out << father << " ";
+    // FILE *out = fopen(filename.c_str(),"wb");
+    BiWrite(KeyNum,out);
+    BiWrite(IsLeaf,out);
+    BiWrite(father,out);
+
     for(int i = 0; i < KeyNum; i++){
         if(tempkey[i] == Key){
-            out << Key << " ";
+            // out << Key << " ";
+            BiWrite(Key,out);
             for(int j = 0; j < TypeList.size(); j++){
-                if(TypeList[j] == 0) out << ve[j].s << " ";
-                else if(TypeList[j] == 1) out << ve[j].num << " ";
-                else if(TypeList[j] == 2) out << ve[j].LL << " ";
-                else if(TypeList[j] == 3) out << ve[j].is << " ";
-                else out << ve[j].dou << " ";
+                if(TypeList[j] == 0) BiWrite(ve[j].s,out);
+                else if(TypeList[j] == 1) BiWrite(ve[j].num,out);
+                else if(TypeList[j] == 2) BiWrite(ve[j].LL,out);
+                else if(TypeList[j] == 3) BiWrite(ve[j].is,out);
+                else BiWrite(ve[j].dou,out);
             }
             continue;
         }
-        out <<  tempkey[i] << " ";
+        // out <<  tempkey[i] << " ";
+        BiWrite(tempkey[i],out);
         for(int j = 0; j < TypeList.size(); j++){
-            if(TypeList[j] == 0) out << v[i][j].s << " ";
-            else if(TypeList[j] == 1) out << v[i][j].num << " ";
-            else if(TypeList[j] == 2) out << v[i][j].LL << " ";
-            else if(TypeList[j] == 3) out << v[i][j].is << " ";
-            else out << v[i][j].dou << " ";
+            if(TypeList[j] == 0) BiWrite(v[i][j].s,out);
+            else if(TypeList[j] == 1) BiWrite(v[i][j].num,out);
+            else if(TypeList[j] == 2) BiWrite(v[i][j].LL,out);
+            else if(TypeList[j] == 3) BiWrite(v[i][j].is,out);
+            else BiWrite(v[i][j].dou,out);
         }
     }
     out.close();
-    return 1;
+    // fclose(out);
 }
 
 template<typename T1>
@@ -1387,170 +1813,162 @@ vector<pair< T1,vector<Undecide> > > BPlusTree<T1>:: AllLeaf(){
     vector<pair<  T1,vector<Undecide>  > > all;
     string datstring = string(".dat");
     ifstream in;
+    // FILE *in;
     for(int i = 0; i < NodeNum; i++){
         string newname = TableName+TransIntToString(i)+datstring;
-        in.open(newname.c_str());
+        in.open(newname.c_str(),ios::binary);
+        // in = fopen(newname.c_str(),"rb");
         if(!in)continue;
+        // cout << newname << endl;
         int KeyNum;
         bool IsLeaf;
         string father;
-        in >> KeyNum;
-        in >> IsLeaf;
-        in >> father;
+        // in >> KeyNum;
+        // in >> IsLeaf;
+        // in >> father;
+        BiRead(KeyNum,in);
+        BiRead(IsLeaf,in);
+        BiRead(father,in);
         if(IsLeaf == false){
             in.close();
+            // fclose(in);
             continue;
         }
         for(int i = 0; i < KeyNum; i++){
             T1 kk;
-            in >> kk;
+            // in >> kk;
+            BiRead(kk,in);
+            // cout << kk << endl;
             vector<Undecide>v;
             Undecide tt;
             for(int j = 0; j < TypeList.size(); j++){
-                if(TypeList[j] == 0) in >> tt.s;
-                else if(TypeList[j] == 1) in >> tt.num;
-                else if(TypeList[j] == 2) in >> tt.LL;
-                else if(TypeList[j] == 3) in >> tt.is;
-                else in >> tt.dou;
+                if(TypeList[j] == 0) BiRead(tt.s,in);
+                else if(TypeList[j] == 1) BiRead(tt.num,in);
+                else if(TypeList[j] == 2) BiRead(tt.LL,in);
+                else if(TypeList[j] == 3) BiRead(tt.is,in);
+                else BiRead(tt.dou,in);
                 v.push_back(tt);
             }
             all.push_back(make_pair(kk,v));
         }
         in.close();
+        // fclose(in);
     }
     return all;
 }
 
-//int main1(){
-//    BPlusTree<string> BookA;
-//    BookA.BuildTree("BookA");
-//    vector<short>bookav;
-//    //bookav.push_back(0); //书籍编号作为key值string类型（ISBN+后三位）
-//    bookav.push_back(0); //用户名string类型
-//    // bookav.push_back(0); //最新借阅时间string类型
-//    // bookav.push_back(1); //借阅状态int类型 0:未借/1:正在借阅/2:续借中
-//    // bookav.push_back(3); //标志位表示是否被标记为删去bool类型: 0为存在/1为被删去
-//    // bookav.push_back(0); //ISBN码string类型（作为BookB的映射联系）
-//    BookA.SetTable(bookav);
-//    // BookB.SetTable(bookbv);
-//    BookA.SaveHead();
-
-//    BPlusTree<string> BookB;
-//    BookB.BuildTree("BookB");
-//    vector<short>bookbv;
-//    //bookbv.push_back(0); //以ISBN作为key值string类型
-//    bookbv.push_back(0); //书名string类型
-//    bookbv.push_back(0); //作者string类型
-//    bookbv.push_back(0); //出版社string类A型
-//    bookbv.push_back(0); //出版时间string类型
-//    bookbv.push_back(0); //价格暂时string（后面会用double代替）
-//    BookB.SetTable(bookbv);
-//    BookB.SaveHead();
-
-//}
-
-//int main(){
-//    BPlusTree<string> BookA;
-//    BookA.BuildTree("BookA");
-//    vector<short>bookav;
-//    //bookav.push_back(0); //书籍编号作为key值string类型（ISBN+后三位）
-//    bookav.push_back(0); //用户名string类型
-//    bookav.push_back(0); //最新借阅时间string类型
-//    bookav.push_back(1); //借阅状态int类型 0:未借/1:正在借阅/2:续借中
-//    bookav.push_back(4); //标志位表示是否被标记为删去bool类型: 0为存在/1为被删去
-//    bookav.push_back(0); //ISBN码string类型（作为BookB的映射联系）
-//    BookA.SetTable(bookav);
-//    int num = 6;
-//    for(int i = 0; i < num; i+=2){
-//        // cout << i << "***" << endl;
-//        vector<Undecide> vv;
-//        Undecide temp;
-//        string ISBNStart = BookA.TransIntToString(10000000);
-//        string Key = ISBNStart+BookA.TransIntToString(i);
-
-//        string string1 = ISBNStart+BookA.TransIntToString(i+1);
-//        strcpy(temp.s,"*****");
-//        vv.push_back(temp);
-//        string string2 = ISBNStart+BookA.TransIntToString(i+2);
-//        strcpy(temp.s,string2.c_str());
-//        vv.push_back(temp);
-//        int int1 = i;
-//        temp.num = int1;
-//        vv.push_back(temp);
-//        double double1 = 8.535;
-//        temp.dou = double1;
-//        vv.push_back(temp);
-//        string string3 = ISBNStart+BookA.TransIntToString(i+3);
-//        strcpy(temp.s,string3.c_str());
-//        vv.push_back(temp);
-//        BookA.Insert(Key,vv);
-//    }
-//    for(int i = 5; i >= 0; i-=2){
-//        // cout << i << "***" << endl;
-//        vector<Undecide> vv;
-//        Undecide temp;
-//        string ISBNStart = BookA.TransIntToString(10000000);
-//        string Key = ISBNStart+BookA.TransIntToString(i);
-
-//        string string1 = ISBNStart+BookA.TransIntToString(i+1);
-//        strcpy(temp.s,"*****");
-//        vv.push_back(temp);
-//        string string2 = ISBNStart+BookA.TransIntToString(i+2);
-//        strcpy(temp.s,string2.c_str());
-//        vv.push_back(temp);
-//        int int1 = i;
-//        temp.num = int1;
-//        vv.push_back(temp);
-//        double double1 = 8.535;
-//        temp.dou = double1;
-//        vv.push_back(temp);
-//        string string3 = ISBNStart+BookA.TransIntToString(i+3);
-//        strcpy(temp.s,string3.c_str());
-//        vv.push_back(temp);
-//        BookA.Insert(Key,vv);
-
-//    }
-//    // for(int i = 0; i < 18; i++){
-//    // 	string ISBNStart = BookA.TransIntToString(10000000);
-//    // 	string Key = ISBNStart+BookA.TransIntToString(i);
-//    // 	BookA.Delete(Key);
-//    // }
-//    // vector<pair< string,vector<Undecide> > > all;
-//    // all = BookA.AllLeaf();
-//    // for(int i = 0; i < all.size(); i++){
-//    // 	cout << all[i].first << " -  " << (all[i].second)[0].s << endl;
-//    // }
-
-//    for(int i = 0; i < num; i++){
-//        string ISBNStart = BookA.TransIntToString(10000000);
-//        string Key = ISBNStart+BookA.TransIntToString(i);
-//        Return3	aa = BookA.Search(Key,BookA.GetRootName());
-//        if(aa.Succ == 1)
-//            cout << Key << " " << aa.ve[0].s << " "<< aa.ve[1].s << " "<< aa.ve[2].num << " "<< aa.ve[3].dou << " "<< aa.ve[4].s << endl;
-//        // cout << Key << " " << aa.ve[0].s << endl;
-//    }
-//    // BookA.SaveHead();
-//}
+template<typename T1>
+Return3 BPlusTree<T1>::Bianli(){
+    //tempkey用来保存当前文件中的key值
+    string datstring = string(".dat");
+    for(int i = 0; i < NodeNum; i++){
+        string newname = TableName+TransIntToString(i)+datstring;
+        cout << newname << endl;
+        T1 tempkey[MAXNODE];
+        string tempfilename[MAXNODE];
+        for(int i = 0; i < MAXNODE; i++)
+            tempfilename[i].reserve(CAP);
+        // FILE *in;
+        // in = fopen(newname.c_str(), "rb");
+        ifstream in(newname.c_str(),ios::binary);
+        int KeyNum = 0;
+        BiRead(KeyNum,in);
+        bool IsLeaf = 0;
+        BiRead(IsLeaf,in);
+        string father;
+        BiRead(father,in);
+        cout << KeyNum << " * " << IsLeaf << " * " << father << endl;
+        if(IsLeaf == true){//如果该文件节点是叶子节点
+            vector<Undecide>v;//用来储存key的附加信息
+            for(int i = 0; i < KeyNum; i++){
+                // in >> tempkey[i];//输入一个key值
+                BiRead(tempkey[i],in);
+                cout << tempkey[i] << " ";
+                Undecide ttt;
+                //输入对应的附加信息
+                for(int j = 0; j < TypeList.size(); j++){
+                    if(TypeList[j] == 0){
+                        BiRead(ttt.s,in);
+                        cout << ttt.s << " ";
+                    }
+                    else if(TypeList[j] == 1){
+                        BiRead(ttt.num,in);
+                        cout << ttt.num << " ";
+                    }
+                    else if(TypeList[j] == 2){
+                        BiRead(ttt.LL,in);
+                        cout << ttt.LL << " ";
+                    }
+                    else if(TypeList[j] == 3){
+                        BiRead(ttt.is,in);
+                        cout << ttt.is << " ";
+                    }
+                    else{
+                        BiRead(ttt.dou,in);
+                        cout << ttt.dou << " ";
+                    }
+                }
+                cout << endl;
+            }
+        }
+        else{//如果这个节点是中间节点
+            //遍历输入该文件节点所存储的key和对应的文件名
+            for(int i = 0; i < KeyNum; i++){
+                BiRead(tempkey[i],in);
+                BiRead(tempfilename[i],in);
+                cout <<"--"<< tempkey[i] << " " << tempfilename[i] << endl;
+            }
+        }
+        // fclose(in);
+        in.close();
+    }
+}
 
 // int main(){
-// 	BPlusTree<int> BookA;
-//     BookA.BuildTree("BookA");
-//     vector<short>bookav;
-//     //bookav.push_back(0); //书籍编号作为key值string类型（ISBN+后三位）
-//     bookav.push_back(0); //用户名string类型
-//     BookA.SetTable(bookav);
-//     int num = 1000;
-//     for(int i = 0; i < num; i++){
-//     	cout << i << " **" << endl;
-//     	vector<Undecide> vv;
-//     	Undecide tt;
-//     	strcpy(tt.s,"*******");
-//     	vv.push_back(tt);
-//     	BookA.Insert(i,vv);
-//     }
-//     for(int i = 0; i < num; i++){
-//     	Return3 aa = BookA.Search(i,BookA.GetRootName());
-//     	cout << i << " " << aa.ve[0].s<< endl;
-//     }
+// 	BPlusTree<string> test;//新建一个对象
+// 	test.BuildTree("test");//表的名字为test
+// 	vector<short>testv;//表的属性列
+// 	//0->string  1->int  2->longlong  3->bool
+// 	testv.push_back(0);	//第一个属性是string类型
+// 	testv.push_back(1); //第二个属性是int类型
+// 	test.SetTable(testv);//使用testv设置表的属性列
+// 	for(int i = 0; i <= 25; i++){
+// 		cout << i << endl;
+// 		vector<Undecide>vv;
+// 		Undecide te;
+// 		strcpy(te.s,"testing_string");
+// 		Undecide te2;
+// 		te2.num = i;
+// 		string HHH = string("尽快了解55555555555555555555HEADHEADHEADHEADHEADHEAD");
+// 		vv.push_back(te);
+// 		vv.push_back(te2);
+// 		test.Insert(test.TransIntToString(i)+HHH,vv);
+// 	}
+// 	// test.Bianli();
 
+// 	// for(int i = 0; i <= 20; i++)
+// 	// 	test.Delete(i);
+// 	// vector<Undecide>vv;
+// 	// Undecide te;
+// 	// strcpy(te.s,"232323tring");
+// 	// Undecide te2;
+// 	// te2.num = 52;
+// 	// vv.push_back(te);
+// 	// 	vv.push_back(te2);
+// 	// test.Update(25,vv);
+// 	for(int i = 0; i <= 25; i++){
+// 		string HHH = string("尽快了解55555555555555555555HEADHEADHEADHEADHEADHEAD");
+// 		Return3 aa = test.Search(test.TransIntToString(i)+HHH,test.GetRootName());
+// 		if(aa.Succ == 1)
+// 			cout << aa.ve[0].s << " " << aa.ve[1].num << endl;
+// 	}
+// 	// 	vector<pair< int,vector<Undecide> > > all;
+// 	// all = test.AllLeaf();
+// 	// for(int i = 0; i < all.size(); i++){
+// 	// 	cout << all[i].first  << endl;
+// 	// }
 // }
+
+
+
+

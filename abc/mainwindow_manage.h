@@ -46,6 +46,8 @@ private slots:
 
     void on_searchButtonDelate_clicked();
 
+    void on_authorDelete_search_clicked();
+
 private:
     Ui::MainWindow_Manage *ui;
 };

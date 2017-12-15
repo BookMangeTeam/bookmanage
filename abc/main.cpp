@@ -5,7 +5,7 @@
 
 int register_location = 0;
 int manage_jurisdiction = 0;
-int mark = 0;
+int mark = 1;
 int savesign = 1;
 int borrow_key = 0;
 int history_key = 0;
