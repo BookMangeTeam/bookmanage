@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_t {
     QByteArrayData data[19];
-    char stringdata0[483];
+    char stringdata0[474];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -49,7 +49,7 @@ QT_MOC_LITERAL(14, 336, 29), // "on_searchButtonBorrow_clicked"
 QT_MOC_LITERAL(15, 366, 29), // "on_affirmBottonBorrow_clicked"
 QT_MOC_LITERAL(16, 396, 28), // "on_affirmBottonRepay_clicked"
 QT_MOC_LITERAL(17, 425, 28), // "on_affirmBottonRenew_clicked"
-QT_MOC_LITERAL(18, 454, 28) // "on_affirmButtonMoney_clicked"
+QT_MOC_LITERAL(18, 454, 19) // "on_payMoney_clicked"
 
     },
     "MainWindow\0on_borrowButton_clicked\0\0"
@@ -67,7 +67,7 @@ QT_MOC_LITERAL(18, 454, 28) // "on_affirmButtonMoney_clicked"
     "on_affirmBottonBorrow_clicked\0"
     "on_affirmBottonRepay_clicked\0"
     "on_affirmBottonRenew_clicked\0"
-    "on_affirmButtonMoney_clicked"
+    "on_payMoney_clicked"
 };
 #undef QT_MOC_LITERAL
 
@@ -147,7 +147,7 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 13: _t->on_affirmBottonBorrow_clicked(); break;
         case 14: _t->on_affirmBottonRepay_clicked(); break;
         case 15: _t->on_affirmBottonRenew_clicked(); break;
-        case 16: _t->on_affirmButtonMoney_clicked(); break;
+        case 16: _t->on_payMoney_clicked(); break;
         default: ;
         }
     }

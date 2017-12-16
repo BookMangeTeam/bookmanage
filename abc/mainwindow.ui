@@ -730,7 +730,7 @@
         <enum>QLineEdit::PasswordEchoOnEdit</enum>
        </property>
       </widget>
-      <widget class="QPushButton" name="affirmButtonMoney">
+      <widget class="QPushButton" name="payMoney">
        <property name="geometry">
         <rect>
          <x>610</x>

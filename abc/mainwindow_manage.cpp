@@ -170,7 +170,7 @@ void MainWindow_Manage::on_affirmBottonAdd_clicked()
     if(bookISBN != "" && bookName != "" && bookAuthur != "" && bookPublish != "" & publishTime != "" && bookPrice != "" && bookNumber !="")
     {
         //判断输入正确
-        //先到BookB表去查找是否存在这本书（利用ISBN作为key去查找） 这还有一种是ISBN被删除的情况，后面再添加
+        //先到BookB表去查找是否存在这本书（利用ISBN作为key去查找）=，包括被删除的部分
         BPlusTree<string> BookB;
         BookB.SetTableName(string("BookB"));
         BookB.ReadHead();
