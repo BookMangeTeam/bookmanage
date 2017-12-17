@@ -51,6 +51,7 @@ public:
     QRadioButton *authorBorrow_search;
     QRadioButton *isbnBorrow_search;
     QRadioButton *bookNumberBorrow_search;
+    QTableView *hasBeenBorrow;
     QWidget *page_3;
     QFrame *mainWindowBackGroundFrame4;
     QTableView *bookInformationRepay;
@@ -71,7 +72,7 @@ public:
     QLabel *passwordMoney;
     QTableView *paymentInformation;
     QLineEdit *passwordMoneyInput;
-    QPushButton *affirmButtonMoney;
+    QPushButton *payMoney;
     QPushButton *returnButtonMoney;
     QPushButton *quitButton;
     QPushButton *renewButton;
@@ -117,11 +118,11 @@ public:
         name->setAlignment(Qt::AlignCenter);
         searchLineEditPermary = new QLineEdit(page);
         searchLineEditPermary->setObjectName(QStringLiteral("searchLineEditPermary"));
-        searchLineEditPermary->setGeometry(QRect(170, 270, 541, 41));
+        searchLineEditPermary->setGeometry(QRect(150, 270, 581, 41));
         searchLineEditPermary->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;"));
         searchButtonPermary = new QPushButton(page);
         searchButtonPermary->setObjectName(QStringLiteral("searchButtonPermary"));
-        searchButtonPermary->setGeometry(QRect(400, 430, 81, 41));
+        searchButtonPermary->setGeometry(QRect(390, 410, 81, 41));
         QFont font1;
         font1.setFamily(QString::fromUtf8("\347\255\211\347\272\277"));
         font1.setPointSize(16);
@@ -132,21 +133,21 @@ public:
         searchButtonPermary->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;"));
         bookName_search = new QRadioButton(page);
         bookName_search->setObjectName(QStringLiteral("bookName_search"));
-        bookName_search->setGeometry(QRect(172, 355, 89, 21));
+        bookName_search->setGeometry(QRect(150, 350, 89, 21));
         QFont font2;
         font2.setPointSize(14);
         bookName_search->setFont(font2);
         author_search = new QRadioButton(page);
         author_search->setObjectName(QStringLiteral("author_search"));
-        author_search->setGeometry(QRect(314, 355, 89, 21));
+        author_search->setGeometry(QRect(320, 350, 89, 21));
         author_search->setFont(font2);
         isbn_search = new QRadioButton(page);
         isbn_search->setObjectName(QStringLiteral("isbn_search"));
-        isbn_search->setGeometry(QRect(464, 355, 89, 21));
+        isbn_search->setGeometry(QRect(480, 350, 89, 21));
         isbn_search->setFont(font2);
         bookNumber_search = new QRadioButton(page);
         bookNumber_search->setObjectName(QStringLiteral("bookNumber_search"));
-        bookNumber_search->setGeometry(QRect(612, 355, 111, 21));
+        bookNumber_search->setGeometry(QRect(630, 350, 111, 21));
         bookNumber_search->setFont(font2);
         stackedWidgetPermary->addWidget(page);
         page_2 = new QWidget();
@@ -207,6 +208,9 @@ public:
         bookNumberBorrow_search->setObjectName(QStringLiteral("bookNumberBorrow_search"));
         bookNumberBorrow_search->setGeometry(QRect(550, 70, 89, 16));
         bookNumberBorrow_search->setFont(font3);
+        hasBeenBorrow = new QTableView(mainWindowBackGroundFrame3);
+        hasBeenBorrow->setObjectName(QStringLiteral("hasBeenBorrow"));
+        hasBeenBorrow->setGeometry(QRect(750, 50, 81, 51));
         stackedWidgetPermary->addWidget(page_2);
         page_3 = new QWidget();
         page_3->setObjectName(QStringLiteral("page_3"));
@@ -304,12 +308,12 @@ public:
         passwordMoneyInput->setGeometry(QRect(550, 420, 221, 31));
         passwordMoneyInput->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;"));
         passwordMoneyInput->setEchoMode(QLineEdit::PasswordEchoOnEdit);
-        affirmButtonMoney = new QPushButton(mainWindowBackGroundFrame7);
-        affirmButtonMoney->setObjectName(QStringLiteral("affirmButtonMoney"));
-        affirmButtonMoney->setGeometry(QRect(610, 490, 91, 31));
-        affirmButtonMoney->setFont(font4);
-        affirmButtonMoney->setCursor(QCursor(Qt::PointingHandCursor));
-        affirmButtonMoney->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;"));
+        payMoney = new QPushButton(mainWindowBackGroundFrame7);
+        payMoney->setObjectName(QStringLiteral("payMoney"));
+        payMoney->setGeometry(QRect(610, 490, 91, 31));
+        payMoney->setFont(font4);
+        payMoney->setCursor(QCursor(Qt::PointingHandCursor));
+        payMoney->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;"));
         returnButtonMoney = new QPushButton(mainWindowBackGroundFrame7);
         returnButtonMoney->setObjectName(QStringLiteral("returnButtonMoney"));
         returnButtonMoney->setGeometry(QRect(20, 550, 91, 31));
@@ -370,7 +374,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        stackedWidgetPermary->setCurrentIndex(5);
+        stackedWidgetPermary->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -383,7 +387,7 @@ public:
         searchButtonPermary->setText(QApplication::translate("MainWindow", "\346\220\234\347\264\242", 0));
         bookName_search->setText(QApplication::translate("MainWindow", "\344\271\246\345\220\215", 0));
         author_search->setText(QApplication::translate("MainWindow", "\344\275\234\350\200\205", 0));
-        isbn_search->setText(QApplication::translate("MainWindow", "isbn", 0));
+        isbn_search->setText(QApplication::translate("MainWindow", "ISBN", 0));
         bookNumber_search->setText(QApplication::translate("MainWindow", "\345\233\276\344\271\246\347\274\226\345\217\267", 0));
         searchLineEditBorrow->setText(QString());
         searchButtonBorrow->setText(QApplication::translate("MainWindow", "\346\220\234\347\264\242", 0));
@@ -391,7 +395,7 @@ public:
         returnButtonBorrow->setText(QApplication::translate("MainWindow", "\350\277\224\345\233\236", 0));
         bookNameBorrow_search->setText(QApplication::translate("MainWindow", "\344\271\246\345\220\215", 0));
         authorBorrow_search->setText(QApplication::translate("MainWindow", "\344\275\234\350\200\205", 0));
-        isbnBorrow_search->setText(QApplication::translate("MainWindow", "isbn", 0));
+        isbnBorrow_search->setText(QApplication::translate("MainWindow", "ISBN", 0));
         bookNumberBorrow_search->setText(QApplication::translate("MainWindow", "\345\233\276\344\271\246\347\274\226\345\217\267", 0));
         affirmBottonRepay->setText(QApplication::translate("MainWindow", "\350\277\230\344\271\246", 0));
         returnButtonRepay->setText(QApplication::translate("MainWindow", "\350\277\224\345\233\236", 0));
@@ -400,7 +404,7 @@ public:
         returnBottonBorrowR->setText(QApplication::translate("MainWindow", "\350\277\224\345\233\236", 0));
         passwordMoney->setText(QApplication::translate("MainWindow", "\350\257\267\350\276\223\345\205\245\345\257\206\347\240\201", 0));
         passwordMoneyInput->setText(QString());
-        affirmButtonMoney->setText(QApplication::translate("MainWindow", "\347\241\256\350\256\244", 0));
+        payMoney->setText(QApplication::translate("MainWindow", "\347\241\256\350\256\244", 0));
         returnButtonMoney->setText(QApplication::translate("MainWindow", "\350\277\224\345\233\236", 0));
         quitButton->setText(QApplication::translate("MainWindow", "\351\200\200\345\207\272", 0));
         renewButton->setText(QApplication::translate("MainWindow", "\347\273\255\345\200\237", 0));

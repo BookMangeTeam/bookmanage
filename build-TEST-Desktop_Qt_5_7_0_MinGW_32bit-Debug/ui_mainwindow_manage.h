@@ -21,6 +21,7 @@
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QPushButton>
+#include <QtWidgets/QRadioButton>
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QTableView>
 #include <QtWidgets/QWidget>
@@ -61,6 +62,10 @@ public:
     QPushButton *affirmBottonDelate;
     QLineEdit *searchLineEditDelate;
     QPushButton *searchButtonDelate;
+    QRadioButton *bookNameDelete_search;
+    QRadioButton *authorDelete_search;
+    QRadioButton *isbnDelete_search;
+    QRadioButton *bookNumberDelete_search;
     QWidget *page_4;
     QTableView *bookInformationUpdate;
     QPushButton *returnButtonUpdate;
@@ -71,6 +76,9 @@ public:
     QLineEdit *updateTo_Input;
     QLineEdit *searchLineEditUpdate;
     QPushButton *searchButtonUpdate;
+    QRadioButton *bookNameUpdate_search;
+    QRadioButton *authorUpdate_search;
+    QRadioButton *isbnUpdate_search;
     QWidget *page_5;
     QTableView *bookInformationBRManage;
     QPushButton *returnBottonBRManage;
@@ -252,14 +260,32 @@ public:
         affirmBottonDelate->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;"));
         searchLineEditDelate = new QLineEdit(page_3);
         searchLineEditDelate->setObjectName(QStringLiteral("searchLineEditDelate"));
-        searchLineEditDelate->setGeometry(QRect(170, 30, 451, 31));
+        searchLineEditDelate->setGeometry(QRect(170, 10, 451, 31));
         searchLineEditDelate->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;"));
         searchButtonDelate = new QPushButton(page_3);
         searchButtonDelate->setObjectName(QStringLiteral("searchButtonDelate"));
-        searchButtonDelate->setGeometry(QRect(680, 30, 71, 31));
+        searchButtonDelate->setGeometry(QRect(680, 10, 71, 31));
         searchButtonDelate->setFont(font4);
         searchButtonDelate->setCursor(QCursor(Qt::PointingHandCursor));
         searchButtonDelate->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;"));
+        bookNameDelete_search = new QRadioButton(page_3);
+        bookNameDelete_search->setObjectName(QStringLiteral("bookNameDelete_search"));
+        bookNameDelete_search->setGeometry(QRect(170, 55, 89, 21));
+        QFont font6;
+        font6.setPointSize(12);
+        bookNameDelete_search->setFont(font6);
+        authorDelete_search = new QRadioButton(page_3);
+        authorDelete_search->setObjectName(QStringLiteral("authorDelete_search"));
+        authorDelete_search->setGeometry(QRect(300, 55, 89, 21));
+        authorDelete_search->setFont(font6);
+        isbnDelete_search = new QRadioButton(page_3);
+        isbnDelete_search->setObjectName(QStringLiteral("isbnDelete_search"));
+        isbnDelete_search->setGeometry(QRect(420, 55, 89, 21));
+        isbnDelete_search->setFont(font6);
+        bookNumberDelete_search = new QRadioButton(page_3);
+        bookNumberDelete_search->setObjectName(QStringLiteral("bookNumberDelete_search"));
+        bookNumberDelete_search->setGeometry(QRect(530, 55, 89, 21));
+        bookNumberDelete_search->setFont(font6);
         stackedWidgetManage->addWidget(page_3);
         page_4 = new QWidget();
         page_4->setObjectName(QStringLiteral("page_4"));
@@ -281,23 +307,21 @@ public:
         affirmBottonUpdate->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;"));
         updateOption = new QLabel(page_4);
         updateOption->setObjectName(QStringLiteral("updateOption"));
-        updateOption->setGeometry(QRect(180, 376, 142, 21));
-        QFont font6;
-        font6.setFamily(QString::fromUtf8("\347\255\211\347\272\277"));
-        font6.setPointSize(15);
-        updateOption->setFont(font6);
+        updateOption->setGeometry(QRect(190, 370, 142, 31));
+        QFont font7;
+        font7.setFamily(QString::fromUtf8("\347\255\211\347\272\277"));
+        font7.setPointSize(15);
+        updateOption->setFont(font7);
         updateOption->setAlignment(Qt::AlignCenter);
         updateOption_CB = new QComboBox(page_4);
         updateOption_CB->setObjectName(QStringLiteral("updateOption_CB"));
         updateOption_CB->setGeometry(QRect(370, 370, 161, 31));
-        QFont font7;
-        font7.setPointSize(12);
-        updateOption_CB->setFont(font7);
+        updateOption_CB->setFont(font6);
         updateOption_CB->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;"));
         updateTo = new QLabel(page_4);
         updateTo->setObjectName(QStringLiteral("updateTo"));
         updateTo->setGeometry(QRect(220, 435, 71, 21));
-        updateTo->setFont(font6);
+        updateTo->setFont(font7);
         updateTo->setAlignment(Qt::AlignCenter);
         updateTo_Input = new QLineEdit(page_4);
         updateTo_Input->setObjectName(QStringLiteral("updateTo_Input"));
@@ -305,14 +329,26 @@ public:
         updateTo_Input->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;"));
         searchLineEditUpdate = new QLineEdit(page_4);
         searchLineEditUpdate->setObjectName(QStringLiteral("searchLineEditUpdate"));
-        searchLineEditUpdate->setGeometry(QRect(170, 30, 451, 31));
+        searchLineEditUpdate->setGeometry(QRect(170, 10, 451, 31));
         searchLineEditUpdate->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;"));
         searchButtonUpdate = new QPushButton(page_4);
         searchButtonUpdate->setObjectName(QStringLiteral("searchButtonUpdate"));
-        searchButtonUpdate->setGeometry(QRect(680, 30, 71, 31));
+        searchButtonUpdate->setGeometry(QRect(680, 10, 71, 31));
         searchButtonUpdate->setFont(font2);
         searchButtonUpdate->setCursor(QCursor(Qt::PointingHandCursor));
         searchButtonUpdate->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;"));
+        bookNameUpdate_search = new QRadioButton(page_4);
+        bookNameUpdate_search->setObjectName(QStringLiteral("bookNameUpdate_search"));
+        bookNameUpdate_search->setGeometry(QRect(240, 60, 89, 20));
+        bookNameUpdate_search->setFont(font6);
+        authorUpdate_search = new QRadioButton(page_4);
+        authorUpdate_search->setObjectName(QStringLiteral("authorUpdate_search"));
+        authorUpdate_search->setGeometry(QRect(370, 60, 89, 20));
+        authorUpdate_search->setFont(font6);
+        isbnUpdate_search = new QRadioButton(page_4);
+        isbnUpdate_search->setObjectName(QStringLiteral("isbnUpdate_search"));
+        isbnUpdate_search->setGeometry(QRect(490, 59, 89, 21));
+        isbnUpdate_search->setFont(font6);
         stackedWidgetManage->addWidget(page_4);
         page_5 = new QWidget();
         page_5->setObjectName(QStringLiteral("page_5"));
@@ -383,7 +419,7 @@ public:
 
         retranslateUi(MainWindow_Manage);
 
-        stackedWidgetManage->setCurrentIndex(3);
+        stackedWidgetManage->setCurrentIndex(2);
 
 
         QMetaObject::connectSlotsByName(MainWindow_Manage);
@@ -412,21 +448,26 @@ public:
         returnButtonDelate->setText(QApplication::translate("MainWindow_Manage", "\350\277\224\345\233\236", 0));
         affirmBottonDelate->setText(QApplication::translate("MainWindow_Manage", "\345\210\240\351\231\244", 0));
         searchButtonDelate->setText(QApplication::translate("MainWindow_Manage", "\346\220\234\347\264\242", 0));
+        bookNameDelete_search->setText(QApplication::translate("MainWindow_Manage", "\344\271\246\345\220\215", 0));
+        authorDelete_search->setText(QApplication::translate("MainWindow_Manage", "\344\275\234\350\200\205", 0));
+        isbnDelete_search->setText(QApplication::translate("MainWindow_Manage", "ISBN", 0));
+        bookNumberDelete_search->setText(QApplication::translate("MainWindow_Manage", "\345\233\276\344\271\246\347\274\226\345\217\267", 0));
         returnButtonUpdate->setText(QApplication::translate("MainWindow_Manage", "\350\277\224\345\233\236", 0));
         affirmBottonUpdate->setText(QApplication::translate("MainWindow_Manage", "\346\233\264\346\224\271", 0));
         updateOption->setText(QApplication::translate("MainWindow_Manage", "\351\241\271\347\233\256", 0));
         updateOption_CB->clear();
         updateOption_CB->insertItems(0, QStringList()
-         << QApplication::translate("MainWindow_Manage", "       ISBN", 0)
          << QApplication::translate("MainWindow_Manage", "       \344\271\246\345\220\215", 0)
          << QApplication::translate("MainWindow_Manage", "       \344\275\234\350\200\205", 0)
          << QApplication::translate("MainWindow_Manage", "     \345\207\272\347\211\210\347\244\276", 0)
          << QApplication::translate("MainWindow_Manage", "    \345\207\272\347\211\210\346\227\266\351\227\264", 0)
          << QApplication::translate("MainWindow_Manage", "       \344\273\267\346\240\274", 0)
-         << QApplication::translate("MainWindow_Manage", "       \347\212\266\346\200\201", 0)
         );
         updateTo->setText(QApplication::translate("MainWindow_Manage", "\346\233\264\346\224\271\344\270\272", 0));
         searchButtonUpdate->setText(QApplication::translate("MainWindow_Manage", "\346\220\234\347\264\242", 0));
+        bookNameUpdate_search->setText(QApplication::translate("MainWindow_Manage", "\344\271\246\345\220\215", 0));
+        authorUpdate_search->setText(QApplication::translate("MainWindow_Manage", "\344\275\234\350\200\205", 0));
+        isbnUpdate_search->setText(QApplication::translate("MainWindow_Manage", "ISBN", 0));
         returnBottonBRManage->setText(QApplication::translate("MainWindow_Manage", "\350\277\224\345\233\236", 0));
         deleteButton->setText(QApplication::translate("MainWindow_Manage", "\345\210\240\351\231\244\345\233\276\344\271\246", 0));
         quitButtonManage->setText(QApplication::translate("MainWindow_Manage", "\351\200\200\345\207\272", 0));

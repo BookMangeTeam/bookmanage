@@ -51,7 +51,7 @@
      <string notr="true">background:#fff</string>
     </property>
     <property name="currentIndex">
-     <number>5</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="page">
      <widget class="QLabel" name="name">
@@ -398,6 +398,16 @@
        </property>
        <property name="text">
         <string>图书编号</string>
+       </property>
+      </widget>
+      <widget class="QTableView" name="hasBeenBorrow">
+       <property name="geometry">
+        <rect>
+         <x>750</x>
+         <y>50</y>
+         <width>81</width>
+         <height>51</height>
+        </rect>
        </property>
       </widget>
      </widget>
