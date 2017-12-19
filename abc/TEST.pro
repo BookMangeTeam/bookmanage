@@ -28,7 +28,9 @@ HEADERS  += mainwindow.h \
     global_variable.h \
     b_plus_tree.h \
     initial.h \
-    systemmanage.h
+    systemmanage.h \
+    search.h \
+    priority.h
 
 FORMS    += mainwindow.ui \
     login.ui \

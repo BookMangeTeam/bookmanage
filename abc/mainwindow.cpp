@@ -13,6 +13,8 @@
 #include <QDebug>
 #include <QCryptographichash.h> //md5加密封装类
 #include <QHeaderView> //隐藏表头
+#include <search.h>
+#include <priority.h>
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -762,13 +764,160 @@ void MainWindow::on_searchButtonBorrow_clicked()
     else
     {
         const char *search_info_s = search_info.toStdString().data();
+        QString search_info_q = QString(QLatin1String(search_info_s));//char*转QString
+        string search_info_st = search_info_q.toStdString();
         if(ui->bookNameBorrow_search->isChecked() == true)
         {
             //按书名搜索
+            int line = 0;
+            int matching_rate;
+            BPlusTree<string> BookB;
+            BookB.SetTableName(string("BookB"));
+            BookB.ReadHead();  //读取文件
+            vector<pair< string,vector<Undecide> > > all;
+            all = BookB.AllLeaf();
+            priority_queue<BoScore>que;
+            for(int i = 0; i < all.size(); i++)
+            {
+                char* bookName1 = const_cast<char*>((all[i].second)[0].s);//const char*转char*
+                QString bookName1_q = QString(QLatin1String(bookName1));//char*转QString
+                string bookName1_st = bookName1_q.toStdString();
+                matching_rate = Score(string(bookName1_st), string(search_info_st));
+                que.push(BoScore(string(bookName1_st),matching_rate));
+            }
+            int k = 1;
+            while(!que.empty())
+            {
+                if(k > 5)
+                    break;
+                BoScore temp;
+                temp = que.top();
+                que.pop();
+                k++;
+                all = BookB.AllLeaf();
+                for(int i = 0; i < all.size(); i++)
+                {
+                    if((all[i].second)[0].s == temp.s)
+                    {
+                        BPlusTree<string> BookA;
+                        BookA.SetTableName(string("BookA"));
+                        BookA.ReadHead();
+                        vector<pair< string,vector<Undecide> > > allA;
+                        allA = BookA.AllLeaf();
+                        for(int j = 0; j < allA.size(); j++)
+                        {
+                            if(((allA[j].second)[4].s == all[i].first) && ((allA[j].second)[3].num == 0))
+                            {
+                                QString bookNumber_q = QString::fromStdString(allA[j].first);//string转QString
+                                bookInformationborrow_model->setItem(line,0,new QStandardItem(bookNumber_q));
+
+                                char* bookName = const_cast<char*>((all[i].second)[0].s);//const char*转char*
+                                QString bookName_q = QString(QLatin1String(bookName));//char*转QString
+                                bookInformationborrow_model->setItem(line,1,new QStandardItem(bookName_q));
+
+                                char* author = const_cast<char*>((all[i].second)[1].s);//const char*转char*
+                                QString author_q = QString(QLatin1String(author));//char*转QString
+                                bookInformationborrow_model->setItem(line,2,new QStandardItem(author_q));
+
+                                char* publishHouse = const_cast<char*>((all[i].second)[2].s);//const char*转char*
+                                QString publishHouse_q = QString(QLatin1String(publishHouse));//char*转QString
+                                bookInformationborrow_model->setItem(line,3,new QStandardItem(publishHouse_q));
+                                if((allA[j].second)[2].num == 0)
+                                {
+                                    bookInformationborrow_model->setItem(line,4,new QStandardItem("未借"));
+                                }
+                                else if((allA[j].second)[2].num == 1)
+                                {
+                                    bookInformationborrow_model->setItem(line,4,new QStandardItem("正在借阅"));
+                                }
+                                    else if((allA[j].second)[2].num == 2)
+                                {
+                                    bookInformationborrow_model->setItem(line,4,new QStandardItem("续借中"));
+                                }
+                                line++;
+                             }
+                         }
+                     }
+                 }
+             }
         }
         else if(ui->authorBorrow_search->isChecked() == true)
         {
             //按作者搜索
+            int line = 0;
+            int matching_rate;
+            BPlusTree<string> BookB;
+            BookB.SetTableName(string("BookB"));
+            BookB.ReadHead();  //读取文件
+            vector<pair< string,vector<Undecide> > > all;
+            all = BookB.AllLeaf();
+            priority_queue<BoScore>que;
+            for(int i = 0; i < all.size(); i++)
+            {
+                char* author1 = const_cast<char*>((all[i].second)[1].s);//const char*转char*
+                QString author1_q = QString(QLatin1String(author1));//char*转QString
+                string author1_st = author1_q.toStdString();
+                matching_rate = Score(string(author1_st), string(search_info_st));
+                que.push(BoScore(string(author1_st),matching_rate));
+            }
+            int k = 1;
+            while(!que.empty())
+            {
+                if(k > 5)
+                    break;
+                BoScore temp;
+                temp = que.top();
+                cout << "**" << " ";
+                que.pop();
+                k++;
+                all = BookB.AllLeaf();
+                for(int i = 0; i < all.size(); i++)
+                {
+                    if((all[i].second)[1].s == temp.s)
+                    {
+                        cout << "//" << " ";
+                        BPlusTree<string> BookA;
+                        BookA.SetTableName(string("BookA"));
+                        BookA.ReadHead();
+                        vector<pair< string,vector<Undecide> > > allA;
+                        allA = BookA.AllLeaf();
+                        for(int j = 0; j < allA.size(); j++)
+                        {
+                            if(((allA[j].second)[4].s == all[i].first) && ((allA[j].second)[3].num == 0))
+                            {
+                                cout << "##" << " ";
+                                QString bookNumber_q = QString::fromStdString(allA[j].first);//string转QString
+                                bookInformationborrow_model->setItem(line,0,new QStandardItem(bookNumber_q));
+
+                                char* bookName = const_cast<char*>((all[i].second)[0].s);//const char*转char*
+                                QString bookName_q = QString(QLatin1String(bookName));//char*转QString
+                                bookInformationborrow_model->setItem(line,1,new QStandardItem(bookName_q));
+
+                                char* author = const_cast<char*>((all[i].second)[1].s);//const char*转char*
+                                QString author_q = QString(QLatin1String(author));//char*转QString
+                                bookInformationborrow_model->setItem(line,2,new QStandardItem(author_q));
+
+                                char* publishHouse = const_cast<char*>((all[i].second)[2].s);//const char*转char*
+                                QString publishHouse_q = QString(QLatin1String(publishHouse));//char*转QString
+                                bookInformationborrow_model->setItem(line,3,new QStandardItem(publishHouse_q));
+                                if((allA[j].second)[2].num == 0)
+                                {
+                                    bookInformationborrow_model->setItem(line,4,new QStandardItem("未借"));
+                                }
+                                else if((allA[j].second)[2].num == 1)
+                                {
+                                    bookInformationborrow_model->setItem(line,4,new QStandardItem("正在借阅"));
+                                }
+                                    else if((allA[j].second)[2].num == 2)
+                                {
+                                    bookInformationborrow_model->setItem(line,4,new QStandardItem("续借中"));
+                                }
+                                line++;
+                             }
+                        }
+                    }
+                }
+            }
         }
         else if(ui->isbnBorrow_search->isChecked() == true)
         {
@@ -834,7 +983,7 @@ void MainWindow::on_searchButtonBorrow_clicked()
             BookA.SetTableName(string("BookA"));
             BookA.ReadHead();  //读取文件
             Return3 result1 = BookA.Search(search_info_s,BookA.GetRootName());
-            if(result1.Succ)
+            if(result1.Succ && result1.ve[3].num == 0)
             {
                 //result1.ve[4].s为isbn
                 bookInformationborrow_model->setItem(0,0,new QStandardItem(search_info));
