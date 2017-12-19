@@ -1149,51 +1149,55 @@ void MainWindow_Manage::on_searchButtonDelate_clicked()
                     //根据构成编码作为BookA的Key值去查找
                     Return3 re = BookA.Search(ISBN_s, BookA.GetRootName());
 
-                    if(re.Succ == 1 && re.ve[3].num == 0)
+                    if(re.Succ == 1)
                     {
                         //如果查找成功且不为被标记的删除值，获取显示这本书信息
-
-                        //插入图书编号（ISBN加后三位）
-                        QString ISBN_q = QString::fromStdString(ISBN_s);
-                        bookInformationDelete_model->setItem(row, 0, new QStandardItem(ISBN_q));   //QString类型
-                        //插入书名
-                        char* bookName = const_cast<char*>(result1.ve[0].s);
-                        bookInformationDelete_model->setItem(row, 1, new QStandardItem(bookName));
-                        //插入作者
-                        char* bookAuthor = const_cast<char*>(result1.ve[1].s);
-                        bookInformationDelete_model->setItem(row, 2, new QStandardItem(bookAuthor));
-                        //插入出版社
-                        char* bookPublish = const_cast<char*>(result1.ve[2].s);
-                        bookInformationDelete_model->setItem(row, 3, new QStandardItem(bookPublish));
-                        //插入出版时间
-                        char* publishTime = const_cast<char*>(result1.ve[3].s);
-                        bookInformationDelete_model->setItem(row, 4, new QStandardItem(publishTime));
-                        //插入价格
-                        char* bookPrice = const_cast<char*>(result1.ve[4].s);
-                        bookInformationDelete_model->setItem(row, 5, new QStandardItem(bookPrice));
-                        //插入借阅状态
-                        int state = re.ve[2].num;
-                        QString bookState;
-                        switch (state)
+                        if(re.ve[3].num == 0)
                         {
-                            case 0:
-                                bookState = "未借";
-                                break;
-                            case 1:
-                                bookState = "正在借阅";
-                                break;
-                            case 2:
-                                bookState = "续借中";
-                                break;
-                            default:
-                                break;
+                            //插入图书编号（ISBN加后三位）
+                            QString ISBN_q = QString::fromStdString(ISBN_s);
+                            bookInformationDelete_model->setItem(row, 0, new QStandardItem(ISBN_q));   //QString类型
+                            //插入书名
+                            char* bookName = const_cast<char*>(result1.ve[0].s);
+                            bookInformationDelete_model->setItem(row, 1, new QStandardItem(bookName));
+                            //插入作者
+                            char* bookAuthor = const_cast<char*>(result1.ve[1].s);
+                            bookInformationDelete_model->setItem(row, 2, new QStandardItem(bookAuthor));
+                            //插入出版社
+                            char* bookPublish = const_cast<char*>(result1.ve[2].s);
+                            bookInformationDelete_model->setItem(row, 3, new QStandardItem(bookPublish));
+                            //插入出版时间
+                            char* publishTime = const_cast<char*>(result1.ve[3].s);
+                            bookInformationDelete_model->setItem(row, 4, new QStandardItem(publishTime));
+                            //插入价格
+                            char* bookPrice = const_cast<char*>(result1.ve[4].s);
+                            bookInformationDelete_model->setItem(row, 5, new QStandardItem(bookPrice));
+                            //插入借阅状态
+                            int state = re.ve[2].num;
+                            QString bookState;
+                            switch (state)
+                            {
+                                case 0:
+                                    bookState = "未借";
+                                    break;
+                                case 1:
+                                    bookState = "正在借阅";
+                                    break;
+                                case 2:
+                                    bookState = "续借中";
+                                    break;
+                                default:
+                                    break;
+                            }
+                            bookInformationDelete_model->setItem(row, 6, new QStandardItem(bookState));
+                            //行计数器增加
+                            row++;
                         }
-                        bookInformationDelete_model->setItem(row, 6, new QStandardItem(bookState));
 
                         //增加相关数据重新获得ISBN码
                         ISBN_s = searchContent.toStdString();
                         countN++;
-                        row++;
+
                     }
 
                     else
@@ -1208,7 +1212,7 @@ void MainWindow_Manage::on_searchButtonDelate_clicked()
             else
             {
                 //查找失败
-                QMessageBox::critical(this, "critical", "查找失败!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                QMessageBox::information(this, "消息", "查找失败!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
             }
 
         }
