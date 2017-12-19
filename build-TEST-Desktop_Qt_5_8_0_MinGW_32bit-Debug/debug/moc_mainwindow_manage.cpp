@@ -22,7 +22,7 @@ QT_WARNING_PUSH
 QT_WARNING_DISABLE_DEPRECATED
 struct qt_meta_stringdata_MainWindow_Manage_t {
     QByteArrayData data[18];
-    char stringdata0[478];
+    char stringdata0[475];
 };
 #define QT_MOC_LITERAL(idx, ofs, len) \
     Q_STATIC_BYTE_ARRAY_DATA_HEADER_INITIALIZER_WITH_OFFSET(len, \
@@ -48,7 +48,7 @@ QT_MOC_LITERAL(13, 329, 27), // "on_btn_manageSystem_clicked"
 QT_MOC_LITERAL(14, 357, 29), // "on_affirmBottonUpdate_clicked"
 QT_MOC_LITERAL(15, 387, 29), // "on_searchButtonUpdate_clicked"
 QT_MOC_LITERAL(16, 417, 29), // "on_searchButtonDelate_clicked"
-QT_MOC_LITERAL(17, 447, 30) // "on_authorDelete_search_clicked"
+QT_MOC_LITERAL(17, 447, 27) // "on_quitButtonManage_clicked"
 
     },
     "MainWindow_Manage\0on_btn_SignupManager_clicked\0"
@@ -65,7 +65,7 @@ QT_MOC_LITERAL(17, 447, 30) // "on_authorDelete_search_clicked"
     "on_affirmBottonUpdate_clicked\0"
     "on_searchButtonUpdate_clicked\0"
     "on_searchButtonDelate_clicked\0"
-    "on_authorDelete_search_clicked"
+    "on_quitButtonManage_clicked"
 };
 #undef QT_MOC_LITERAL
 
@@ -142,7 +142,7 @@ void MainWindow_Manage::qt_static_metacall(QObject *_o, QMetaObject::Call _c, in
         case 12: _t->on_affirmBottonUpdate_clicked(); break;
         case 13: _t->on_searchButtonUpdate_clicked(); break;
         case 14: _t->on_searchButtonDelate_clicked(); break;
-        case 15: _t->on_authorDelete_search_clicked(); break;
+        case 15: _t->on_quitButtonManage_clicked(); break;
         default: ;
         }
     }

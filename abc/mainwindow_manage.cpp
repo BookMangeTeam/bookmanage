@@ -441,7 +441,7 @@ void MainWindow_Manage::on_affirmBottonDelate_clicked()
     BookA.SetTableName(string("BookA"));
     BookA.ReadHead();
 
-    //遍搜索BookA（根据图书编码）
+    //搜索BookA（根据图书编码）
     string bookNumber_fin = bookNumber.toStdString();
     Return3 result1 = BookA.Search(bookNumber_fin, BookA.GetRootName());
     if(result1.Succ)
@@ -451,7 +451,7 @@ void MainWindow_Manage::on_affirmBottonDelate_clicked()
         if(result1.ve[2].num != 0)
         {
             //若是借阅状态的
-            QMessageBox::critical(this, "提示", "这本书当前是借阅状态，不可以删除！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+            QMessageBox::information(this, "提示", "这本书当前是借阅状态，不可以删除！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
         }
         else
@@ -656,30 +656,35 @@ void MainWindow_Manage::on_searchButtonUpdate_clicked()
             //全部遍历搜索BookB
             vector<pair< string,vector<Undecide> > > allB;
             allB = BookB.AllLeaf();
+            //设置行数计数器
+            int row = 0;
+
             for(int i=0; i<allB.size(); i++)
             {
-                if(strcmp((allB[i].second)[0].s, bookName_char) == 0)
+                if(strcmp((allB[i].second)[0].s, bookName_char) == 0)  //这里是精确查找的
                 {
                     //如果查找成功，显示查找结果到表格中
                     //插入ISBN
                     string ISBN_s = allB[i].first;
                     QString ISBN_q = QString::fromStdString(ISBN_s);
-                    bookInformationUpdate_model->setItem(0, 0, new QStandardItem(ISBN_q));   //QString类型
+                    bookInformationUpdate_model->setItem(row, 0, new QStandardItem(ISBN_q));   //QString类型
                     //插入书名
                     char* bookName = const_cast<char*>((allB[i].second)[0].s);
-                    bookInformationUpdate_model->setItem(0, 1, new QStandardItem(bookName));
+                    bookInformationUpdate_model->setItem(row, 1, new QStandardItem(bookName));
                     //插入作者
                     char* bookAuthor = const_cast<char*>((allB[i].second)[1].s);
-                    bookInformationUpdate_model->setItem(0, 2, new QStandardItem(bookAuthor));
+                    bookInformationUpdate_model->setItem(row, 2, new QStandardItem(bookAuthor));
                     //插入出版社
                     char* bookPublish = const_cast<char*>((allB[i].second)[2].s);
-                    bookInformationUpdate_model->setItem(0, 3, new QStandardItem(bookPublish));
+                    bookInformationUpdate_model->setItem(row, 3, new QStandardItem(bookPublish));
                     //插入出版时间
                     char* publishTime = const_cast<char*>((allB[i].second)[3].s);
-                    bookInformationUpdate_model->setItem(0, 4, new QStandardItem(publishTime));
+                    bookInformationUpdate_model->setItem(row, 4, new QStandardItem(publishTime));
                     //插入价格
                     char* bookPrice = const_cast<char*>((allB[i].second)[4].s);
-                    bookInformationUpdate_model->setItem(0, 5, new QStandardItem(bookPrice));
+                    bookInformationUpdate_model->setItem(row, 5, new QStandardItem(bookPrice));
+
+                    row++;
                 }
 
             }
@@ -697,6 +702,9 @@ void MainWindow_Manage::on_searchButtonUpdate_clicked()
             //全部遍历搜索BookB
             vector<pair< string,vector<Undecide> > > allB;
             allB = BookB.AllLeaf();
+            //设置行数计数器
+            int row = 0;
+
             for(int i=0; i<allB.size(); i++)
             {
                 if(strcmp((allB[i].second)[1].s, bookAuthor_char) == 0)
@@ -705,22 +713,24 @@ void MainWindow_Manage::on_searchButtonUpdate_clicked()
                     //插入ISBN
                     string ISBN_s = allB[i].first;
                     QString ISBN_q = QString::fromStdString(ISBN_s);
-                    bookInformationUpdate_model->setItem(0, 0, new QStandardItem(ISBN_q));   //QString类型
+                    bookInformationUpdate_model->setItem(row, 0, new QStandardItem(ISBN_q));   //QString类型
                     //插入书名
                     char* bookName = const_cast<char*>((allB[i].second)[0].s);
-                    bookInformationUpdate_model->setItem(0, 1, new QStandardItem(bookName));
+                    bookInformationUpdate_model->setItem(row, 1, new QStandardItem(bookName));
                     //插入作者
                     char* bookAuthor = const_cast<char*>((allB[i].second)[1].s);
-                    bookInformationUpdate_model->setItem(0, 2, new QStandardItem(bookAuthor));
+                    bookInformationUpdate_model->setItem(row, 2, new QStandardItem(bookAuthor));
                     //插入出版社
                     char* bookPublish = const_cast<char*>((allB[i].second)[2].s);
-                    bookInformationUpdate_model->setItem(0, 3, new QStandardItem(bookPublish));
+                    bookInformationUpdate_model->setItem(row, 3, new QStandardItem(bookPublish));
                     //插入出版时间
                     char* publishTime = const_cast<char*>((allB[i].second)[3].s);
-                    bookInformationUpdate_model->setItem(0, 4, new QStandardItem(publishTime));
+                    bookInformationUpdate_model->setItem(row, 4, new QStandardItem(publishTime));
                     //插入价格
                     char* bookPrice = const_cast<char*>((allB[i].second)[4].s);
-                    bookInformationUpdate_model->setItem(0, 5, new QStandardItem(bookPrice));
+                    bookInformationUpdate_model->setItem(row, 5, new QStandardItem(bookPrice));
+
+                    row++;
                 }
 
             }
@@ -843,8 +853,7 @@ void MainWindow_Manage::on_searchButtonDelate_clicked()
         if(ui->bookNameDelete_search->isChecked() == true)
         {
             //选中书名选择方式
-            //设置计数器和当前行坐标
-            int countN = 1;
+            //设置当前行坐标
             int row = 0;
 
             const char* bookName_char = searchContent.toStdString().data();  //类型转换
@@ -868,6 +877,8 @@ void MainWindow_Manage::on_searchButtonDelate_clicked()
                     BookA.ReadHead();
                     //获取对应的ISBN
                     string ISBN_s = allB[i].first;
+                    //同一本ISBN的书计数器设置
+                    int countN = 1;
 
                     while(1)
                     {
@@ -960,8 +971,7 @@ void MainWindow_Manage::on_searchButtonDelate_clicked()
         else if(ui->authorDelete_search->isChecked() == true)
         {
             //选中作者选择方式
-            //设置计数器和当前行坐标
-            int countN = 1;
+            //设置当前行坐标
             int row = 0;
 
             const char* bookAuthor_char = searchContent.toStdString().data();  //类型转换
@@ -985,11 +995,14 @@ void MainWindow_Manage::on_searchButtonDelate_clicked()
                     BookA.ReadHead();
                     //获取对应的ISBN
                     string ISBN_s = allB[i].first;
+                    //同一本ISBN的书计数器设置
+                    int countN = 1;
 
                     while(1)
                     {
                         //直到Search函数返回显示查找不到，则停止循环
                         //根据ISBN编码做处理
+                        //将countN转换为字符串
                         stringstream ss;
                         string str;
                         string add;
@@ -1204,70 +1217,76 @@ void MainWindow_Manage::on_searchButtonDelate_clicked()
             BookA.ReadHead();
             Return3 resulta = BookA.Search(bookNumber_s, BookA.GetRootName());
 
-            //读取BookB表
-            BPlusTree<string> BookB;
-            BookB.SetTableName(string("BookB"));
-            BookB.ReadHead();
-
-            int row = 0; //设置定位的插入行
-            //获取书本是否被删去的状态
-            int bookState = resulta.ve[3].num;
-
-            //根据BookA中的ISBN去BookB找信息（这里还需要判断是否被删去的，删去的不显示）
-            if(resulta.Succ == 1 && bookState == 0)
+            if(resulta.Succ == 1)
             {
-                   //获取书本编号
-                   bookInformationDelete_model->setItem(row, 0, new QStandardItem(searchContent));
+                //读取BookB表
+                BPlusTree<string> BookB;
+                BookB.SetTableName(string("BookB"));
+                BookB.ReadHead();
 
-                   //获取书本借阅状态
-                   int borrowState = resulta.ve[2].num;
-                   QString state;
-                   switch (borrowState) {
-                       case 0:
-                           state = "未借";
-                           break;
-                       case 1:
-                           state = "正在借阅";
-                           break;
-                       case 2:
-                           state = "续借中";
-                           break;
-                       default:
-                           break;
-                   }
-                   bookInformationDelete_model->setItem(row, 6, new QStandardItem(state));
+                int row = 0; //设置定位的插入行
+                //获取书本是否被删去的状态
+                int bookState = resulta.ve[3].num;
 
-                   //去BookB中查找相应信息
-                   const char *ISBN_s = resulta.ve[4].s; //const char*转为string
-                   string ISBN(ISBN_s);
-                   Return3 result1 = BookB.Search(ISBN, BookB.GetRootName());
-                   if(result1.Succ)
-                   {
-                       //若在BookB中存在
-                       //获取书名
-                       char* bookName = const_cast<char*>(result1.ve[0].s);  //const char*转char*
-                       //QString bookName_q = QString::fromUtf8(bookName.getData());  //中文编码
-                       //QString bookNumber_q = QString(QLatin1String(bookNumber));   //char*转QString
-                       bookInformationDelete_model->setItem(row, 1, new QStandardItem(bookName));
+                //根据BookA中的ISBN去BookB找信息（这里还需要判断是否被删去的，删去的不显示）
+                if(bookState == 0)
+                {
+                       //获取书本编号
+                       bookInformationDelete_model->setItem(row, 0, new QStandardItem(searchContent));
 
-                       //获取作者名
-                       char* bookAuthur = const_cast<char*>(result1.ve[1].s);
-                       //QString bookAuthur_q = QString::fromUtf8(bookAuthur.getData());  //中文编码
-                       bookInformationDelete_model->setItem(row, 2, new QStandardItem(bookAuthur));
+                       //获取书本借阅状态
+                       int borrowState = resulta.ve[2].num;
+                       QString state;
+                       switch (borrowState) {
+                           case 0:
+                               state = "未借";
+                               break;
+                           case 1:
+                               state = "正在借阅";
+                               break;
+                           case 2:
+                               state = "续借中";
+                               break;
+                           default:
+                               break;
+                       }
+                       bookInformationDelete_model->setItem(row, 6, new QStandardItem(state));
 
-                       //获取出版社
-                       char* bookPublish = const_cast<char*>(result1.ve[2].s);
-                       bookInformationDelete_model->setItem(row, 3, new QStandardItem(bookPublish));
+                       //去BookB中查找相应信息
+                       const char *ISBN_s = resulta.ve[4].s; //const char*转为string
+                       string ISBN(ISBN_s);
+                       Return3 result1 = BookB.Search(ISBN, BookB.GetRootName());
+                       if(result1.Succ == 1)
+                       {
+                           //若在BookB中存在
+                           //获取书名
+                           char* bookName = const_cast<char*>(result1.ve[0].s);  //const char*转char*
+                           //QString bookName_q = QString::fromUtf8(bookName.getData());  //中文编码
+                           //QString bookNumber_q = QString(QLatin1String(bookNumber));   //char*转QString
+                           bookInformationDelete_model->setItem(row, 1, new QStandardItem(bookName));
 
-                       //获取出版时间
-                       char* publishTime = const_cast<char*>(result1.ve[3].s);
-                       bookInformationDelete_model->setItem(row, 4, new QStandardItem(publishTime));
+                           //获取作者名
+                           char* bookAuthur = const_cast<char*>(result1.ve[1].s);
+                           //QString bookAuthur_q = QString::fromUtf8(bookAuthur.getData());  //中文编码
+                           bookInformationDelete_model->setItem(row, 2, new QStandardItem(bookAuthur));
 
-                       //获取书本价格
-                       char* bookPrice = const_cast<char*>(result1.ve[4].s);
-                       bookInformationDelete_model->setItem(row, 5, new QStandardItem(bookPrice));
-                    }
-                    row++;  //增加row，放进表格行数
+                           //获取出版社
+                           char* bookPublish = const_cast<char*>(result1.ve[2].s);
+                           bookInformationDelete_model->setItem(row, 3, new QStandardItem(bookPublish));
+
+                           //获取出版时间
+                           char* publishTime = const_cast<char*>(result1.ve[3].s);
+                           bookInformationDelete_model->setItem(row, 4, new QStandardItem(publishTime));
+
+                           //获取书本价格
+                           char* bookPrice = const_cast<char*>(result1.ve[4].s);
+                           bookInformationDelete_model->setItem(row, 5, new QStandardItem(bookPrice));
+
+                           //增加row，放进表格行数
+                           row++;
+                        }
+
+                 }
              }
              else
              {
@@ -1278,8 +1297,6 @@ void MainWindow_Manage::on_searchButtonDelate_clicked()
 
         }
 
-
-
         else
         {
             //需要选择查找类型
@@ -1289,13 +1306,15 @@ void MainWindow_Manage::on_searchButtonDelate_clicked()
     else
     {
         //提示搜索输入不可以为空
-        QMessageBox::critical(this, "critical", "输入修改的内容不能为空!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+        QMessageBox::information(this, "提示", "输入修改的内容不能为空!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
     }
 
 
 }
 
-void MainWindow_Manage::on_authorDelete_search_clicked()
-{
 
+void MainWindow_Manage::on_quitButtonManage_clicked()
+{
+    //退出管理员窗口
+    exit(0);
 }

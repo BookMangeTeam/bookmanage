@@ -51,6 +51,7 @@ public:
     QRadioButton *authorBorrow_search;
     QRadioButton *isbnBorrow_search;
     QRadioButton *bookNumberBorrow_search;
+    QTableView *hasBeenBorrow;
     QWidget *page_3;
     QFrame *mainWindowBackGroundFrame4;
     QTableView *bookInformationRepay;
@@ -207,6 +208,9 @@ public:
         bookNumberBorrow_search->setObjectName(QStringLiteral("bookNumberBorrow_search"));
         bookNumberBorrow_search->setGeometry(QRect(550, 70, 89, 16));
         bookNumberBorrow_search->setFont(font3);
+        hasBeenBorrow = new QTableView(mainWindowBackGroundFrame3);
+        hasBeenBorrow->setObjectName(QStringLiteral("hasBeenBorrow"));
+        hasBeenBorrow->setGeometry(QRect(750, 50, 81, 51));
         stackedWidgetPermary->addWidget(page_2);
         page_3 = new QWidget();
         page_3->setObjectName(QStringLiteral("page_3"));
@@ -370,7 +374,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        stackedWidgetPermary->setCurrentIndex(5);
+        stackedWidgetPermary->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
