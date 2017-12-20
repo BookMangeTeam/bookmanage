@@ -1,6 +1,8 @@
 #include "mainwindow_manage.h"
 #include "ui_mainwindow_manage.h"
 #include "b_plus_tree.h"
+#include "priority.h"
+#include "search.h"
 #include "systemmanage.h"
 #include <QMessageBox>
 #include <global_variable.h>
@@ -10,6 +12,7 @@
 #include<iostream>
 #include<QDebug>
 #include <QStandardItemModel> //用于存储定制数据的通用模型
+
 
 
 MainWindow_Manage::MainWindow_Manage(QWidget *parent) :
@@ -853,10 +856,12 @@ void MainWindow_Manage::on_searchButtonDelate_clicked()
         if(ui->bookNameDelete_search->isChecked() == true)
         {
             //选中书名选择方式
-            //设置当前行坐标
+            //设置当前行坐标和匹配度
             int row = 0;
+            int matching_rate;
 
             const char* bookName_char = searchContent.toStdString().data();  //类型转换
+            string searchContent_s = searchContent.toStdString();
             //读取BookB
             BPlusTree<string> BookB;
             BookB.SetTableName(string("BookB"));
@@ -864,112 +869,133 @@ void MainWindow_Manage::on_searchButtonDelate_clicked()
             //全部遍历搜索BookB
             vector<pair< string,vector<Undecide> > > allB;
             allB = BookB.AllLeaf();
+            //设置que
+            priority_queue<BoScore>que;
+            //循环将BookB中的书本名称都调出来进行一个匹配度计算，并放入队列que中
             for(int i=0; i<allB.size(); i++)
             {
-                if(strcmp((allB[i].second)[0].s, bookName_char) == 0)
+                char* bookName1 = const_cast<char*>((allB[i].second)[0].s);
+                QString bookName1_q = QString(bookName1);
+                string bookName1_s = bookName1_q.toStdString();
+                matching_rate = Score(string(bookName1_s), string(searchContent_s));
+                que.push(BoScore(string(allB[i].first), matching_rate));
+            }
+            int k = 1; //表示去匹配度的程度计数器
+            while(!que.empty())
+            {
+                if(k > 5)
+                    break;
+                BoScore temp;
+                temp = que.top();
+                que.pop();
+                k++;
+                for(int i=0; i<allB.size(); i++)
                 {
-                    //如果查找成功，显示查找结果到表格中
-                    //插入图书编号
-                    //到BookA去找到对应的图书编号
-                    //读取BookA表
-                    BPlusTree<string> BookA;
-                    BookA.SetTableName(string("BookA"));
-                    BookA.ReadHead();
-                    //获取对应的ISBN
-                    string ISBN_s = allB[i].first;
-                    //同一本ISBN的书计数器设置
-                    int countN = 1;
-
-                    while(1)
+                    if(temp.s == allB[i].first)
                     {
-                        //直到Search函数返回显示查找不到，则停止循环
-                        //根据ISBN编码做处理
-                        stringstream ss;
-                        string str;
-                        string add;
-                        ss<<countN;
-                        ss>>str;
+                        //如果查找成功，显示查找结果到表格中
+                        //插入图书编号
+                        //到BookA去找到对应的图书编号
+                        //读取BookA表
+                        BPlusTree<string> BookA;
+                        BookA.SetTableName(string("BookA"));
+                        BookA.ReadHead();
+                        //获取对应的ISBN
+                        string ISBN_s = allB[i].first;
+                        //同一本ISBN的书计数器设置
+                        int countN = 1;
 
-                        int len = str.length();
-                        switch(len)
+                        while(1)
                         {
-                            case 1: add = "00";
-                                    add.append(str);
-                                    ISBN_s.append(add);
-                                    break;
-                            case 2: add = "0";
-                                    add.append(str);
-                                    ISBN_s.append(add);
-                                    break;
-                            case 3: ISBN_s.append(str);
-                                    break;
-                            default:
-                                    break;
-                        }
+                            //直到Search函数返回显示查找不到，则停止循环
+                            //根据ISBN编码做处理
+                            stringstream ss;
+                            string str;
+                            string add;
+                            ss<<countN;
+                            ss>>str;
 
-
-                        //根据构成编码作为BookA的Key值去查找
-                        Return3 re = BookA.Search(ISBN_s, BookA.GetRootName());
-                        if(re.Succ == 1) //这里的判定条件只可以为判断可不可以查找到！！
-                        {
-                            //如果查找成功且不为被标记的删除值，获取显示这本书信息
-                            if(re.ve[3].num == 0)
+                            int len = str.length();
+                            switch(len)
                             {
-                                //插入图书编号（ISBN加后三位）
-                                QString ISBN_q = QString::fromStdString(ISBN_s);
-                                bookInformationDelete_model->setItem(row, 0, new QStandardItem(ISBN_q));   //QString类型
-                                //插入书名
-                                char* bookName = const_cast<char*>((allB[i].second)[0].s);
-                                bookInformationDelete_model->setItem(row, 1, new QStandardItem(bookName));
-                                //插入作者
-                                char* bookAuthor = const_cast<char*>((allB[i].second)[1].s);
-                                bookInformationDelete_model->setItem(row, 2, new QStandardItem(bookAuthor));
-                                //插入出版社
-                                char* bookPublish = const_cast<char*>((allB[i].second)[2].s);
-                                bookInformationDelete_model->setItem(row, 3, new QStandardItem(bookPublish));
-                                //插入出版时间
-                                char* publishTime = const_cast<char*>((allB[i].second)[3].s);
-                                bookInformationDelete_model->setItem(row, 4, new QStandardItem(publishTime));
-                                //插入价格
-                                char* bookPrice = const_cast<char*>((allB[i].second)[4].s);
-                                bookInformationDelete_model->setItem(row, 5, new QStandardItem(bookPrice));
-                                //插入借阅状态
-                                int state = re.ve[2].num;
-                                QString bookState;
-                                switch (state)
-                                {
-                                    case 0:
-                                        bookState = "未借";
+                                case 1: add = "00";
+                                        add.append(str);
+                                        ISBN_s.append(add);
                                         break;
-                                    case 1:
-                                        bookState = "正在借阅";
+                                case 2: add = "0";
+                                        add.append(str);
+                                        ISBN_s.append(add);
                                         break;
-                                    case 2:
-                                        bookState = "续借中";
+                                case 3: ISBN_s.append(str);
                                         break;
-                                    default:
+                                default:
                                         break;
-                                }
-                                bookInformationDelete_model->setItem(row, 6, new QStandardItem(bookState));
-                                //行计数器增加
-                                row++;
                             }
 
-                            //增加查询编号计数器和给string变量重新定义
-                            ISBN_s = allB[i].first;
-                            countN++;
+
+                            //根据构成编码作为BookA的Key值去查找
+                            Return3 re = BookA.Search(ISBN_s, BookA.GetRootName());
+                            if(re.Succ == 1) //这里的判定条件只可以为判断可不可以查找到！！
+                            {
+                                //如果查找成功且不为被标记的删除值，获取显示这本书信息
+                                if(re.ve[3].num == 0)
+                                {
+                                    //插入图书编号（ISBN加后三位）
+                                    QString ISBN_q = QString::fromStdString(ISBN_s);
+                                    bookInformationDelete_model->setItem(row, 0, new QStandardItem(ISBN_q));   //QString类型
+                                    //插入书名
+                                    char* bookName = const_cast<char*>((allB[i].second)[0].s);
+                                    bookInformationDelete_model->setItem(row, 1, new QStandardItem(bookName));
+                                    //插入作者
+                                    char* bookAuthor = const_cast<char*>((allB[i].second)[1].s);
+                                    bookInformationDelete_model->setItem(row, 2, new QStandardItem(bookAuthor));
+                                    //插入出版社
+                                    char* bookPublish = const_cast<char*>((allB[i].second)[2].s);
+                                    bookInformationDelete_model->setItem(row, 3, new QStandardItem(bookPublish));
+                                    //插入出版时间
+                                    char* publishTime = const_cast<char*>((allB[i].second)[3].s);
+                                    bookInformationDelete_model->setItem(row, 4, new QStandardItem(publishTime));
+                                    //插入价格
+                                    char* bookPrice = const_cast<char*>((allB[i].second)[4].s);
+                                    bookInformationDelete_model->setItem(row, 5, new QStandardItem(bookPrice));
+                                    //插入借阅状态
+                                    int state = re.ve[2].num;
+                                    QString bookState;
+                                    switch (state)
+                                    {
+                                        case 0:
+                                            bookState = "未借";
+                                            break;
+                                        case 1:
+                                            bookState = "正在借阅";
+                                            break;
+                                        case 2:
+                                            bookState = "续借中";
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                    bookInformationDelete_model->setItem(row, 6, new QStandardItem(bookState));
+                                    //行计数器增加
+                                    row++;
+                                }
+
+                                //增加查询编号计数器和给string变量重新定义
+                                ISBN_s = allB[i].first;
+                                countN++;
+
+                            }
+
+                            else
+                            {
+                                //如果查找不到，退出循环
+                                break;
+                            }
 
                         }
-
-                        else
-                        {
-                            //如果查找不到，退出循环
-                            break;
-                        }
-
                     }
                 }
-            }
+             }
         }
 
         else if(ui->authorDelete_search->isChecked() == true)

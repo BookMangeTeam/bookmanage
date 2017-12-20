@@ -15,6 +15,7 @@
 #include <QHeaderView> //隐藏表头
 #include <search.h>
 #include <priority.h>
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -783,7 +784,7 @@ void MainWindow::on_searchButtonBorrow_clicked()
                 QString bookName1_q = QString(QLatin1String(bookName1));//char*转QString
                 string bookName1_st = bookName1_q.toStdString();
                 matching_rate = Score(string(bookName1_st), string(search_info_st));
-                que.push(BoScore(string(bookName1_st),matching_rate));
+                que.push(BoScore(string(all[i].first),matching_rate));
             }
             int k = 1;
             while(!que.empty())
@@ -797,7 +798,7 @@ void MainWindow::on_searchButtonBorrow_clicked()
                 all = BookB.AllLeaf();
                 for(int i = 0; i < all.size(); i++)
                 {
-                    if((all[i].second)[0].s == temp.s)
+                    if(all[i].first == temp.s)
                     {
                         BPlusTree<string> BookA;
                         BookA.SetTableName(string("BookA"));
@@ -858,7 +859,7 @@ void MainWindow::on_searchButtonBorrow_clicked()
                 QString author1_q = QString(QLatin1String(author1));//char*转QString
                 string author1_st = author1_q.toStdString();
                 matching_rate = Score(string(author1_st), string(search_info_st));
-                que.push(BoScore(string(author1_st),matching_rate));
+                que.push(BoScore(string(all[i].first),matching_rate));
             }
             int k = 1;
             while(!que.empty())
@@ -867,15 +868,13 @@ void MainWindow::on_searchButtonBorrow_clicked()
                     break;
                 BoScore temp;
                 temp = que.top();
-                cout << "**" << " ";
                 que.pop();
                 k++;
                 all = BookB.AllLeaf();
                 for(int i = 0; i < all.size(); i++)
                 {
-                    if((all[i].second)[1].s == temp.s)
+                    if(all[i].first == temp.s)
                     {
-                        cout << "//" << " ";
                         BPlusTree<string> BookA;
                         BookA.SetTableName(string("BookA"));
                         BookA.ReadHead();
@@ -885,7 +884,6 @@ void MainWindow::on_searchButtonBorrow_clicked()
                         {
                             if(((allA[j].second)[4].s == all[i].first) && ((allA[j].second)[3].num == 0))
                             {
-                                cout << "##" << " ";
                                 QString bookNumber_q = QString::fromStdString(allA[j].first);//string转QString
                                 bookInformationborrow_model->setItem(line,0,new QStandardItem(bookNumber_q));
 
@@ -913,7 +911,7 @@ void MainWindow::on_searchButtonBorrow_clicked()
                                     bookInformationborrow_model->setItem(line,4,new QStandardItem("续借中"));
                                 }
                                 line++;
-                             }
+                            }
                         }
                     }
                 }
