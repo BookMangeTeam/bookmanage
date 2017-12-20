@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     login.cpp \
     register.cpp \
     mainwindow_manage.cpp \
-    systemmanage.cpp
+    systemmanage.cpp \
+    search.cpp
 
 HEADERS  += mainwindow.h \
     login.h \

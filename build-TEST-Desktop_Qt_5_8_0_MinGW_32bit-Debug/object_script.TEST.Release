@@ -5,6 +5,7 @@ INPUT(
 ./release\register.o
 ./release\mainwindow_manage.o
 ./release\systemmanage.o
+./release\search.o
 ./release\qrc_picture.o
 ./release\moc_mainwindow.o
 ./release\moc_login.o

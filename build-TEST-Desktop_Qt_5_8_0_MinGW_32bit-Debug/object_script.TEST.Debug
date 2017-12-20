@@ -5,6 +5,7 @@ INPUT(
 ./debug\register.o
 ./debug\mainwindow_manage.o
 ./debug\systemmanage.o
+./debug\search.o
 ./debug\qrc_picture.o
 ./debug\moc_mainwindow.o
 ./debug\moc_login.o
