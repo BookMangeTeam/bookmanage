@@ -1,7 +1,7 @@
 #ifndef SEARCH_H
 #define SEARCH_H
 
-#endif // SEARCH_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -87,3 +87,4 @@ int Score(string a, string b){
     }
     return Sco_Eng(a,b_eng)+Sco_Ch(a,b_ch);
 }
+#endif // SEARCH_H

@@ -13,8 +13,8 @@
 #include <QDebug>
 #include <QCryptographichash.h> //md5加密封装类
 #include <QHeaderView> //隐藏表头
-#include <search.h>
-#include <priority.h>
+//#include <search.h>
+//#include <priority.h>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -767,7 +767,7 @@ void MainWindow::on_searchButtonBorrow_clicked()
         const char *search_info_s = search_info.toStdString().data();
         QString search_info_q = QString(QLatin1String(search_info_s));//char*转QString
         string search_info_st = search_info_q.toStdString();
-        if(ui->bookNameBorrow_search->isChecked() == true)
+        /*if(ui->bookNameBorrow_search->isChecked() == true)
         {
             //按书名搜索
             int line = 0;
@@ -916,8 +916,8 @@ void MainWindow::on_searchButtonBorrow_clicked()
                     }
                 }
             }
-        }
-        else if(ui->isbnBorrow_search->isChecked() == true)
+        }*/
+        if(ui->isbnBorrow_search->isChecked() == true)
         {
             //按isbn搜索
             int line = 0;

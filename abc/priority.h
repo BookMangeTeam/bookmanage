@@ -1,7 +1,7 @@
 #ifndef PRIORITY_H
 #define PRIORITY_H
 
-#endif // PRIORITY_H
+
 #include<iostream>
 #include<algorithm>
 #include<cstdio>
@@ -24,3 +24,5 @@ public:
         return (a.score < b.score);
     }
 };
+
+#endif // PRIORITY_H

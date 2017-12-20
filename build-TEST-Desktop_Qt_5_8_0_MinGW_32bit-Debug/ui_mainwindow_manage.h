@@ -284,7 +284,7 @@ public:
         isbnDelete_search->setFont(font6);
         bookNumberDelete_search = new QRadioButton(page_3);
         bookNumberDelete_search->setObjectName(QStringLiteral("bookNumberDelete_search"));
-        bookNumberDelete_search->setGeometry(QRect(530, 55, 89, 21));
+        bookNumberDelete_search->setGeometry(QRect(530, 55, 111, 21));
         bookNumberDelete_search->setFont(font6);
         stackedWidgetManage->addWidget(page_3);
         page_4 = new QWidget();
@@ -419,7 +419,7 @@ public:
 
         retranslateUi(MainWindow_Manage);
 
-        stackedWidgetManage->setCurrentIndex(2);
+        stackedWidgetManage->setCurrentIndex(3);
 
 
         QMetaObject::connectSlotsByName(MainWindow_Manage);
