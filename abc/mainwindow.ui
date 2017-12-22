@@ -57,8 +57,8 @@
      <widget class="QLabel" name="name">
       <property name="geometry">
        <rect>
-        <x>140</x>
-        <y>280</y>
+        <x>150</x>
+        <y>210</y>
         <width>521</width>
         <height>141</height>
        </rect>
@@ -67,8 +67,8 @@
        <font>
         <family>等线</family>
         <pointsize>50</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
+        <weight>50</weight>
+        <bold>false</bold>
        </font>
       </property>
       <property name="autoFillBackground">
@@ -79,26 +79,6 @@
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
-      </property>
-     </widget>
-     <widget class="QLabel" name="label">
-      <property name="geometry">
-       <rect>
-        <x>290</x>
-        <y>170</y>
-        <width>231</width>
-        <height>91</height>
-       </rect>
-      </property>
-      <property name="font">
-       <font>
-        <pointsize>40</pointsize>
-        <weight>75</weight>
-        <bold>true</bold>
-       </font>
-      </property>
-      <property name="text">
-       <string>欢迎使用</string>
       </property>
      </widget>
     </widget>
@@ -173,9 +153,9 @@
        <property name="geometry">
         <rect>
          <x>30</x>
-         <y>100</y>
+         <y>130</y>
          <width>801</width>
-         <height>431</height>
+         <height>401</height>
         </rect>
        </property>
        <property name="styleSheet">
@@ -240,9 +220,9 @@
        <property name="geometry">
         <rect>
          <x>180</x>
-         <y>70</y>
+         <y>65</y>
          <width>89</width>
-         <height>16</height>
+         <height>21</height>
         </rect>
        </property>
        <property name="font">
@@ -258,9 +238,9 @@
        <property name="geometry">
         <rect>
          <x>300</x>
-         <y>70</y>
+         <y>65</y>
          <width>89</width>
-         <height>16</height>
+         <height>21</height>
         </rect>
        </property>
        <property name="font">
@@ -276,9 +256,9 @@
        <property name="geometry">
         <rect>
          <x>430</x>
-         <y>70</y>
+         <y>65</y>
          <width>89</width>
-         <height>16</height>
+         <height>21</height>
         </rect>
        </property>
        <property name="font">
@@ -294,9 +274,9 @@
        <property name="geometry">
         <rect>
          <x>550</x>
-         <y>70</y>
-         <width>89</width>
-         <height>16</height>
+         <y>60</y>
+         <width>111</width>
+         <height>31</height>
         </rect>
        </property>
        <property name="font">
@@ -312,9 +292,9 @@
        <property name="geometry">
         <rect>
          <x>750</x>
-         <y>50</y>
+         <y>60</y>
          <width>81</width>
-         <height>51</height>
+         <height>71</height>
         </rect>
        </property>
       </widget>

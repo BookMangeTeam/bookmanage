@@ -524,7 +524,7 @@ void MainWindow_Manage::on_affirmBottonUpdate_clicked()
                     BookB.Update(bookNumber_fin, result1.ve);
                     //将表格信息更新
                     //定位到搜索到的行设置index
-                    QModelIndex index = model->index(0,1);
+                    QModelIndex index = model->index(row,1);
                     QVariant value(updateInfo_q);
                     model->setData(index, value, Qt::EditRole);
                     QMessageBox::critical(this, "提示", "更改书名成功!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
@@ -536,7 +536,7 @@ void MainWindow_Manage::on_affirmBottonUpdate_clicked()
                     BookB.Update(bookNumber_fin, result1.ve);
                     //将表格信息更新
                     //定位到搜索到的行设置index
-                    QModelIndex index2 = model->index(0,2);
+                    QModelIndex index2 = model->index(row,2);
                     QVariant value2(updateInfo_q);
                     model->setData(index2, value2, Qt::EditRole);
                     QMessageBox::critical(this, "提示", "更改作者成功!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
@@ -548,7 +548,7 @@ void MainWindow_Manage::on_affirmBottonUpdate_clicked()
                     BookB.Update(bookNumber_fin, result1.ve);
                     //将表格信息更新
                     //定位到搜索到的行设置index
-                    QModelIndex index3 = model->index(0,3);
+                    QModelIndex index3 = model->index(row,3);
                     QVariant value3(updateInfo_q);
                     model->setData(index3, value3, Qt::EditRole);
                     QMessageBox::critical(this, "提示", "更改出版社成功!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
@@ -560,7 +560,7 @@ void MainWindow_Manage::on_affirmBottonUpdate_clicked()
                     BookB.Update(bookNumber_fin, result1.ve);
                     //将表格信息更新
                     //定位到搜索到的行设置index
-                    QModelIndex index4 = model->index(0,4);
+                    QModelIndex index4 = model->index(row,4);
                     QVariant value4(updateInfo_q);
                     model->setData(index4, value4, Qt::EditRole);
                     QMessageBox::critical(this, "提示", "更改出版时间成功!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
@@ -572,10 +572,10 @@ void MainWindow_Manage::on_affirmBottonUpdate_clicked()
                     BookB.Update(bookNumber_fin, result1.ve);
                     //将表格信息更新
                     //定位到搜索到的行设置index
-                    QModelIndex index5 = model->index(0,5);
+                    QModelIndex index5 = model->index(row,5);
                     QVariant value5(updateInfo_q);
                     model->setData(index5, value5, Qt::EditRole);
-                    QMessageBox::critical(this, "提示", "更改价格成功!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                    QMessageBox::information(this, "提示", "更改价格成功!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
                     break;
             }
 
@@ -1295,7 +1295,7 @@ void MainWindow_Manage::on_searchButtonDelate_clicked()
                }
 
 
-            }           
+            }
             else
             {
                 //查找失败

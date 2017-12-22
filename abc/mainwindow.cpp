@@ -119,9 +119,9 @@ void MainWindow::on_repayButton_clicked()
         ui->bookInformationRepay->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Fixed);
         ui->bookInformationRepay->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Fixed);
         //设置表格的各列的宽度值
-        ui->bookInformationRepay->setColumnWidth(0,110);
-        ui->bookInformationRepay->setColumnWidth(1,180);
-        ui->bookInformationRepay->setColumnWidth(2,180);
+        ui->bookInformationRepay->setColumnWidth(0,180);
+        ui->bookInformationRepay->setColumnWidth(1,160);
+        ui->bookInformationRepay->setColumnWidth(2,150);
         ui->bookInformationRepay->setColumnWidth(3,125);
         ui->bookInformationRepay->setColumnWidth(4,125);
         ui->bookInformationRepay->setColumnWidth(5,80);
@@ -257,10 +257,10 @@ void MainWindow::on_renewButton_clicked()
     ui->bookInformationRenew->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Fixed);
     ui->bookInformationRenew->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Fixed);
     //设置表格的各列的宽度值
-    ui->bookInformationRenew->setColumnWidth(0,110);
+    ui->bookInformationRenew->setColumnWidth(0,180);
     ui->bookInformationRenew->setColumnWidth(1,180);
     ui->bookInformationRenew->setColumnWidth(2,125);
-    ui->bookInformationRenew->setColumnWidth(3,180);
+    ui->bookInformationRenew->setColumnWidth(3,125);
     ui->bookInformationRenew->setColumnWidth(4,125);
     ui->bookInformationRenew->setColumnWidth(5,80);
 
@@ -714,10 +714,10 @@ void MainWindow::on_searchButtonBorrow_clicked()
     ui->bookInformationborrow->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Fixed);
     ui->bookInformationborrow->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Fixed);
     //设置表格的各列的宽度值
-    ui->bookInformationborrow->setColumnWidth(0,110);
+    ui->bookInformationborrow->setColumnWidth(0,180);
     ui->bookInformationborrow->setColumnWidth(1,230);
     ui->bookInformationborrow->setColumnWidth(2,130);
-    ui->bookInformationborrow->setColumnWidth(3,230);
+    ui->bookInformationborrow->setColumnWidth(3,180);
     ui->bookInformationborrow->setColumnWidth(4,80);
 
     //设置选中时为整行选中
@@ -1042,6 +1042,7 @@ void MainWindow::on_affirmBottonBorrow_clicked()
     QModelIndex index = model->index(row,0);//选中行第一列的内容
     QVariant data = model->data(index);
     const char *data_s = data.toString().toStdString().data();//先转Qstring再转const char*
+    string data_ss = data.toString().toStdString();
 
     BPlusTree<string> BookA;
     BookA.SetTableName(string("BookA"));
@@ -1105,7 +1106,7 @@ void MainWindow::on_affirmBottonBorrow_clicked()
             bookav.push_back(te11);
             bookav.push_back(te12);
             bookav.push_back(te13);
-            BookA.Update(data_s,bookav);
+            BookA.Update(data_ss,bookav);
             BookA.SaveHead();
 
             //更新user表 借书数加一
