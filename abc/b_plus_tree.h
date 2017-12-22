@@ -8,6 +8,7 @@
 #include<vector>
 #include<sstream>
 #include<typeinfo>
+#include<time.h>
 #define OK 1
 #define NO 0
 #define ERROR -1
@@ -121,6 +122,7 @@ public:
     bool Delete(T1 Key);
     bool Delete2(string filename, T1 Key);
     string GetRootName();
+    string GetTableName();
     bool ChangePreNameForDel(string filename, T1 original, T1 newkey);
     Return4<T1> BorrowNodes(string filename, T1 Key);
     bool Union2(string file1, string file2);
@@ -132,6 +134,8 @@ public:
     bool SetTableName(string s);
     vector<pair< T1,vector<Undecide> > > AllLeaf();
     Return3 Bianli();
+    int GetNodeNum();
+    void ClearData();
 private:
     //储存表的结构，每个位置对应一个数字
     vector<short> TypeList;  //0->string  1->int  2->longlong  3->bool
@@ -146,10 +150,19 @@ bool BPlusTree<T1>::SetTableName(string s){
 }
 
 template<typename T1>
+int BPlusTree<T1>::GetNodeNum(){
+    return NodeNum;
+}
+
+template<typename T1>
 string BPlusTree<T1>::GetRootName(){
     return RootName;
 }
 
+template<typename T1>
+string BPlusTree<T1>::GetTableName(){
+    return TableName;
+}
 
 template<typename T1>
 void BPlusTree<T1>::SetTable(vector<short>v){
@@ -172,7 +185,9 @@ void BPlusTree<T1>::BuildTree(string Table){
     NodeNum = 0;
     //根节点文件命名为root.dat
     TableName = Table;
+    // cout << TableName << endl;
     RootName = TableName+TransIntToString(NodeNum)+string(".dat");
+    // cout << RootName << "   p184" << endl;
     NodeNum++;
     ofstream out(RootName.c_str(),ios::binary);
     BiWrite(int(0),out);
@@ -1850,6 +1865,7 @@ vector<pair< T1,vector<Undecide> > > BPlusTree<T1>:: AllLeaf(){
                 v.push_back(tt);
             }
             all.push_back(make_pair(kk,v));
+            // cout << kk << endl;
         }
         in.close();
         // fclose(in);
@@ -1924,51 +1940,66 @@ Return3 BPlusTree<T1>::Bianli(){
     }
 }
 
-// int main(){
-// 	BPlusTree<string> test;//新建一个对象
-// 	test.BuildTree("test");//表的名字为test
-// 	vector<short>testv;//表的属性列
-// 	//0->string  1->int  2->longlong  3->bool
-// 	testv.push_back(0);	//第一个属性是string类型
-// 	testv.push_back(1); //第二个属性是int类型
-// 	test.SetTable(testv);//使用testv设置表的属性列
-// 	for(int i = 0; i <= 25; i++){
-// 		cout << i << endl;
-// 		vector<Undecide>vv;
-// 		Undecide te;
-// 		strcpy(te.s,"testing_string");
-// 		Undecide te2;
-// 		te2.num = i;
-// 		string HHH = string("尽快了解55555555555555555555HEADHEADHEADHEADHEADHEAD");
-// 		vv.push_back(te);
-// 		vv.push_back(te2);
-// 		test.Insert(test.TransIntToString(i)+HHH,vv);
-// 	}
-// 	// test.Bianli();
+template<typename T1>
+void BPlusTree<T1>::ClearData(){
+    string datstring = string(".dat");
+    for(int i = 0; i < NodeNum; i++){
+        string newname = TableName+TransIntToString(i)+datstring;
+        remove(newname.c_str());
+    }
+    BuildTree(GetTableName());
+    SaveHead();
+}
 
-// 	// for(int i = 0; i <= 20; i++)
-// 	// 	test.Delete(i);
-// 	// vector<Undecide>vv;
-// 	// Undecide te;
-// 	// strcpy(te.s,"232323tring");
-// 	// Undecide te2;
-// 	// te2.num = 52;
-// 	// vv.push_back(te);
-// 	// 	vv.push_back(te2);
-// 	// test.Update(25,vv);
-// 	for(int i = 0; i <= 25; i++){
-// 		string HHH = string("尽快了解55555555555555555555HEADHEADHEADHEADHEADHEAD");
-// 		Return3 aa = test.Search(test.TransIntToString(i)+HHH,test.GetRootName());
-// 		if(aa.Succ == 1)
-// 			cout << aa.ve[0].s << " " << aa.ve[1].num << endl;
-// 	}
-// 	// 	vector<pair< int,vector<Undecide> > > all;
-// 	// all = test.AllLeaf();
-// 	// for(int i = 0; i < all.size(); i++){
-// 	// 	cout << all[i].first  << endl;
-// 	// }
-// }
+void ReadData(string filename);
 
+//int main(){
+    // BPlusTree<string> BookA;
+    // BPlusTree<string> BookB;
+    // BookA.BuildTree("BookA");
+    // BookB.BuildTree("BookB");
+    // vector<short>bookav;
+ //    //bookav.push_back(0); //书籍编号作为key值string类型（ISBN+后三位）
+ //    bookav.push_back(0); //用户名string类型
+ //    bookav.push_back(0); //最新借阅时间string类型
+ //    bookav.push_back(1); //借阅状态int类型 0:未借/1:正在借阅/2:续借中
+ //    bookav.push_back(1); //标志位表示是否被标记为删去bool类型: 0为存在/1为被删去
+ //    bookav.push_back(0); //ISBN码string类型（作为BookB的映射联系）
+ //    BookA.SetTable(bookav);
+    // BookB.BuildTree("BookB");
+ //    vector<short>bookbv;
+ //    bookbv.push_back(0); //书名
+ //    bookbv.push_back(0); //作者
+ //    bookbv.push_back(0); //出版社
+ //    bookbv.push_back(0); //时间
+ //    bookbv.push_back(0); //价格
+ //    BookB.SetTable(bookbv);
+ //    BookA.SaveHead();
+    // BookB.SaveHead();
+    ///////////////
 
+    // ReadData(string("Data2.txt"));
 
+//    BPlusTree<string> BookB;
+//    BookB.SetTableName("BookB");
+//    BookB.ReadHead();
+//    BookB.ClearData();
+//    BPlusTree<string> BookA;
+//    BookA.SetTableName("BookA");
+//    BookA.ReadHead();
+//    BookA.ClearData();
+
+    // BookA.AllLeaf();
+    // for(int i = 0; i < 15000; i++){
+    // 	string Key = string("9787107242717")+BookA.TransIntToString(i);
+    // 	string Key1 = Key+string("000");
+    // 	string Key2 = Key+string("001");
+    // 	string Key3 = Key+string("002");
+    // 	Return3 aa  = BookB.Search(Key,BookB.GetRootName());
+    // 	Return3 aa1 = BookA.Search(Key1,BookA.GetRootName());
+    // 	Return3 aa2 = BookA.Search(Key2,BookA.GetRootName());
+    // 	Return3 aa3 = BookA.Search(Key3,BookA.GetRootName());
+    // 	cout << i << " -- " <<aa.Succ << " " << aa1.Succ << " " << aa2.Succ << " " << aa3.Succ << endl;
+    // }
+//}
 

@@ -20,7 +20,8 @@ SOURCES += main.cpp\
     register.cpp \
     mainwindow_manage.cpp \
     systemmanage.cpp \
-    search.cpp
+    search.cpp \
+    b_tree.cpp
 
 HEADERS  += mainwindow.h \
     login.h \

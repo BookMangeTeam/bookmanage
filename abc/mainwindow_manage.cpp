@@ -33,56 +33,6 @@ MainWindow_Manage::MainWindow_Manage(QWidget *parent) :
     ui->stackedWidgetManage->setCurrentIndex(0);//首页界面
 
 
-
-
-
-
-    //借书记录表
-    //设置表头
-    QStandardItemModel *bookInformationBRManage_model = new QStandardItemModel();
-    bookInformationBRManage_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("书籍编号")));
-    bookInformationBRManage_model->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("用户名")));
-    bookInformationBRManage_model->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("书名")));
-    bookInformationBRManage_model->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("借/续书日期")));
-    bookInformationBRManage_model->setHorizontalHeaderItem(4, new QStandardItem(QObject::tr("最后还书日期")));
-    bookInformationBRManage_model->setHorizontalHeaderItem(5, new QStandardItem(QObject::tr("状态")));//借，续
-    bookInformationBRManage_model->setHorizontalHeaderItem(6, new QStandardItem(QObject::tr("扣费")));
-
-    //利用setModel()方法将数据模型与QTableView绑定
-    ui->bookInformationBRManage->setModel(bookInformationBRManage_model);
-
-    //设置列宽不可变动，即不能通过鼠标拖动增加列宽
-    ui->bookInformationBRManage->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
-    ui->bookInformationBRManage->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
-    ui->bookInformationBRManage->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
-    ui->bookInformationBRManage->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Fixed);
-    ui->bookInformationBRManage->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Fixed);
-    ui->bookInformationBRManage->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Fixed);
-    ui->bookInformationBRManage->horizontalHeader()->setSectionResizeMode(6, QHeaderView::Fixed);
-    //设置表格的各列的宽度值
-    ui->bookInformationBRManage->setColumnWidth(0,90);
-    ui->bookInformationBRManage->setColumnWidth(1,170);
-    ui->bookInformationBRManage->setColumnWidth(2,180);
-    ui->bookInformationBRManage->setColumnWidth(3,100);
-    ui->bookInformationBRManage->setColumnWidth(4,100);
-    ui->bookInformationBRManage->setColumnWidth(5,80);
-    ui->bookInformationBRManage->setColumnWidth(6,80);
-
-    //设置选中时为整行选中
-    ui->bookInformationBRManage->setSelectionBehavior(QAbstractItemView::SelectRows);
-
-    //设置表格的单元为只读属性，即不能编辑
-    ui->bookInformationBRManage->setEditTriggers(QAbstractItemView::NoEditTriggers);
-
-    //设置隔一行变一颜色，即：一灰一白
-    ui->bookInformationBRManage->setAlternatingRowColors(true);
-
-    //设置只能选择一行，不能多行选中
-    ui->bookInformationBRManage->setSelectionMode(QAbstractItemView::SingleSelection);
-
-    //如果你用在QTableView中使用右键菜单，需启用该属性
-    ui->bookInformationBRManage->setContextMenuPolicy(Qt::CustomContextMenu);
-
 }
 
 MainWindow_Manage::~MainWindow_Manage()
@@ -128,6 +78,52 @@ void MainWindow_Manage::on_returnButtonUpdate_clicked()
 void MainWindow_Manage::on_borrowRecordButtonManage_clicked()
 {
     ui->stackedWidgetManage->setCurrentIndex(4);
+
+    //借书记录表
+    //设置表头
+    QStandardItemModel *bookInformationBRManage_model = new QStandardItemModel();
+    bookInformationBRManage_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("书籍编号")));
+    bookInformationBRManage_model->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("用户")));
+    bookInformationBRManage_model->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("书名")));
+    bookInformationBRManage_model->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("借/续书日期")));
+    bookInformationBRManage_model->setHorizontalHeaderItem(4, new QStandardItem(QObject::tr("最后还书日期")));
+    bookInformationBRManage_model->setHorizontalHeaderItem(5, new QStandardItem(QObject::tr("状态")));//借，续
+    bookInformationBRManage_model->setHorizontalHeaderItem(6, new QStandardItem(QObject::tr("扣费")));
+
+    //利用setModel()方法将数据模型与QTableView绑定
+    ui->bookInformationBRManage->setModel(bookInformationBRManage_model);
+
+    //设置列宽不可变动，即不能通过鼠标拖动增加列宽
+    ui->bookInformationBRManage->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
+    ui->bookInformationBRManage->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
+    ui->bookInformationBRManage->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
+    ui->bookInformationBRManage->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Fixed);
+    ui->bookInformationBRManage->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Fixed);
+    ui->bookInformationBRManage->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Fixed);
+    ui->bookInformationBRManage->horizontalHeader()->setSectionResizeMode(6, QHeaderView::Fixed);
+    //设置表格的各列的宽度值
+    ui->bookInformationBRManage->setColumnWidth(0,90);
+    ui->bookInformationBRManage->setColumnWidth(1,170);
+    ui->bookInformationBRManage->setColumnWidth(2,180);
+    ui->bookInformationBRManage->setColumnWidth(3,100);
+    ui->bookInformationBRManage->setColumnWidth(4,100);
+    ui->bookInformationBRManage->setColumnWidth(5,80);
+    ui->bookInformationBRManage->setColumnWidth(6,80);
+
+    //设置选中时为整行选中
+    ui->bookInformationBRManage->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    //设置表格的单元为只读属性，即不能编辑
+    ui->bookInformationBRManage->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    //设置隔一行变一颜色，即：一灰一白
+    ui->bookInformationBRManage->setAlternatingRowColors(true);
+
+    //设置只能选择一行，不能多行选中
+    ui->bookInformationBRManage->setSelectionMode(QAbstractItemView::SingleSelection);
+
+    //如果你用在QTableView中使用右键菜单，需启用该属性
+    ui->bookInformationBRManage->setContextMenuPolicy(Qt::CustomContextMenu);
 }
 
 void MainWindow_Manage::on_returnBottonBRManage_clicked()
@@ -1420,4 +1416,129 @@ void MainWindow_Manage::on_quitButtonManage_clicked()
 {
     //退出管理员窗口
     exit(0);
+}
+
+void MainWindow_Manage::on_pushButton_clicked()
+{
+
+}
+
+void MainWindow_Manage::on_searchButtonBorrowR_clicked()
+{
+    //借书记录表
+    //设置表头
+    QStandardItemModel *bookInformationBRManage_model = new QStandardItemModel();
+    bookInformationBRManage_model->setHorizontalHeaderItem(0, new QStandardItem(QObject::tr("书籍编号")));
+    bookInformationBRManage_model->setHorizontalHeaderItem(1, new QStandardItem(QObject::tr("用户")));
+    bookInformationBRManage_model->setHorizontalHeaderItem(2, new QStandardItem(QObject::tr("书名")));
+    bookInformationBRManage_model->setHorizontalHeaderItem(3, new QStandardItem(QObject::tr("借/续书日期")));
+    bookInformationBRManage_model->setHorizontalHeaderItem(4, new QStandardItem(QObject::tr("最后还书日期")));
+    bookInformationBRManage_model->setHorizontalHeaderItem(5, new QStandardItem(QObject::tr("扣费")));
+
+    //利用setModel()方法将数据模型与QTableView绑定
+    ui->bookInformationBRManage->setModel(bookInformationBRManage_model);
+
+    //设置列宽不可变动，即不能通过鼠标拖动增加列宽
+    ui->bookInformationBRManage->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
+    ui->bookInformationBRManage->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
+    ui->bookInformationBRManage->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
+    ui->bookInformationBRManage->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Fixed);
+    ui->bookInformationBRManage->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Fixed);
+    ui->bookInformationBRManage->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Fixed);
+    //设置表格的各列的宽度值
+    ui->bookInformationBRManage->setColumnWidth(0,170);
+    ui->bookInformationBRManage->setColumnWidth(1,170);
+    ui->bookInformationBRManage->setColumnWidth(2,180);
+    ui->bookInformationBRManage->setColumnWidth(3,100);
+    ui->bookInformationBRManage->setColumnWidth(4,100);
+    ui->bookInformationBRManage->setColumnWidth(5,80);
+
+    //设置选中时为整行选中
+    ui->bookInformationBRManage->setSelectionBehavior(QAbstractItemView::SelectRows);
+
+    //设置表格的单元为只读属性，即不能编辑
+    ui->bookInformationBRManage->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    //设置隔一行变一颜色，即：一灰一白
+    ui->bookInformationBRManage->setAlternatingRowColors(true);
+
+    //设置只能选择一行，不能多行选中
+    ui->bookInformationBRManage->setSelectionMode(QAbstractItemView::SingleSelection);
+
+    //如果你用在QTableView中使用右键菜单，需启用该属性
+    ui->bookInformationBRManage->setContextMenuPolicy(Qt::CustomContextMenu);
+
+
+
+    QString search_info = ui->searchLineEditBorrowR->text();//读入输入
+    if(search_info == NULL)
+    {
+        //输入内容为空
+        QMessageBox::critical(this, "critical", "输入内容不能为空!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    }
+    else
+    {
+        const char *search_info_s = search_info.toStdString().data();
+        QString search_info_q = QString(QLatin1String(search_info_s));//char*转QString
+        string search_info_st = search_info_q.toStdString();
+
+        int line = 0;
+        int flag = 0;
+        //从History中找出用户
+        BPlusTree<int> History;
+        History.SetTableName(string("History"));
+        History.ReadHead();
+
+        vector<pair< int,vector<Undecide> > > all;
+        all = History.AllLeaf();
+        for(int i = 0; i < all.size(); i++)
+        {
+            if((all[i].second)[1].s == search_info_q)
+            {
+                flag = 1;
+                //(all[i].second)[0].s为图书编号
+                char* bookNumber = const_cast<char*>((all[i].second)[0].s);//const char*转char*
+                QString bookNumber_q = QString(QLatin1String(bookNumber));//char*转QString
+                bookInformationBRManage_model->setItem(line,0,new QStandardItem(bookNumber_q));
+
+                char* user = const_cast<char*>((all[i].second)[1].s);//const char*转char*
+                QString user_q = QString(QLatin1String(user));//char*转QString
+                bookInformationBRManage_model->setItem(line,1,new QStandardItem(user_q));
+                //BookA里查isbn
+                BPlusTree<string> BookA;
+                BookA.SetTableName(string("BookA"));
+                BookA.ReadHead();
+                Return3 result1 = BookA.Search((all[i].second)[0].s,BookA.GetRootName());
+                if(result1.Succ)
+                {
+                    //result1.ve[4].s  isbn
+                    BPlusTree<string> BookB;
+                    BookB.SetTableName(string("BookB"));
+                    BookB.ReadHead();
+                    Return3 result2 = BookB.Search(result1.ve[4].s,BookB.GetRootName());
+                    //书名
+                    char* bookName = const_cast<char*>(result2.ve[0].s);//const char*转char*
+                    QString bookName_q = QString(QLatin1String(bookName));//char*转QString
+                    bookInformationBRManage_model->setItem(line,2,new QStandardItem(bookName_q));
+                }
+                //借阅时间
+                char* borrowTime = const_cast<char*>((all[i].second)[2].s);//const char*转char*
+                QString borrowTime_q = QString(QLatin1String(borrowTime));//char*转QString
+                bookInformationBRManage_model->setItem(line,3,new QStandardItem(borrowTime_q));
+
+                //还书时间
+                char* returnTime = const_cast<char*>((all[i].second)[3].s);//const char*转char*
+                QString returnTime_q = QString(QLatin1String(returnTime));//char*转QString
+                bookInformationBRManage_model->setItem(line,4,new QStandardItem(returnTime_q));
+
+                //扣费
+                QString deduction = QString::number((all[i].second)[4].dou,10,2);
+                bookInformationBRManage_model->setItem(line,5,new QStandardItem(deduction));
+                line++;
+            }
+        }
+        if(flag == 0)
+            QMessageBox::information(this, "提示", "无相关记录!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+
+    }
 }

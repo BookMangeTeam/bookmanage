@@ -41,11 +41,13 @@ public:
         font.setFamily(QString::fromUtf8("\347\255\211\347\272\277"));
         font.setPointSize(12);
         oneKeyImport->setFont(font);
+        oneKeyImport->setCursor(QCursor(Qt::PointingHandCursor));
         oneKeyImport->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;"));
         oneKeyDelete = new QPushButton(SystemManage);
         oneKeyDelete->setObjectName(QStringLiteral("oneKeyDelete"));
         oneKeyDelete->setGeometry(QRect(90, 270, 141, 31));
         oneKeyDelete->setFont(font);
+        oneKeyDelete->setCursor(QCursor(Qt::PointingHandCursor));
         oneKeyDelete->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;"));
         label = new QLabel(SystemManage);
         label->setObjectName(QStringLiteral("label"));
@@ -58,6 +60,7 @@ public:
         returnBtn->setObjectName(QStringLiteral("returnBtn"));
         returnBtn->setGeometry(QRect(120, 390, 81, 31));
         returnBtn->setFont(font);
+        returnBtn->setCursor(QCursor(Qt::PointingHandCursor));
         returnBtn->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;"));
 
         retranslateUi(SystemManage);

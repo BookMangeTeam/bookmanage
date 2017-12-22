@@ -82,6 +82,8 @@ public:
     QWidget *page_5;
     QTableView *bookInformationBRManage;
     QPushButton *returnBottonBRManage;
+    QLineEdit *searchLineEditBorrowR;
+    QPushButton *searchButtonBorrowR;
     QPushButton *deleteButton;
     QFrame *line;
     QPushButton *quitButtonManage;
@@ -354,7 +356,7 @@ public:
         page_5->setObjectName(QStringLiteral("page_5"));
         bookInformationBRManage = new QTableView(page_5);
         bookInformationBRManage->setObjectName(QStringLiteral("bookInformationBRManage"));
-        bookInformationBRManage->setGeometry(QRect(10, 40, 811, 461));
+        bookInformationBRManage->setGeometry(QRect(10, 80, 811, 421));
         bookInformationBRManage->setStyleSheet(QStringLiteral(""));
         returnBottonBRManage = new QPushButton(page_5);
         returnBottonBRManage->setObjectName(QStringLiteral("returnBottonBRManage"));
@@ -362,6 +364,16 @@ public:
         returnBottonBRManage->setFont(font2);
         returnBottonBRManage->setCursor(QCursor(Qt::PointingHandCursor));
         returnBottonBRManage->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;"));
+        searchLineEditBorrowR = new QLineEdit(page_5);
+        searchLineEditBorrowR->setObjectName(QStringLiteral("searchLineEditBorrowR"));
+        searchLineEditBorrowR->setGeometry(QRect(170, 10, 451, 31));
+        searchLineEditBorrowR->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;"));
+        searchButtonBorrowR = new QPushButton(page_5);
+        searchButtonBorrowR->setObjectName(QStringLiteral("searchButtonBorrowR"));
+        searchButtonBorrowR->setGeometry(QRect(680, 10, 91, 31));
+        searchButtonBorrowR->setFont(font4);
+        searchButtonBorrowR->setCursor(QCursor(Qt::PointingHandCursor));
+        searchButtonBorrowR->setStyleSheet(QStringLiteral("border:2px groove rgb(44, 62, 80);border-radius:10px;padding:2px 4px;background-color:rgb(44, 62, 80);color:#fff;"));
         stackedWidgetManage->addWidget(page_5);
         deleteButton = new QPushButton(centralwidget);
         deleteButton->setObjectName(QStringLiteral("deleteButton"));
@@ -419,7 +431,7 @@ public:
 
         retranslateUi(MainWindow_Manage);
 
-        stackedWidgetManage->setCurrentIndex(3);
+        stackedWidgetManage->setCurrentIndex(4);
 
 
         QMetaObject::connectSlotsByName(MainWindow_Manage);
@@ -469,6 +481,7 @@ public:
         authorUpdate_search->setText(QApplication::translate("MainWindow_Manage", "\344\275\234\350\200\205", Q_NULLPTR));
         isbnUpdate_search->setText(QApplication::translate("MainWindow_Manage", "ISBN", Q_NULLPTR));
         returnBottonBRManage->setText(QApplication::translate("MainWindow_Manage", "\350\277\224\345\233\236", Q_NULLPTR));
+        searchButtonBorrowR->setText(QApplication::translate("MainWindow_Manage", "\346\220\234\347\264\242", Q_NULLPTR));
         deleteButton->setText(QApplication::translate("MainWindow_Manage", "\345\210\240\351\231\244\345\233\276\344\271\246", Q_NULLPTR));
         quitButtonManage->setText(QApplication::translate("MainWindow_Manage", "\351\200\200\345\207\272", Q_NULLPTR));
         updateButton->setText(QApplication::translate("MainWindow_Manage", "\346\233\264\346\224\271\344\277\241\346\201\257", Q_NULLPTR));

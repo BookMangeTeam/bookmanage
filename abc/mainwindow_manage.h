@@ -48,6 +48,10 @@ private slots:
 
     void on_quitButtonManage_clicked();
 
+    void on_pushButton_clicked();
+
+    void on_searchButtonBorrowR_clicked();
+
 private:
     Ui::MainWindow_Manage *ui;
 };

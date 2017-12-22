@@ -678,7 +678,7 @@ void MainWindow::on_searchButtonPermary_clicked()
 {
 
     //获取搜索框的信息
-    QString search_info = ui->searchLineEditPermary->text();
+    //QString search_info = ui->searchLineEditPermary->text();
 //    if(search_info == NULL)
 //    {
 //        //输入内容为空
@@ -1023,7 +1023,7 @@ void MainWindow::on_searchButtonBorrow_clicked()
                 QMessageBox::information(this, "提示", "无相关书目！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
             }
         }
-        else
+        else if((ui->bookNameBorrow_search->isChecked() == false) && (ui->authorBorrow_search->isChecked() == false) && (ui->isbnBorrow_search->isChecked() == false) && (ui->bookNumberBorrow_search->isChecked() == false))
         {
             QMessageBox::information(this, "提示", "请选择搜索关键字！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
         }
