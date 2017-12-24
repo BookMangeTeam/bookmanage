@@ -38,7 +38,7 @@ private slots:
 
     void on_quitButton_clicked();
 
-    void on_searchButtonPermary_clicked();
+
 
     void on_searchButtonBorrow_clicked();
 

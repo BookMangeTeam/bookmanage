@@ -119,9 +119,9 @@ void MainWindow::on_repayButton_clicked()
         ui->bookInformationRepay->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Fixed);
         ui->bookInformationRepay->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Fixed);
         //设置表格的各列的宽度值
-        ui->bookInformationRepay->setColumnWidth(0,180);
-        ui->bookInformationRepay->setColumnWidth(1,160);
-        ui->bookInformationRepay->setColumnWidth(2,150);
+        ui->bookInformationRepay->setColumnWidth(0,110);
+        ui->bookInformationRepay->setColumnWidth(1,180);
+        ui->bookInformationRepay->setColumnWidth(2,180);
         ui->bookInformationRepay->setColumnWidth(3,125);
         ui->bookInformationRepay->setColumnWidth(4,125);
         ui->bookInformationRepay->setColumnWidth(5,80);
@@ -149,35 +149,31 @@ void MainWindow::on_repayButton_clicked()
     all = Borrow.AllLeaf();//遍历借书表查找此用户借的书
     for(int i = 0; i < all.size(); i++)
     {
-        if(((all[i].second)[1].s) == record_username)//找到此人
+        if(strcmp((all[i].second)[1].s,record_username_s) == 0)//找到此人
         {
             BPlusTree<string> BookA;
             BookA.SetTableName(string("BookA"));
             BookA.ReadHead();  //读取文件
-            Return3 result3 = BookA.Search((all[i].second)[0].s,BookA.GetRootName());
+            Return3 result3 = BookA.Search(string((all[i].second)[0].s),BookA.GetRootName());
             if(result3.Succ)
             {
                 //没还并且最新借阅人为此人就显示
-                if((result3.ve[2].num == 1) && (result3.ve[0].s == record_username)&&((all[i].second)[4].num == 0))
+                if((result3.ve[2].num == 1) && (strcmp(result3.ve[0].s,record_username_s) == 0)&&((all[i].second)[4].num == 0))
                 {
                     //all[i].first为借的书的key
                     //(all[i].second)[0].s为书籍编号
-                    QString bookNumber_q = QString::fromStdString((all[i].second)[0].s);//string转qstring
-                    bookInformationRepay_model->setItem(line,0,new QStandardItem(bookNumber_q)); //图书编号
+                    char* bookNumber = const_cast<char*>((all[i].second)[0].s);
+                    bookInformationRepay_model->setItem(line,0,new QStandardItem(bookNumber)); //图书编号
 
                     //(all[i].second)[2].s为借阅时间
                     //最后还书日期
                     char* lastTime = const_cast<char*>((all[i].second)[3].s);//const char*转char*
                     QString lastTime_q = QString(QLatin1String(lastTime));//char*转QString
                     QDateTime lastTime_qq = QDateTime::fromString(lastTime_q, "yyyy/MM/dd");//借书时间QString转化为QDateTime
-//                    QDateTime lastTime = borrowTime_qq.addDays(30);
-//                    QString lastTime_q = lastTime.toString("yyyy/MM/dd");
-                    bookInformationRepay_model->setItem(line,4,new QStandardItem(lastTime_q));
+                    bookInformationRepay_model->setItem(line,4,new QStandardItem(lastTime));
 
                     //获取当前时间
                     QDateTime current_date_time = QDateTime::currentDateTime();
-        //            QString current_date = current_date_time.toString("yyyy/MM/dd");
-        //            const char *current_date_s = current_date.toStdString().data();
 
                     if(lastTime_qq.operator <=(current_date_time))
                     {
@@ -193,7 +189,7 @@ void MainWindow::on_repayButton_clicked()
                     BookA.SetTableName(string("BookA"));
                     BookA.ReadHead();  //读取文件
 
-                    Return3 result1 = BookA.Search((all[i].second)[0].s,BookA.GetRootName());
+                    Return3 result1 = BookA.Search(string((all[i].second)[0].s),BookA.GetRootName());
                     if(result1.Succ)
                     {
                         //result1.ve[4].s为isbn
@@ -201,22 +197,19 @@ void MainWindow::on_repayButton_clicked()
                         BPlusTree<string> BookB;
                         BookB.SetTableName(string("BookB"));
                         BookB.ReadHead();  //读取文件
-                        Return3 result2 = BookB.Search(result1.ve[4].s,BookB.GetRootName());
+                        Return3 result2 = BookB.Search(string(result1.ve[4].s),BookB.GetRootName());
 
                         if(result2.Succ)
                         {
                             //书名
                             char* bookName = const_cast<char*>(result2.ve[0].s);//const char*转char*
-                            QString bookName_q = QString(QLatin1String(bookName));//char*转QString
-                            bookInformationRepay_model->setItem(line,1,new QStandardItem(bookName_q));
+                            bookInformationRepay_model->setItem(line,1,new QStandardItem(bookName));
                             //作者
                             char* author = const_cast<char*>(result2.ve[2].s);//const char*转char*
-                            QString author_q = QString(QLatin1String(author));//char*转QString
-                            bookInformationRepay_model->setItem(line,2,new QStandardItem(author_q));
+                            bookInformationRepay_model->setItem(line,2,new QStandardItem(author));
                             //出版社
                             char* publishHouse = const_cast<char*>(result2.ve[1].s);//const char*转char*
-                            QString publishHouse_q = QString(QLatin1String(publishHouse));//char*转QString
-                            bookInformationRepay_model->setItem(line,3,new QStandardItem(publishHouse_q));
+                            bookInformationRepay_model->setItem(line,3,new QStandardItem(publishHouse));
                         }
                     }
                     line++;
@@ -257,10 +250,10 @@ void MainWindow::on_renewButton_clicked()
     ui->bookInformationRenew->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Fixed);
     ui->bookInformationRenew->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Fixed);
     //设置表格的各列的宽度值
-    ui->bookInformationRenew->setColumnWidth(0,180);
+    ui->bookInformationRenew->setColumnWidth(0,110);
     ui->bookInformationRenew->setColumnWidth(1,180);
     ui->bookInformationRenew->setColumnWidth(2,125);
-    ui->bookInformationRenew->setColumnWidth(3,125);
+    ui->bookInformationRenew->setColumnWidth(3,180);
     ui->bookInformationRenew->setColumnWidth(4,125);
     ui->bookInformationRenew->setColumnWidth(5,80);
 
@@ -287,46 +280,42 @@ void MainWindow::on_renewButton_clicked()
     all = Borrow.AllLeaf();
     for(int i = 0; i < all.size(); i++)
     {
-        if((all[i].second)[1].s == record_username)
+        if(strcmp((all[i].second)[1].s,record_username_s) == 0)
         {
             if((all[i].second)[4].num == 0)
             {
                 //(all[i].second)[0].s这个人借的书的编号
                 //显示图书编号
                 char* bookNumber = const_cast<char*>((all[i].second)[0].s);//const char*转char*
-                QString bookNumber_q = QString(QLatin1String(bookNumber));//char*转QString
-                bookInformationRenew_model->setItem(line,0,new QStandardItem(bookNumber_q));
+                bookInformationRenew_model->setItem(line,0,new QStandardItem(bookNumber));
                 //最后还书日期
                 char* lastTime = const_cast<char*>((all[i].second)[3].s);//const char*转char*
-                QString lastTime_q = QString(QLatin1String(lastTime));//char*转QString
-                bookInformationRenew_model->setItem(line,4,new QStandardItem(lastTime_q));
+                QString lastTime_q = QString(QLatin1String(lastTime));
+                bookInformationRenew_model->setItem(line,4,new QStandardItem(lastTime));
 
                 BPlusTree<string> BookA;
                 BookA.SetTableName(string("BookA"));
                 BookA.ReadHead();
 
-                Return3 result1 = BookA.Search((all[i].second)[0].s,BookA.GetRootName());
+                Return3 result1 = BookA.Search(string((all[i].second)[0].s),BookA.GetRootName());
                 if(result1.Succ)
                 {
                     BPlusTree<string> BookB;
                     BookB.SetTableName(string("BookB"));
                     BookB.ReadHead();
                     //result1.ve[4].s为isbn
-                    Return3 result2 = BookB.Search(result1.ve[4].s,BookB.GetRootName());
+                    Return3 result2 = BookB.Search(string(result1.ve[4].s),BookB.GetRootName());
                     if(result2.Succ)
                     {
                         //显示书名
                         char* bookName = const_cast<char*>(result2.ve[0].s);//const char*转char*
-                        QString bookName_q = QString(QLatin1String(bookName));//char*转QString
-                        bookInformationRenew_model->setItem(line,1,new QStandardItem(bookName_q));
+                        bookInformationRenew_model->setItem(line,1,new QStandardItem(bookName));
                         //作者
                         char* author = const_cast<char*>(result2.ve[1].s);//const char*转char*
-                        QString author_q = QString(QLatin1String(author));//char*转QString
-                        bookInformationRenew_model->setItem(line,2,new QStandardItem(author_q));
+                        bookInformationRenew_model->setItem(line,2,new QStandardItem(author));
                         //出版社
                         char* publishHouse = const_cast<char*>(result2.ve[2].s);//const char*转char*
-                        QString publishHouse_q = QString(QLatin1String(publishHouse));//char*转QString
-                        bookInformationRenew_model->setItem(line,3,new QStandardItem(publishHouse_q));
+                        bookInformationRenew_model->setItem(line,3,new QStandardItem(publishHouse));
                     }
                 }
                 QDateTime current_date_time = QDateTime::currentDateTime();
@@ -427,46 +416,41 @@ void MainWindow::on_borrowRecordButton_clicked()
     all = History.AllLeaf();
     const char *record_username_s = record_username.toStdString().data();//Qstring转const char*
     for(int i = 0; i < all.size(); i++){
-        if((all[i].second)[1].s == record_username)
+        if(strcmp((all[i].second)[1].s,record_username_s) == 0)
         {
             //(all[i].second)[0].s为图书编号
             char* bookNumber = const_cast<char*>((all[i].second)[0].s);//const char*转char*
-            QString bookNumber_q = QString(QLatin1String(bookNumber));//char*转QString
-            bookInformationBorrowR_model->setItem(line,0,new QStandardItem(bookNumber_q));
+            bookInformationBorrowR_model->setItem(line,0,new QStandardItem(bookNumber));
             //BookA里查isbn
             BPlusTree<string> BookA;
             BookA.SetTableName(string("BookA"));
             BookA.ReadHead();
-            Return3 result1 = BookA.Search((all[i].second)[0].s,BookA.GetRootName());
+            Return3 result1 = BookA.Search(string((all[i].second)[0].s),BookA.GetRootName());
             if(result1.Succ)
             {
                 //result1.ve[4].s  isbn
                 BPlusTree<string> BookB;
                 BookB.SetTableName(string("BookB"));
                 BookB.ReadHead();
-                Return3 result2 = BookB.Search(result1.ve[4].s,BookB.GetRootName());
+                Return3 result2 = BookB.Search(string(result1.ve[4].s),BookB.GetRootName());
                 //书名
                 char* bookName = const_cast<char*>(result2.ve[0].s);//const char*转char*
-                QString bookName_q = QString(QLatin1String(bookName));//char*转QString
-                bookInformationBorrowR_model->setItem(line,1,new QStandardItem(bookName_q));
+                bookInformationBorrowR_model->setItem(line,1,new QStandardItem(bookName));
                 //作者
                 char* publishHousse = const_cast<char*>(result2.ve[2].s);//const char*转char*
-                QString publishHousse_q = QString(QLatin1String(publishHousse));//char*转QString
-                bookInformationBorrowR_model->setItem(line,2,new QStandardItem(publishHousse_q));
+                bookInformationBorrowR_model->setItem(line,2,new QStandardItem(publishHousse));
             }
             //借阅时间
             char* borrowTime = const_cast<char*>((all[i].second)[2].s);//const char*转char*
-            QString borrowTime_q = QString(QLatin1String(borrowTime));//char*转QString
-            bookInformationBorrowR_model->setItem(line,3,new QStandardItem(borrowTime_q));
+            bookInformationBorrowR_model->setItem(line,3,new QStandardItem(borrowTime));
 
             //还书时间
             char* returnTime = const_cast<char*>((all[i].second)[3].s);//const char*转char*
-            QString returnTime_q = QString(QLatin1String(returnTime));//char*转QString
-            bookInformationBorrowR_model->setItem(line,4,new QStandardItem(returnTime_q));
+            bookInformationBorrowR_model->setItem(line,4,new QStandardItem(returnTime));
 
             //扣费
-            QString deduction = QString::number((all[i].second)[4].dou,10,2);
-            bookInformationBorrowR_model->setItem(line,5,new QStandardItem(deduction));
+            QString fine = QString::number((all[i].second)[4].dou, 10, 2);
+            bookInformationBorrowR_model->setItem(line,5,new QStandardItem(fine));
             line++;
         }
     }
@@ -578,46 +562,41 @@ void MainWindow::on_moneyBotton_clicked()
     //表1
     for(int i = 0; i < all.size(); i++)
     {
-        if((all[i].second)[1].s == record_username)
+        if(strcmp((all[i].second)[1].s,record_username_s) == 0)
         {
             //(all[i].second)[0].s为图书编号
             char* bookNumber = const_cast<char*>((all[i].second)[0].s);//const char*转char*
-            QString bookNumber_q = QString(QLatin1String(bookNumber));//char*转QString
-            inDebtInformation_model->setItem(line1,0,new QStandardItem(bookNumber_q));
+            inDebtInformation_model->setItem(line1,0,new QStandardItem(bookNumber));
             //BookA里查isbn
             BPlusTree<string> BookA;
             BookA.SetTableName(string("BookA"));
             BookA.ReadHead();
-            Return3 result1 = BookA.Search((all[i].second)[0].s,BookA.GetRootName());
+            Return3 result1 = BookA.Search(string((all[i].second)[0].s),BookA.GetRootName());
             if(result1.Succ)
             {
                 //result1.ve[4].s  isbn
                 BPlusTree<string> BookB;
                 BookB.SetTableName(string("BookB"));
                 BookB.ReadHead();
-                Return3 result2 = BookB.Search(result1.ve[4].s,BookB.GetRootName());
+                Return3 result2 = BookB.Search(string(result1.ve[4].s),BookB.GetRootName());
                 //书名
                 char* bookName = const_cast<char*>(result2.ve[0].s);//const char*转char*
-                QString bookName_q = QString(QLatin1String(bookName));//char*转QString
-                inDebtInformation_model->setItem(line1,1,new QStandardItem(bookName_q));
+                inDebtInformation_model->setItem(line1,1,new QStandardItem(bookName));
                 //作者
                 char* publishHousse = const_cast<char*>(result2.ve[2].s);//const char*转char*
-                QString publishHousse_q = QString(QLatin1String(publishHousse));//char*转QString
-                inDebtInformation_model->setItem(line1,2,new QStandardItem(publishHousse_q));
+                inDebtInformation_model->setItem(line1,2,new QStandardItem(publishHousse));
             }
             //借阅时间
             char* borrowTime = const_cast<char*>((all[i].second)[2].s);//const char*转char*
-            QString borrowTime_q = QString(QLatin1String(borrowTime));//char*转QString
-            inDebtInformation_model->setItem(line1,3,new QStandardItem(borrowTime_q));
+            inDebtInformation_model->setItem(line1,3,new QStandardItem(borrowTime));
 
             //还书时间
             char* returnTime = const_cast<char*>((all[i].second)[3].s);//const char*转char*
-            QString returnTime_q = QString(QLatin1String(returnTime));//char*转QString
-            inDebtInformation_model->setItem(line1,4,new QStandardItem(returnTime_q));
+            inDebtInformation_model->setItem(line1,4,new QStandardItem(returnTime));
 
             //超期罚款
-            QString deduction = QString::number((all[i].second)[4].dou,10,2);
-            inDebtInformation_model->setItem(line1,5,new QStandardItem(deduction));
+            QString fine = QString::number((all[i].second)[4].dou, 10, 2);
+            inDebtInformation_model->setItem(line1,5,new QStandardItem(fine));
 
             line1++;
         }
@@ -630,20 +609,18 @@ void MainWindow::on_moneyBotton_clicked()
     alls = Money.AllLeaf();
     for(int i = 0; i < alls.size(); i++)
     {
-        if((alls[i].second)[0].s == record_username)
+        if(strcmp((alls[i].second)[0].s,record_username_s) == 0)
         {
             //缴费时间
             char* payTime = const_cast<char*>((alls[i].second)[1].s);//const char*转char*
-            QString payTime_q = QString(QLatin1String(payTime));//char*转QString
-            paymentInformation_model->setItem(line2,0,new QStandardItem(payTime_q));
+            paymentInformation_model->setItem(line2,0,new QStandardItem(payTime));
 
             //缴费金额
-            //char* payMoney = const_cast<char*>((alls[i].second)[2].dou);//const char*转char*
-            QString payMoney_q = QString::number((alls[i].second)[2].dou,10,2);//char*转QString
-            paymentInformation_model->setItem(line2,2,new QStandardItem(payMoney_q));
+            QString money = QString::number((alls[i].second)[2].dou, 10, 2);
+            paymentInformation_model->setItem(line2,2,new QStandardItem(money));
 
             //总欠费
-            paymentInformation_model->setItem(line2,1,new QStandardItem(payMoney_q));
+            paymentInformation_model->setItem(line2,1,new QStandardItem(money));
 
 
             //状态
@@ -674,26 +651,6 @@ void MainWindow::on_quitButton_clicked()
     exit(0);
 }
 
-void MainWindow::on_searchButtonPermary_clicked()
-{
-
-    //获取搜索框的信息
-    //QString search_info = ui->searchLineEditPermary->text();
-//    if(search_info == NULL)
-//    {
-//        //输入内容为空
-//        QMessageBox::critical(this, "critical", "输入内容不能为空!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-//    }
-//    else
-//    {
-//        //根据输入内容到数据库进行搜索并且返回内容显示到该页面上
-//        ui->stackedWidgetPermary->setCurrentIndex(1);
-//        ui->searchLineEditBorrow->setText(search_info);
-//        //ui->searchLineEditBorrow->setCursorMoveStyle(Qt::CursorMoveStyle );
-//    }
-
-}
-
 
 void MainWindow::on_searchButtonBorrow_clicked()
 {
@@ -714,10 +671,10 @@ void MainWindow::on_searchButtonBorrow_clicked()
     ui->bookInformationborrow->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Fixed);
     ui->bookInformationborrow->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Fixed);
     //设置表格的各列的宽度值
-    ui->bookInformationborrow->setColumnWidth(0,180);
+    ui->bookInformationborrow->setColumnWidth(0,110);
     ui->bookInformationborrow->setColumnWidth(1,230);
     ui->bookInformationborrow->setColumnWidth(2,130);
-    ui->bookInformationborrow->setColumnWidth(3,180);
+    ui->bookInformationborrow->setColumnWidth(3,230);
     ui->bookInformationborrow->setColumnWidth(4,80);
 
     //设置选中时为整行选中
@@ -748,7 +705,7 @@ void MainWindow::on_searchButtonBorrow_clicked()
 
     string record_username_st = record_username.toStdString();
     const char *record_username_s = record_username.toStdString().data();
-    Return3 result1 = User.Search(record_username_s,User.GetRootName());
+    Return3 result1 = User.Search(record_username_st,User.GetRootName());
     if(result1.Succ)
     {
         QString ben = QString::number(result1.ve[3].num, 10);
@@ -807,22 +764,22 @@ void MainWindow::on_searchButtonBorrow_clicked()
                         allA = BookA.AllLeaf();
                         for(int j = 0; j < allA.size(); j++)
                         {
-                            if(((allA[j].second)[4].s == all[i].first) && ((allA[j].second)[3].num == 0))
+                            if((string((allA[j].second)[4].s) == all[i].first) && ((allA[j].second)[3].num == 0))
                             {
-                                QString bookNumber_q = QString::fromStdString(allA[j].first);//string转QString
-                                bookInformationborrow_model->setItem(line,0,new QStandardItem(bookNumber_q));
+                                //QString bookNumber_q = QString::fromStdString(allA[j].first);//string转QString
+                                const char *bookNumber_c = (allA[j].first).c_str();
+                                char* bookNumber = const_cast<char*>(bookNumber_c);//const char*转char*
+                                bookInformationborrow_model->setItem(line,0,new QStandardItem(bookNumber));
 
                                 char* bookName = const_cast<char*>((all[i].second)[0].s);//const char*转char*
-                                QString bookName_q = QString(QLatin1String(bookName));//char*转QString
-                                bookInformationborrow_model->setItem(line,1,new QStandardItem(bookName_q));
+                                bookInformationborrow_model->setItem(line,1,new QStandardItem(bookName));
+
 
                                 char* author = const_cast<char*>((all[i].second)[1].s);//const char*转char*
-                                QString author_q = QString(QLatin1String(author));//char*转QString
-                                bookInformationborrow_model->setItem(line,2,new QStandardItem(author_q));
+                                bookInformationborrow_model->setItem(line,2,new QStandardItem(author));
 
                                 char* publishHouse = const_cast<char*>((all[i].second)[2].s);//const char*转char*
-                                QString publishHouse_q = QString(QLatin1String(publishHouse));//char*转QString
-                                bookInformationborrow_model->setItem(line,3,new QStandardItem(publishHouse_q));
+                                bookInformationborrow_model->setItem(line,3,new QStandardItem(publishHouse));
                                 if((allA[j].second)[2].num == 0)
                                 {
                                     bookInformationborrow_model->setItem(line,4,new QStandardItem("未借"));
@@ -882,22 +839,20 @@ void MainWindow::on_searchButtonBorrow_clicked()
                         allA = BookA.AllLeaf();
                         for(int j = 0; j < allA.size(); j++)
                         {
-                            if(((allA[j].second)[4].s == all[i].first) && ((allA[j].second)[3].num == 0))
+                            if((string((allA[j].second)[4].s) == all[i].first) && ((allA[j].second)[3].num == 0))
                             {
-                                QString bookNumber_q = QString::fromStdString(allA[j].first);//string转QString
-                                bookInformationborrow_model->setItem(line,0,new QStandardItem(bookNumber_q));
+                                const char *bookNumber_c = (allA[j].first).c_str();
+                                char* bookNumber = const_cast<char*>(bookNumber_c);//const char*转char*
+                                bookInformationborrow_model->setItem(line,0,new QStandardItem(bookNumber));
 
                                 char* bookName = const_cast<char*>((all[i].second)[0].s);//const char*转char*
-                                QString bookName_q = QString(QLatin1String(bookName));//char*转QString
-                                bookInformationborrow_model->setItem(line,1,new QStandardItem(bookName_q));
+                                bookInformationborrow_model->setItem(line,1,new QStandardItem(bookName));
 
                                 char* author = const_cast<char*>((all[i].second)[1].s);//const char*转char*
-                                QString author_q = QString(QLatin1String(author));//char*转QString
-                                bookInformationborrow_model->setItem(line,2,new QStandardItem(author_q));
+                                bookInformationborrow_model->setItem(line,2,new QStandardItem(author));
 
                                 char* publishHouse = const_cast<char*>((all[i].second)[2].s);//const char*转char*
-                                QString publishHouse_q = QString(QLatin1String(publishHouse));//char*转QString
-                                bookInformationborrow_model->setItem(line,3,new QStandardItem(publishHouse_q));
+                                bookInformationborrow_model->setItem(line,3,new QStandardItem(publishHouse));
                                 if((allA[j].second)[2].num == 0)
                                 {
                                     bookInformationborrow_model->setItem(line,4,new QStandardItem("未借"));
@@ -925,7 +880,7 @@ void MainWindow::on_searchButtonBorrow_clicked()
             BookB.SetTableName(string("BookB"));
             BookB.ReadHead();  //读取文件
 
-            Return3 result1 = BookB.Search(search_info_s,BookB.GetRootName());
+            Return3 result1 = BookB.Search(search_info_st,BookB.GetRootName());
             if(result1.Succ)
             {
                 BPlusTree<string> BookA;
@@ -935,23 +890,22 @@ void MainWindow::on_searchButtonBorrow_clicked()
                 all = BookA.AllLeaf();
                 for(int i = 0; i < all.size(); i++)
                 {
-                    if(((all[i].second)[4].s == search_info) && ((all[i].second)[3].num == 0))//有并且没被删除
+                    if((string((all[i].second)[4].s) == search_info_st) && ((all[i].second)[3].num == 0))//有并且没被删除
                     {
-                        QString bookNumber_q = QString::fromStdString(all[i].first);//string转QString
-                        bookInformationborrow_model->setItem(line,0,new QStandardItem(bookNumber_q));
+                        const char *bookNumber_c = (all[i].first).c_str();
+                        char* bookNumber = const_cast<char*>(bookNumber_c);//const char*转char*
+                        bookInformationborrow_model->setItem(line,0,new QStandardItem(bookNumber));
 
 
                         char* bookName = const_cast<char*>(result1.ve[0].s);//const char*转char*
-                        QString bookName_q = QString(QLatin1String(bookName));//char*转QString
-                        bookInformationborrow_model->setItem(line,1,new QStandardItem(bookName_q));
+                        bookInformationborrow_model->setItem(line,1,new QStandardItem(bookName));
 
                         char* author = const_cast<char*>(result1.ve[1].s);//const char*转char*
-                        QString author_q = QString(QLatin1String(author));//char*转QString
-                        bookInformationborrow_model->setItem(line,2,new QStandardItem(author_q));
+
+                        bookInformationborrow_model->setItem(line,2,new QStandardItem(author));
 
                         char* publishHouse = const_cast<char*>(result1.ve[2].s);//const char*转char*
-                        QString publishHouse_q = QString(QLatin1String(publishHouse));//char*转QString
-                        bookInformationborrow_model->setItem(line,3,new QStandardItem(publishHouse_q));
+                        bookInformationborrow_model->setItem(line,3,new QStandardItem(publishHouse));
 
                         if((all[i].second)[2].num == 0)
                         {
@@ -980,7 +934,7 @@ void MainWindow::on_searchButtonBorrow_clicked()
             BPlusTree<string> BookA;
             BookA.SetTableName(string("BookA"));
             BookA.ReadHead();  //读取文件
-            Return3 result1 = BookA.Search(search_info_s,BookA.GetRootName());
+            Return3 result1 = BookA.Search(search_info_st,BookA.GetRootName());
             if(result1.Succ && result1.ve[3].num == 0)
             {
                 //result1.ve[4].s为isbn
@@ -989,20 +943,17 @@ void MainWindow::on_searchButtonBorrow_clicked()
                 BPlusTree<string> BookB;
                 BookB.SetTableName(string("BookB"));
                 BookB.ReadHead();  //读取文件
-                Return3 result2 = BookB.Search(result1.ve[4].s,BookB.GetRootName());
+                Return3 result2 = BookB.Search(string(result1.ve[4].s),BookB.GetRootName());
                 if(result1.Succ)
                 {
                     char* bookName = const_cast<char*>(result2.ve[0].s);//const char*转char*
-                    QString bookName_q = QString(QLatin1String(bookName));//char*转QString
-                    bookInformationborrow_model->setItem(0,1,new QStandardItem(bookName_q));
+                    bookInformationborrow_model->setItem(0,1,new QStandardItem(bookName));
 
                     char* author = const_cast<char*>(result2.ve[1].s);//const char*转char*
-                    QString author_q = QString(QLatin1String(author));//char*转QString
-                    bookInformationborrow_model->setItem(0,2,new QStandardItem(author_q));
+                    bookInformationborrow_model->setItem(0,2,new QStandardItem(author));
 
                     char* publishHouse = const_cast<char*>(result2.ve[2].s);//const char*转char*
-                    QString publishHouse_q = QString(QLatin1String(publishHouse));//char*转QString
-                    bookInformationborrow_model->setItem(0,3,new QStandardItem(publishHouse_q));
+                    bookInformationborrow_model->setItem(0,3,new QStandardItem(publishHouse));
 
                     if(result1.ve[2].num == 0)
                     {
@@ -1032,6 +983,7 @@ void MainWindow::on_searchButtonBorrow_clicked()
 
 void MainWindow::on_affirmBottonBorrow_clicked()
 {
+    int exceedDays = 0;
     BPlusTree<int> Borrow;
     Borrow.SetTableName(string("Borrow"));
     Borrow.ReadHead();
@@ -1042,7 +994,7 @@ void MainWindow::on_affirmBottonBorrow_clicked()
     QModelIndex index = model->index(row,0);//选中行第一列的内容
     QVariant data = model->data(index);
     const char *data_s = data.toString().toStdString().data();//先转Qstring再转const char*
-    string data_ss = data.toString().toStdString();
+
 
     BPlusTree<string> BookA;
     BookA.SetTableName(string("BookA"));
@@ -1051,99 +1003,129 @@ void MainWindow::on_affirmBottonBorrow_clicked()
     BPlusTree<string> User;
     User.SetTableName(string("User"));
     User.ReadHead();
-    Return3 result1 = BookA.Search(data_s,BookA.GetRootName());
+    Return3 result1 = BookA.Search(string(data_s),BookA.GetRootName());
 
     const char *record_username_s = record_username.toStdString().data();
-    Return3 result0 = User.Search(record_username_s,User.GetRootName());
+    Return3 result0 = User.Search(string(record_username_s),User.GetRootName());
 
+
+    //判断该用户是否有超期时间过长未还书目
+    vector<pair< int,vector<Undecide> > > all;
+    all = Borrow.AllLeaf();
+    for(int i = 0; i < all.size(); i++)
+    {
+        if(strcmp((all[i].second)[1].s,record_username_s) == 0)//找到该用户
+            if((all[i].second)[4].num == 0) //此书正在借
+            {
+                //获取现在时间
+                QDateTime current_date_time = QDateTime::currentDateTime();
+                QString current_date = current_date_time.toString("yyyy/MM/dd");
+                //const char *current_date_s = current_date.toStdString().data();
+                //获取最后还书日期
+                char* lastTime_sc = const_cast<char*>((all[i].second)[3].s);//const char*转char*
+                QString lastTime_scq = QString(QLatin1String(lastTime_sc));//char*转QString
+                QDateTime lastTime_scqq = QDateTime::fromString(lastTime_scq, "yyyy/MM/dd");//借书时间QString转化为QDateTime
+                int days = lastTime_scqq.daysTo(current_date_time);
+                if(days > 15)//超过15天没还
+                {
+                    exceedDays = 1;
+                }
+            }
+    }
     if(result1.Succ)
     {
-        if((result1.ve[2].num == 0) && (result0.ve[3].num < 6))
+        if(result1.ve[2].num == 0)
         {
-            vector<pair< int,vector<Undecide> > > all;
-            all = Borrow.AllLeaf();
-            int k = all.size();
-            //导入信息到borrow表
-            vector<Undecide>borrowv;
-            Undecide te1,te2,te3,te4,te5,te6,te7;
-            te1.num = k;
-            strcpy(te2.s,data_s);//书的编号
-            strcpy(te3.s,record_username_s);//借书人
-            QDateTime current_date_time = QDateTime::currentDateTime();
-            QString current_date = current_date_time.toString("yyyy/MM/dd");
-            const char *current_date_s = current_date.toStdString().data();
-            strcpy(te4.s,current_date_s);//借书时间*/
+            if(result0.ve[3].num < 6)
+            {
+                if(result0.ve[2].dou <= 3.0)
+                {
+                    if(exceedDays == 0)
+                    {
+                        int k = all.size();
+                        //导入信息到borrow表
+                        vector<Undecide>borrowv;
+                        Undecide te1,te2,te3,te4,te5,te6,te7;
+                        te1.num = k;
+                        strcpy(te2.s,data_s);//书的编号
+                        strcpy(te3.s,record_username_s);//借书人
+                        QDateTime current_date_time = QDateTime::currentDateTime();
+                        QString current_date = current_date_time.toString("yyyy/MM/dd");
+                        const char *current_date_s = current_date.toStdString().data();
+                        strcpy(te4.s,current_date_s);//借书时间*/
 
-            //最后还书日期
-            QDateTime lastTime = current_date_time.addDays(30);
-            QString lastTime_q = lastTime.toString("yyyy/MM/dd");
-            const char *lastTime_qs = lastTime_q.toStdString().data();
-            strcpy(te5.s,lastTime_qs);
+                        //最后还书日期
+                        QDateTime lastTime = current_date_time.addDays(30);
+                        QString lastTime_q = lastTime.toString("yyyy/MM/dd");
+                        const char *lastTime_qs = lastTime_q.toStdString().data();
+                        strcpy(te5.s,lastTime_qs);
 
-            te6.num = 0;
-            te7.num = 1;
+                        te6.num = 0;
+                        te7.num = 1;
 
-            borrowv.push_back(te2);
-            borrowv.push_back(te3);
-            borrowv.push_back(te4);
-            borrowv.push_back(te5);
-            borrowv.push_back(te6);
-            borrowv.push_back(te7);
-            Borrow.Insert(k,borrowv);
-            Borrow.SaveHead();//一定要记得保存！
+                        borrowv.push_back(te2);
+                        borrowv.push_back(te3);
+                        borrowv.push_back(te4);
+                        borrowv.push_back(te5);
+                        borrowv.push_back(te6);
+                        borrowv.push_back(te7);
+                        Borrow.Insert(k,borrowv);
+                        Borrow.SaveHead();//一定要记得保存！
 
 
-            vector<Undecide>bookav;//将BookA中的是否可借的值改为false,更新最新借阅时间、人
-            Undecide te8,te9,te10,te11,te12,te13;
-            strcpy(te8.s,data_s);
-            strcpy(te9.s,record_username_s);
-            strcpy(te10.s,current_date_s);
-            te11.num = 1;
-            te12.num = result1.ve[3].num;
-            strcpy(te13.s,result1.ve[4].s);
-            bookav.push_back(te9);
-            bookav.push_back(te10);
-            bookav.push_back(te11);
-            bookav.push_back(te12);
-            bookav.push_back(te13);
-            BookA.Update(data_ss,bookav);
-            BookA.SaveHead();
+                        vector<Undecide>bookav;//将BookA中的是否可借的值改为false,更新最新借阅时间、人
+                        Undecide te8,te9,te10,te11,te12,te13;
+                        strcpy(te8.s,data_s);
+                        strcpy(te9.s,record_username_s);
+                        strcpy(te10.s,current_date_s);
+                        te11.num = 1;
+                        te12.num = result1.ve[3].num;
+                        strcpy(te13.s,result1.ve[4].s);
+                        bookav.push_back(te9);
+                        bookav.push_back(te10);
+                        bookav.push_back(te11);
+                        bookav.push_back(te12);
+                        bookav.push_back(te13);
+                        BookA.Update(string(data_s),bookav);
+                        BookA.SaveHead();
 
-            //更新user表 借书数加一
-            BPlusTree<string> User;
-            User.SetTableName(string("User"));
-            User.ReadHead();
+                        //更新user表 借书数加一
+                        BPlusTree<string> User;
+                        User.SetTableName(string("User"));
+                        User.ReadHead();
 
-            string record_username_st = record_username.toStdString();
-            vector<Undecide>userv;
-            Undecide te14,te15,te16,te17;
-            Return3 result2 = User.Search(record_username_s,User.GetRootName());
-            if(result2.Succ){
-                strcpy(te14.s,result2.ve[0].s);
-                strcpy(te15.s,result2.ve[1].s);
-                te16.dou = result2.ve[2].dou;
-                te17.num = result2.ve[3].num + 1;
-                userv.push_back(te14);
-                userv.push_back(te15);
-                userv.push_back(te16);
-                userv.push_back(te17);
-                User.Update(record_username_st,userv);
-                User.SaveHead();//一定要记得保存！
+                        string record_username_st = record_username.toStdString();
+                        vector<Undecide>userv;
+                        Undecide te14,te15,te16,te17;
+                        Return3 result2 = User.Search(record_username_st,User.GetRootName());
+                        if(result2.Succ){
+                            strcpy(te14.s,result2.ve[0].s);
+                            strcpy(te15.s,result2.ve[1].s);
+                            te16.dou = result2.ve[2].dou;
+                            te17.num = result2.ve[3].num + 1;
+                            userv.push_back(te14);
+                            userv.push_back(te15);
+                            userv.push_back(te16);
+                            userv.push_back(te17);
+                            User.Update(record_username_st,userv);
+                            User.SaveHead();//一定要记得保存！
+
+                            QMessageBox::information(this, "提示", "借书成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                        }
+                    }
+                    else
+                        QMessageBox::critical(this, "critical", "借书失败,存在超期时间过长未还书目！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                }
+                else
+                    QMessageBox::critical(this, "critical", "借书失败,请先缴清欠费！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
             }
-            QMessageBox::information(this, "提示", "借书成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+            else
+                QMessageBox::critical(this, "critical", "借书失败,已达到借书上限！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
         }
-        else if((result1.ve[2].num != 0) && (result0.ve[3].num < 6))
-        {
-            QMessageBox::critical(this, "critical", "该书不可被借！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-        }
-        else if((result1.ve[2].num == 0) && (result0.ve[3].num = 6))
-        {
-            QMessageBox::critical(this, "critical", "借书失败,已达到借书上限！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-        }
-
+        else
+            QMessageBox::critical(this, "critical", "该书正在借阅中，不可被借！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
     }
-    borrow_key++;
 
 }
 
@@ -1183,7 +1165,7 @@ void MainWindow::on_affirmBottonRepay_clicked()
         Bookav.push_back(te10);
         Bookav.push_back(te11);
         Bookav.push_back(te12);
-        BookA.Update(bookNumber_s,Bookav);
+        BookA.Update(bookNumber_str,Bookav);
         BookA.SaveHead();
 
         BPlusTree<int> History;
@@ -1217,7 +1199,7 @@ void MainWindow::on_affirmBottonRepay_clicked()
                 const char *lastTime_s;
                 for(int i = 0; i < all.size(); i++)
                 {
-                    if(((all[i].second)[0].s == bookNumber) && ((all[i].second)[1].s == record_username) && ((all[i].second)[4].num == 0))
+                    if((strcmp((all[i].second)[0].s,bookNumber_s) == 0) && (strcmp((all[i].second)[1].s,record_username_s) == 0) && ((all[i].second)[4].num == 0))
                     {
                         strcpy(te4.s,(all[i].second)[2].s);
                         lastTime_s = (all[i].second)[3].s;
@@ -1279,8 +1261,7 @@ void MainWindow::on_affirmBottonRepay_clicked()
                 //vector<pair< int,vector<Undecide> > > all;
                 all = Borrow.AllLeaf();
                 for(int i = 0; i < all.size(); i++){
-                    cout << (all[i].second)[0].s << " " << bookNumber_s<<" "<< (all[i].second)[1].s<<" " << record_username_s;
-                    if(((all[i].second)[0].s == bookNumber) && ((all[i].second)[1].s == record_username))
+                    if((strcmp((all[i].second)[0].s,bookNumber_s) == 0) && (strcmp((all[i].second)[1].s,record_username_s) == 0))
                     {
                         vector<Undecide>borrowv;
                         Undecide te13,te14,te15,te16,te17,te18,te19;
@@ -1327,7 +1308,7 @@ void MainWindow::on_affirmBottonRenew_clicked()
         all = Borrow.AllLeaf();
         for(int i = 0; i < all.size(); i++)
         {
-            if(((all[i].second)[0].s == bookNumber) && ((all[i].second)[1].s == record_username) && ((all[i].second)[4].num == 0))
+            if((strcmp((all[i].second)[0].s,bookNumber_s) == 0) && (strcmp((all[i].second)[1].s,record_username_s) == 0) && ((all[i].second)[4].num == 0))
             {
                 if((all[i].second)[5].num == 1)
                 {
@@ -1386,11 +1367,11 @@ void MainWindow::on_payMoney_clicked()
         User.ReadHead();  //读取文件
         const char *record_username_s = record_username.toStdString().data();
         string record_username_st = record_username.toStdString();
-        Return3 result1 = User.Search(record_username_s,User.GetRootName());
+        Return3 result1 = User.Search(record_username_st,User.GetRootName());
         if(result1.Succ)
         {
             cout << result1.ve[0].s;
-            if(md5_password == result1.ve[1].s)
+            if(md5_password == string(result1.ve[1].s))
             {
                 BPlusTree<int> Money;
                 Money.SetTableName(string("Money"));;
@@ -1451,3 +1432,6 @@ void MainWindow::on_payMoney_clicked()
         }
     }
 }
+
+
+
