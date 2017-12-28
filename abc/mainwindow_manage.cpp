@@ -153,7 +153,7 @@ void MainWindow_Manage::on_affirmBottonAdd_clicked()
     bookPublish = ui->add_publish->text();
     publishTime = ui->add_publishTime->text();
     bookPrice = ui->add_price->text();
-    bookNumber = ui->add_amount->text();
+    //bookNumber = ui->add_amount->text();
     //相关类型转换
     const char *bookISBN_s = bookISBN.toStdString().data();
     const char *bookName_s = bookName.toStdString().data();
@@ -285,7 +285,7 @@ void MainWindow_Manage::on_affirmBottonAdd_clicked()
                         ui->add_author->setText("");
                         ui->add_publish->setText("");
                         ui->add_price->setText("");
-                        ui->add_amount->setText("");
+                        //ui->add_amount->setText("");
 
                         break;
                     }
@@ -431,7 +431,7 @@ void MainWindow_Manage::on_affirmBottonAdd_clicked()
                 ui->add_author->setText("");
                 ui->add_publish->setText("");
                 ui->add_price->setText("");
-                ui->add_amount->setText("");
+                //ui->add_amount->setText("");
             }
         }
     }
