@@ -166,232 +166,274 @@ void MainWindow_Manage::on_affirmBottonAdd_clicked()
     string ISBN = bookISBN.toStdString();
 //    const char *publicTime_s = publicTime.toStdString().data();
 //    std::cout<<publicTime_s;
+    int flag = 1;
     if(bookISBN != "" && bookName != "" && bookAuthur != "" && bookPublish != "" & publishTime != "" && bookPrice != "" && bookNumber !="")
     {
-        //判断输入正确
-        //先到BookB表去查找是否存在这本书（利用ISBN作为key去查找）=，包括被删除的部分
-        BPlusTree<string> BookB;
-        BookB.SetTableName(string("BookB"));
-        BookB.ReadHead();
-        Return3 result1 = BookB.Search(bookISBN_fin, BookB.GetRootName());
-
-        if(result1.Succ)
+        //格式控制
+        //isbn
+        QRegExp bookISBN_reg_exp("^[0-9-]+$");
+        QRegExpValidator *bookISBN_validator = new QRegExpValidator(bookISBN_reg_exp);
+        if(!bookISBN_validator->regExp().exactMatch(bookISBN))
         {
-            cout<<result1.Succ;
-            //如果找到，再到BookA表去遍历对应的本书，获得应该的数量编号
-            BPlusTree<string> BookA;
-            BookA.SetTableName(string("BookA"));
-            BookA.ReadHead();
+           QMessageBox::critical(this, "critical", "isbn不符合规范!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+           flag = 0;
+        }
+        //作者 汉字或字母或数字
+        QRegExp bookAuthur_reg_exp("^[\u4E00-\u9FA5A-Za-z0-9]*$");
+        QRegExpValidator *bookAuthur_validator = new QRegExpValidator(bookAuthur_reg_exp);
+        if(!bookAuthur_validator->regExp().exactMatch(bookAuthur))
+        {
+           QMessageBox::critical(this, "critical", "作者不符合规范!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+           flag = 0;
+        }
+        //出版社 汉字或字母或数字
+        QRegExp bookPublish_reg_exp("^[\u4E00-\u9FA5A-Za-z0-9]*$");
+        QRegExpValidator *bookPublish_validator = new QRegExpValidator(bookPublish_reg_exp);
+        if(!bookPublish_validator->regExp().exactMatch(bookPublish))
+        {
+           QMessageBox::critical(this, "critical", "出版社不符合规范!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+           flag = 0;
+        }
+        //价格 非负浮点数
+        QRegExp bookPrice_reg_exp("^[0-9]+(.[0-9]{1,2})?$");
+        QRegExpValidator *bookPrice_validator = new QRegExpValidator(bookPrice_reg_exp);
+        if(!bookPrice_validator->regExp().exactMatch(bookPrice))
+        {
+           QMessageBox::critical(this, "critical", "价格不符合规范!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+           flag = 0;
+        }
+        //数量 非负整数
+        QRegExp bookNumber_reg_exp("^[0-9]*$");
+        QRegExpValidator *bookNumber_validator = new QRegExpValidator(bookNumber_reg_exp);
+        if(!bookNumber_validator->regExp().exactMatch(bookNumber))
+        {
+           QMessageBox::critical(this, "critical", "数量不符合规范!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+           flag = 0;
+        }
+        if(flag == 1)
+        {
+            //判断输入正确
+            //先到BookB表去查找是否存在这本书（利用ISBN作为key去查找）=，包括被删除的部分
+            BPlusTree<string> BookB;
+            BookB.SetTableName(string("BookB"));
+            BookB.ReadHead();
+            Return3 result1 = BookB.Search(bookISBN_fin, BookB.GetRootName());
 
-            while(1)
+            if(result1.Succ)
             {
-                //直到Search函数返回显示查找不到，则停止循环
-                //根据ISBN编码做处理
-                stringstream ss;
-                string str;
-                string add;
-                ss<<countN;
-                ss>>str;
+                cout<<result1.Succ;
+                //如果找到，再到BookA表去遍历对应的本书，获得应该的数量编号
+                BPlusTree<string> BookA;
+                BookA.SetTableName(string("BookA"));
+                BookA.ReadHead();
 
-                int len = str.length();
-                switch(len)
+                while(1)
                 {
-                    case 1: add = "00";
-                            add.append(str);
-                            bookISBN_fin.append(add);
-                            break;
-                    case 2: add = "0";
-                            add.append(str);
-                            bookISBN_fin.append(add);
-                            break;
-                    case 3: bookISBN_fin.append(str);
-                            break;
-                    default:
-                            break;
+                    //直到Search函数返回显示查找不到，则停止循环
+                    //根据ISBN编码做处理
+                    stringstream ss;
+                    string str;
+                    string add;
+                    ss<<countN;
+                    ss>>str;
+
+                    int len = str.length();
+                    switch(len)
+                    {
+                        case 1: add = "00";
+                                add.append(str);
+                                bookISBN_fin.append(add);
+                                break;
+                        case 2: add = "0";
+                                add.append(str);
+                                bookISBN_fin.append(add);
+                                break;
+                        case 3: bookISBN_fin.append(str);
+                                break;
+                        default:
+                                break;
+                    }
+
+                    //根据构成编码作为BookA的Key值去查找
+                    Return3 re = BookA.Search(bookISBN_fin, BookA.GetRootName());
+                    if(re.Succ == 0)
+                    {
+                        //查找失败，表明此时编码可以作为新的插入
+                        //在BookA找到的情况，包括标记为删除的部分
+                        //类型转换(string->const char*)
+                        //const char *ISBNThree = bookISBN_fin.data();
+                        vector<Undecide>bookav;
+                        Undecide te1, te2, te3, te4, te5, te6;
+                        //strcpy(te1.s, ISBNThree);
+                        strcpy(te2.s, "none");   //初始化用户存储为"none"
+                        strcpy(te3.s, "none");   //初始化时间为"none"
+                        te4.num = 0;            //续借状态初始为0，即未被借
+                        te5.num = 0;            //是否被标记为删除初始为0
+                        strcpy(te6.s, bookISBN_s);
+                        //bookav.push_back(te1);
+                        bookav.push_back(te2);
+                        bookav.push_back(te3);
+                        bookav.push_back(te4);
+                        bookav.push_back(te5);
+                        bookav.push_back(te6);
+                        BookA.Insert(bookISBN_fin, bookav);
+                        BookA.SaveHead();  //保存信息
+                        QMessageBox::information(this, "提示", "添加成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+
+                        ui->add_ISBN->setText("");
+                        ui->add_bookName->setText("");
+                        ui->add_author->setText("");
+                        ui->add_publish->setText("");
+                        ui->add_price->setText("");
+                        ui->add_amount->setText("");
+
+                        break;
+                    }
+                    else
+                    {
+                        //查找成功，表明存在图书编号
+                        countN = countN + 1;
+                        bookISBN_fin = ISBN;
+                    }
+
+
+
                 }
 
-                //根据构成编码作为BookA的Key值去查找
-                Return3 re = BookA.Search(bookISBN_fin, BookA.GetRootName());
-                if(re.Succ == 0)
-                {
-                    //查找失败，表明此时编码可以作为新的插入
-                    //在BookA找到的情况，包括标记为删除的部分
-                    //类型转换(string->const char*)
-                    //const char *ISBNThree = bookISBN_fin.data();
-                    vector<Undecide>bookav;
-                    Undecide te1, te2, te3, te4, te5, te6;
-                    //strcpy(te1.s, ISBNThree);
-                    strcpy(te2.s, "none");   //初始化用户存储为"none"
-                    strcpy(te3.s, "none");   //初始化时间为"none"
-                    te4.num = 0;            //续借状态初始为0，即未被借
-                    te5.num = 0;            //是否被标记为删除初始为0
-                    strcpy(te6.s, bookISBN_s);
-                    //bookav.push_back(te1);
-                    bookav.push_back(te2);
-                    bookav.push_back(te3);
-                    bookav.push_back(te4);
-                    bookav.push_back(te5);
-                    bookav.push_back(te6);
-                    BookA.Insert(bookISBN_fin, bookav);
-                    BookA.SaveHead();  //保存信息
-                    QMessageBox::information(this, "提示", "添加成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+    //            vector<pair< string,vector<Undecide> > > all;
+    //            all = BookA.AllLeaf();
+    //            cout<<all.size();
+    //            for(int i = 0; i < all.size(); i++)
+    //            {
+    //                if( (all[i].second)[4].s == bookISBN_s )
+    //                {
+    //                    countN = countN + 1;
+    //                }
+    //            }
 
-                    ui->add_ISBN->setText("");
-                    ui->add_bookName->setText("");
-                    ui->add_author->setText("");
-                    ui->add_publish->setText("");
-                    ui->add_price->setText("");
-                    ui->add_amount->setText("");
 
-                    break;
-                }
-                else
-                {
-                    //查找成功，表明存在图书编号
-                    countN = countN + 1;
-                    bookISBN_fin = ISBN;
-                }
 
+    //            if(len)
+    //            {
+    //                //在BookA找到的情况，包括标记为删除的部分
+    //                //类型转换(string->const char*)
+    //                //const char *ISBNThree = bookISBN_fin.data();
+    //                vector<Undecide>bookav;
+    //                Undecide te1, te2, te3, te4, te5, te6;
+    //                //strcpy(te1.s, ISBNThree);
+    //                strcpy(te2.s, "none");   //初始化用户存储为"none"
+    //                strcpy(te3.s, "none");   //初始化时间为"none"
+    //                te4.num = 0;            //续借状态初始为0，即未被借
+    //                te5.num = 0;            //是否被标记为删除初始为0
+    //                strcpy(te6.s, bookISBN_s);
+    //                //bookav.push_back(te1);
+    //                bookav.push_back(te2);
+    //                bookav.push_back(te3);
+    //                bookav.push_back(te4);
+    //                bookav.push_back(te5);
+    //                bookav.push_back(te6);
+    //                BookA.Insert(bookISBN_fin, bookav);
+    //                BookA.SaveHead();  //保存信息
+    //                QMessageBox::information(this, "提示", "添加成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+
+    //                ui->add_ISBN->setText("");
+    //                ui->add_bookName->setText("");
+    //                ui->add_author->setText("");
+    //                ui->add_publish->setText("");
+    //                ui->add_price->setText("");
+    //                ui->add_amount->setText("");
+    //            }
+    //            else
+    //            {
+    //                //如果在BookA没有找到的情况(在BookB中是存在的)
+    //                bookISBN_fin.append("000");  //创建为BookA的第一本
+    //                //const char *ISBNThree = bookISBN_fin.data(); //转换类型
+    //                vector<Undecide>bookav;
+    //                Undecide te1, te2, te3, te4, te5, te6;
+    //                //strcpy(te1.s, ISBNThree);    //这里实际上是ISBN+三位
+    //                strcpy(te2.s, "none");   //初始化用户存储为NULL
+    //                strcpy(te3.s, "none");   //初始化时间为NULL
+    //                te4.num = 0;            //续借状态初始为0，即未被借
+    //                te5.num = 0;            //是否被标记为删除初始为0
+    //                strcpy(te6.s, bookISBN_s);
+    //                //bookav.push_back(te1);
+    //                bookav.push_back(te2);
+    //                bookav.push_back(te3);
+    //                bookav.push_back(te4);
+    //                string s(te4.s);
+    //                QString ss = QString::fromStdString(s);
+    //                //cout<<te4.s<<" ";
+    //                bookav.push_back(te5);
+    //                bookav.push_back(te6);
+    //                BookA.Insert(bookISBN_fin, bookav);
+    //                BookA.SaveHead();  //保存信息
+    //                QMessageBox::information(this, "提示", "添加成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+
+    //                ui->add_ISBN->setText("");
+    //                ui->add_bookName->setText("");
+    //                ui->add_author->setText("");
+    //                ui->add_publish->setText("");
+    //                ui->add_price->setText("");
+    //                ui->add_amount->setText("");
+    //            }
 
 
             }
+            else
+            {
+                //如果在BookB里面没有找到
+                //先将书添加到BookB表中
+                vector<Undecide> bookbv;
+                Undecide tt1, tt2, tt3, tt4, tt5, tt6;
+                //strcpy(tt1.s, bookISBN_s);
+                strcpy(tt2.s, bookName_s);
+                strcpy(tt3.s, bookAuthur_s);
+                strcpy(tt4.s, bookPublish_s); //???????????
+                strcpy(tt5.s, publishTime_s);
+                strcpy(tt6.s, bookPrice_s);
+                //bookbv.push_back(t1);
+                bookbv.push_back(tt2);
+                bookbv.push_back(tt3);
+                bookbv.push_back(tt4);
+                bookbv.push_back(tt5);
+                bookbv.push_back(tt6);
+                BookB.Insert(bookISBN_fin, bookbv);
+                BookB.SaveHead();  //保存信息
 
-//            vector<pair< string,vector<Undecide> > > all;
-//            all = BookA.AllLeaf();
-//            cout<<all.size();
-//            for(int i = 0; i < all.size(); i++)
-//            {
-//                if( (all[i].second)[4].s == bookISBN_s )
-//                {
-//                    countN = countN + 1;
-//                }
-//            }
+                //再将书添加到BookA中
+                BPlusTree<string> BookA;
+                BookA.SetTableName(string("BookA"));
+                BookA.ReadHead();
+                bookISBN_fin.append("001");  //创建为BookA的第一本
+                cout<<"test1##############";
 
+                //const char *ISBNThree = bookISBN_fin.data(); //转换类型
+                vector<Undecide>bookav;
+                Undecide te1, te2, te3, te4, te5, te6;
+                //strcpy(te1.s, ISBNThree);    //这里实际上是ISBN+三位
+                strcpy(te2.s, "none");   //初始化用户存储为"none"
+                strcpy(te3.s, "none");   //初始化时间为"none"
+                te4.num = 0;            //借阅状态初始为未借为0
+                te5.num = 0;            //是否被标记为删除初始为0
+                strcpy(te6.s, bookISBN_s);
+                //bookav.push_back(te1);
+                bookav.push_back(te2);
+                bookav.push_back(te3);
+                bookav.push_back(te4);
+                bookav.push_back(te5);
+                bookav.push_back(te6);
+                BookA.Insert(bookISBN_fin, bookav);
+                BookA.SaveHead();  //保存信息
+                QMessageBox::information(this, "提示", "添加成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 
-
-//            if(len)
-//            {
-//                //在BookA找到的情况，包括标记为删除的部分
-//                //类型转换(string->const char*)
-//                //const char *ISBNThree = bookISBN_fin.data();
-//                vector<Undecide>bookav;
-//                Undecide te1, te2, te3, te4, te5, te6;
-//                //strcpy(te1.s, ISBNThree);
-//                strcpy(te2.s, "none");   //初始化用户存储为"none"
-//                strcpy(te3.s, "none");   //初始化时间为"none"
-//                te4.num = 0;            //续借状态初始为0，即未被借
-//                te5.num = 0;            //是否被标记为删除初始为0
-//                strcpy(te6.s, bookISBN_s);
-//                //bookav.push_back(te1);
-//                bookav.push_back(te2);
-//                bookav.push_back(te3);
-//                bookav.push_back(te4);
-//                bookav.push_back(te5);
-//                bookav.push_back(te6);
-//                BookA.Insert(bookISBN_fin, bookav);
-//                BookA.SaveHead();  //保存信息
-//                QMessageBox::information(this, "提示", "添加成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-
-//                ui->add_ISBN->setText("");
-//                ui->add_bookName->setText("");
-//                ui->add_author->setText("");
-//                ui->add_publish->setText("");
-//                ui->add_price->setText("");
-//                ui->add_amount->setText("");
-//            }
-//            else
-//            {
-//                //如果在BookA没有找到的情况(在BookB中是存在的)
-//                bookISBN_fin.append("000");  //创建为BookA的第一本
-//                //const char *ISBNThree = bookISBN_fin.data(); //转换类型
-//                vector<Undecide>bookav;
-//                Undecide te1, te2, te3, te4, te5, te6;
-//                //strcpy(te1.s, ISBNThree);    //这里实际上是ISBN+三位
-//                strcpy(te2.s, "none");   //初始化用户存储为NULL
-//                strcpy(te3.s, "none");   //初始化时间为NULL
-//                te4.num = 0;            //续借状态初始为0，即未被借
-//                te5.num = 0;            //是否被标记为删除初始为0
-//                strcpy(te6.s, bookISBN_s);
-//                //bookav.push_back(te1);
-//                bookav.push_back(te2);
-//                bookav.push_back(te3);
-//                bookav.push_back(te4);
-//                string s(te4.s);
-//                QString ss = QString::fromStdString(s);
-//                //cout<<te4.s<<" ";
-//                bookav.push_back(te5);
-//                bookav.push_back(te6);
-//                BookA.Insert(bookISBN_fin, bookav);
-//                BookA.SaveHead();  //保存信息
-//                QMessageBox::information(this, "提示", "添加成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-
-//                ui->add_ISBN->setText("");
-//                ui->add_bookName->setText("");
-//                ui->add_author->setText("");
-//                ui->add_publish->setText("");
-//                ui->add_price->setText("");
-//                ui->add_amount->setText("");
-//            }
-
-
+                ui->add_ISBN->setText("");
+                ui->add_bookName->setText("");
+                ui->add_author->setText("");
+                ui->add_publish->setText("");
+                ui->add_price->setText("");
+                ui->add_amount->setText("");
+            }
         }
-        else
-        {
-            //如果在BookB里面没有找到
-            //先将书添加到BookB表中
-            vector<Undecide> bookbv;
-            Undecide tt1, tt2, tt3, tt4, tt5, tt6;
-            //strcpy(tt1.s, bookISBN_s);
-            strcpy(tt2.s, bookName_s);
-            strcpy(tt3.s, bookAuthur_s);
-            strcpy(tt4.s, bookPublish_s); //???????????
-            strcpy(tt5.s, publishTime_s);
-            strcpy(tt6.s, bookPrice_s);
-            //bookbv.push_back(t1);
-            bookbv.push_back(tt2);
-            bookbv.push_back(tt3);
-            bookbv.push_back(tt4);
-            bookbv.push_back(tt5);
-            bookbv.push_back(tt6);
-            BookB.Insert(bookISBN_fin, bookbv);
-            BookB.SaveHead();  //保存信息
-
-            //再将书添加到BookA中
-            BPlusTree<string> BookA;
-            BookA.SetTableName(string("BookA"));
-            BookA.ReadHead();
-            bookISBN_fin.append("001");  //创建为BookA的第一本
-            cout<<"test1##############";
-
-            //const char *ISBNThree = bookISBN_fin.data(); //转换类型
-            vector<Undecide>bookav;
-            Undecide te1, te2, te3, te4, te5, te6;
-            //strcpy(te1.s, ISBNThree);    //这里实际上是ISBN+三位
-            strcpy(te2.s, "none");   //初始化用户存储为"none"
-            strcpy(te3.s, "none");   //初始化时间为"none"
-            te4.num = 0;            //借阅状态初始为未借为0
-            te5.num = 0;            //是否被标记为删除初始为0
-            strcpy(te6.s, bookISBN_s);
-            //bookav.push_back(te1);
-            bookav.push_back(te2);
-            bookav.push_back(te3);
-            bookav.push_back(te4);
-            bookav.push_back(te5);
-            bookav.push_back(te6);
-            BookA.Insert(bookISBN_fin, bookav);
-            BookA.SaveHead();  //保存信息
-            QMessageBox::information(this, "提示", "添加成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-
-            ui->add_ISBN->setText("");
-            ui->add_bookName->setText("");
-            ui->add_author->setText("");
-            ui->add_publish->setText("");
-            ui->add_price->setText("");
-            ui->add_amount->setText("");
-        }
-
-
-
     }
     else
     {

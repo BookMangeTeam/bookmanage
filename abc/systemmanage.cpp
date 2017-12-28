@@ -29,6 +29,22 @@ void SystemManage::on_oneKeyImport_clicked()
 void SystemManage::on_oneKeyDelete_clicked()
 {
     //点击一键清除数据
+    BPlusTree<string> User;
+    User.SetTableName("User");
+    User.ReadHead();
+    User.ClearData();
+    BPlusTree<string> Admin;
+    Admin.SetTableName("Admin");
+    Admin.ReadHead();
+    Admin.ClearData();
+    BPlusTree<int> Borrow;
+    Borrow.SetTableName("Borrow");
+    Borrow.ReadHead();
+    Borrow.ClearData();
+    BPlusTree<int> History;
+    History.SetTableName("History");
+    History.ReadHead();
+    History.ClearData();
     BPlusTree<string> BookB;
     BookB.SetTableName("BookB");
     BookB.ReadHead();
@@ -37,6 +53,10 @@ void SystemManage::on_oneKeyDelete_clicked()
     BookA.SetTableName("BookA");
     BookA.ReadHead();
     BookA.ClearData();
+    BPlusTree<int> Money;
+    Money.SetTableName("Money");
+    Money.ReadHead();
+    Money.ClearData();
 }
 
 void SystemManage::on_returnBtn_clicked()

@@ -20,9 +20,9 @@ Register::Register(QWidget *parent) :
     ui(new Ui::Register)
 {
     ui->setupUi(this);
-    ui->register_userNameinput->setToolTip("用户名为学号或工号");
-    ui->register_passwordInput->setToolTip("密码由数字、字母、特殊符号组成");
-    ui->register_passwordAffirmInput->setToolTip("请再次输入密码");
+    ui->register_userNameinput->setPlaceholderText("用户名为6~20位数字或字母组成");
+    ui->register_passwordInput->setPlaceholderText("6~20位数字字母特殊符号任意2或3种");
+    ui->register_passwordAffirmInput->setPlaceholderText("请再次输入密码");
     if(register_location == 1)
     {
         ui->user_optionRegister->setChecked(true);
@@ -66,43 +66,61 @@ void Register::on_affirmReisterButton_clicked()
         //判断成功情况
         if(username != "" && password1 != "" && password2 != "" && password1 == password2)
         {
-            BPlusTree<string> User;
-            User.SetTableName(string("User"));
-            User.ReadHead();  //读取文件
-
-            //判断用户名是否已经存在
-            Return3 result1 = User.Search(username_s,User.GetRootName());    //!!!!!!!!
-            if(result1.Succ)
+            QRegExp username_reg_exp("^[0-9a-zA-Z]{6,20}$");
+            QRegExpValidator *username_validator = new QRegExpValidator(username_reg_exp);
+            if(!username_validator->regExp().exactMatch(username))
             {
-                //用户名已存在
-                QMessageBox::critical(this, "critical", "用户名已存在!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+               QMessageBox::critical(this, "critical", "用户名不符合规范!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
             }
             else
             {
-                //将登录信息写进数据库User表
-                //密码md5加密
-                vector<Undecide>userv;
-                Undecide te1, te2, te3, te4,te5;
-                strcpy(te1.s,username_s);
-                bb = QCryptographicHash::hash ( password1.toLatin1(), QCryptographicHash::Md5 );
-                md5_password.append(bb.toHex());               
-                const char* md5_password_s = md5_password.c_str();
-                strcpy(te2.s,md5_password_s);
-                strcpy(te3.s,department_s);
-                te4.dou = 0;
-                te5.num = 0;
-                userv.push_back(te1);
-                userv.push_back(te2);
-                userv.push_back(te3);
-                userv.push_back(te4);
-                userv.push_back(te5);
-                User.Insert(username_fin,userv);
-                User.SaveHead();//一定要记得保存！
-                Login *login = new Login();
-                QMessageBox::information(this, "提示", "注册成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-                this->hide();
-                login->show();
-             }
+                QRegExp password_reg_exp("^^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{6,20}$");
+                QRegExpValidator *password_validator = new QRegExpValidator(password_reg_exp);
+                if(!password_validator->regExp().exactMatch(password1))
+                {
+                   QMessageBox::critical(this, "critical", "密码不符合规范!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                }
+                else
+                {
+                    BPlusTree<string> User;
+                    User.SetTableName(string("User"));
+                    User.ReadHead();  //读取文件
+
+                    //判断用户名是否已经存在
+                    Return3 result1 = User.Search(username_s,User.GetRootName());    //!!!!!!!!
+                    if(result1.Succ)
+                    {
+                        //用户名已存在
+                        QMessageBox::critical(this, "critical", "用户名已存在!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                    }
+                    else
+                    {
+                        //将登录信息写进数据库User表
+                        //密码md5加密
+                        vector<Undecide>userv;
+                        Undecide te1, te2, te3, te4,te5;
+                        strcpy(te1.s,username_s);
+                        bb = QCryptographicHash::hash ( password1.toLatin1(), QCryptographicHash::Md5 );
+                        md5_password.append(bb.toHex());
+                        const char* md5_password_s = md5_password.c_str();
+                        strcpy(te2.s,md5_password_s);
+                        strcpy(te3.s,department_s);
+                        te4.dou = 0;
+                        te5.num = 0;
+                        userv.push_back(te1);
+                        userv.push_back(te2);
+                        userv.push_back(te3);
+                        userv.push_back(te4);
+                        userv.push_back(te5);
+                        User.Insert(username_fin,userv);
+                        User.SaveHead();//一定要记得保存！
+                        Login *login = new Login();
+                        QMessageBox::information(this, "提示", "注册成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                        this->hide();
+                        login->show();
+                     }
+                }
+            }
         }
 
         //判断失败情况
@@ -141,41 +159,58 @@ void Register::on_affirmReisterButton_clicked()
         //判断成功情况
         if(adminname != "" && password1 != "" && password2 != "" && password1 == password2)
         {
-            //判断用户名是否已经存在
-            BPlusTree<string> Admin;
-            Admin.SetTableName(string("Admin"));
-            Admin.ReadHead();  //读取文件
-
-            //判断用户名是否已经存在
-            Return3 result1 = Admin.Search(adminname_s,Admin.GetRootName());    //!!!!!!!!
-            if(result1.Succ)
+            QRegExp adminname_reg_exp("^[0-9a-zA-Z]{6,20}$");
+            QRegExpValidator *adminname_validator = new QRegExpValidator(adminname_reg_exp);
+            if(!adminname_validator->regExp().exactMatch(adminname))
             {
-                //用户名已存在
-                QMessageBox::critical(this, "critical", "用户名已存在!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+               QMessageBox::critical(this, "critical", "用户名不符合规范!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
             }
             else
             {
-                //将登录信息写进数据库admin表
-                //密码md5加密
-                vector<Undecide>userv;
-                Undecide te1, te2;
-                strcpy(te1.s,adminname_s);
-                bb = QCryptographicHash::hash ( password1.toLatin1(), QCryptographicHash::Md5 );
-                md5_password.append(bb.toHex());
-                const char* md5_password_s = md5_password.c_str();
-                strcpy(te2.s,md5_password_s);
-                //userv.push_back(te1);
-                userv.push_back(te2);
-                Admin.Insert(adminname_fin,userv);
-                Admin.SaveHead();//一定要记得保存！
-                Login *login = new Login();
-                QMessageBox::information(this, "提示", "注册成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
-                this->hide();
-                login->show();
-             }
+                QRegExp password_reg_exp1("^^(?![\d]+$)(?![a-zA-Z]+$)(?![^\da-zA-Z]+$).{6,20}$");
+                QRegExpValidator *password_validator1 = new QRegExpValidator(password_reg_exp1);
+                if(!password_validator1->regExp().exactMatch(password1))
+                {
+                   QMessageBox::critical(this, "critical", "密码不符合规范!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                }
+                else
+                {
+                    //判断用户名是否已经存在
+                    BPlusTree<string> Admin;
+                    Admin.SetTableName(string("Admin"));
+                    Admin.ReadHead();  //读取文件
 
+                    //判断用户名是否已经存在
+                    Return3 result1 = Admin.Search(adminname_s,Admin.GetRootName());    //!!!!!!!!
+                    if(result1.Succ)
+                    {
+                        //用户名已存在
+                        QMessageBox::critical(this, "critical", "用户名已存在!", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                    }
+                    else
+                    {
+                        //将登录信息写进数据库admin表
+                        //密码md5加密
+                        vector<Undecide>userv;
+                        Undecide te1, te2;
+                        strcpy(te1.s,adminname_s);
+                        bb = QCryptographicHash::hash ( password1.toLatin1(), QCryptographicHash::Md5 );
+                        md5_password.append(bb.toHex());
+                        const char* md5_password_s = md5_password.c_str();
+                        strcpy(te2.s,md5_password_s);
+                        //userv.push_back(te1);
+                        userv.push_back(te2);
+                        Admin.Insert(adminname_fin,userv);
+                        Admin.SaveHead();//一定要记得保存！
+                        Login *login = new Login();
+                        QMessageBox::information(this, "提示", "注册成功！", QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+                        this->hide();
+                        login->show();
+                     }
+
+                }
+            }
         }
-
         //判断失败情况
         else
         {

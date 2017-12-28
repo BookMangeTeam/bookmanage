@@ -19,8 +19,9 @@ Login::Login(QWidget *parent) :
     ui(new Ui::Login)
 {
     ui->setupUi(this);
-    ui->user_nameInput->setToolTip("请输入用户名");
-    ui->passwordInput->setToolTip("请输入密码");
+    ui->user_nameInput->setPlaceholderText("请输入用户名");
+    ui->passwordInput->setPlaceholderText("请输入密码");
+
 }
 
 Login::~Login()

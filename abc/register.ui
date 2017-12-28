@@ -113,7 +113,7 @@ background-image: url(:/2.jpg);
     </property>
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
+      <pointsize>10</pointsize>
      </font>
     </property>
     <property name="toolTip">
@@ -158,7 +158,7 @@ background-image: url(:/2.jpg);
     </property>
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
+      <pointsize>10</pointsize>
      </font>
     </property>
     <property name="styleSheet">
@@ -200,7 +200,7 @@ background-image: url(:/2.jpg);
     </property>
     <property name="font">
      <font>
-      <pointsize>12</pointsize>
+      <pointsize>10</pointsize>
      </font>
     </property>
     <property name="styleSheet">
